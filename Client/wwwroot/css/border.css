@@ -1,0 +1,64 @@
+/* ==========================================================================
+   Border design system
+   --------------------------------------------------------------------------
+   Load after app.css — colors reference theme tokens (--theme-border, etc.)
+   that switch with prefers-color-scheme and html[data-theme].
+
+   Widths:   var(--border-width-*), var(--border-container*)
+   Colors:   var(--border-color-*)
+   Radius:   var(--radius-*)
+
+   Usage:
+     border: var(--border-container) solid var(--border-color-default);
+     border-radius: var(--radius-input);
+   ========================================================================== */
+
+:root {
+    /* ---------------------------------------------------------------------- */
+    /* Border widths                                                           */
+    /* ---------------------------------------------------------------------- */
+    --border-width-none: 0;
+    --border-width-hairline: 1px;
+    --border-width-thin: 2px;
+    --border-width-medium: 3px;
+
+    --border-container: var(--border-width-hairline);
+    --border-container-m: var(--border-width-hairline);
+    --border-input: var(--border-width-hairline);
+    --border-input-m: var(--border-width-hairline);
+    --border-focus-ring: 2px; 
+
+    /* ---------------------------------------------------------------------- */
+    /* Border colors (theme-aware — follows light / dark from app.css)         */
+    /* ---------------------------------------------------------------------- */
+    --border-color-default: var(--theme-border);
+    --border-color-muted: color-mix(in srgb, var(--theme-border) 55%, var(--theme-bg));
+    --border-color-strong: color-mix(in srgb, var(--theme-border) 78%, var(--theme-fg) 10%);
+    --border-color-input: var(--theme-border);
+    --border-color-divider: var(--theme-border);
+    --border-color-focus: var(--app-primary-focus-ring);
+
+    /* ---------------------------------------------------------------------- */
+    /* Container borders — cards, panels, tables, form shells                  */
+    /* ---------------------------------------------------------------------- */
+    --border-container-color: var(--border-color-default);
+    --border-container-style: var(--border-container) solid var(--border-container-color);
+
+    /* ---------------------------------------------------------------------- */
+    /* Input field borders — text fields, selects, buttons (neutral outline)   */
+    /* ---------------------------------------------------------------------- */
+    --border-input-color: var(--border-color-input);
+    --border-input-radius: calc(var(--radius-lg) / 4);
+    --border-input-style: var(--border-input) solid var(--border-input-color);
+
+    /* ---------------------------------------------------------------------- */
+    /* Border radius scale                                                     */
+    /* ---------------------------------------------------------------------- */
+    --radius-none: 0;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: var(--app-radius-lg, 16px);
+    --radius-input: calc(var(--radius-lg) / 4);
+    --radius-container: calc(var(--radius-lg) / 4);
+    --radius-pill: 999px;
+}

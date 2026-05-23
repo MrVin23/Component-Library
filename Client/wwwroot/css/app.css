@@ -1,7 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Theme + spacing tokens                                                       */
-/* Spacing: var(--pad-*), var(--border-container*). *-m = mobile-friendly      */
-/* values for use inside max-width media rules (not auto-applied).             */
+/* Theme tokens (spacing: spacing.css, borders: border.css)                     */
 /* Theme: var(--theme-*), var(--palette-*).                                    */
 /*                                                                             */
 /* KEY (semantic roles):                                                       */
@@ -16,19 +14,6 @@
 /* on html[data-theme="dark"] / html[data-theme="light"].                      */
 /* -------------------------------------------------------------------------- */
 :root {
-    /* Spacing */
-    --pad-page: 20px;
-    --pad-page-m: 16px;
-    --pad-container: 14px;
-    --pad-container-m: 10px;
-    --pad-sub: 14px;
-    --pad-sub-m: 10px;
-    --pad-input: 10px;
-    --pad-input-m: 8px;
-    --border-container: 1px;
-    --border-container-m: 1px;
-    --grid-gutter: 16px;
-
     /* Theme */
     --font-ui: "Outfit", system-ui, sans-serif;
     --theme-bg: #ffffff;

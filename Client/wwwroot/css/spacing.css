@@ -1,0 +1,65 @@
+/* ==========================================================================
+   Spacing design system
+   --------------------------------------------------------------------------
+   Base unit: 4px (8-point grid compatible; aligns with Material, Polaris, etc.)
+
+   Primitives:  var(--spacing-0) … var(--spacing-12)
+   Semantic:    var(--pad-*), var(--grid-gutter) (borders: see border.css)
+                *-m suffix = compact values for use inside max-width media
+                queries (not auto-applied).
+
+   Usage:
+     padding: var(--pad-page);
+     gap: var(--pad-container);
+     margin-bottom: var(--spacing-4);
+   ========================================================================== */
+
+:root {
+    /* ---------------------------------------------------------------------- */
+    /* Primitive scale (4px base)                                              */
+    /* ---------------------------------------------------------------------- */
+    --spacing-base: 4px;
+
+    --spacing-0: 0;
+    --spacing-1: calc(var(--spacing-base) * 1);     /*  4px */
+    --spacing-2: calc(var(--spacing-base) * 2);     /*  8px */
+    --spacing-2-5: calc(var(--spacing-base) * 2.5); /* 10px */
+    --spacing-3: calc(var(--spacing-base) * 3);     /* 12px */
+    --spacing-3-5: calc(var(--spacing-base) * 3.5); /* 14px */
+    --spacing-4: calc(var(--spacing-base) * 4);     /* 16px */
+    --spacing-5: calc(var(--spacing-base) * 5);     /* 20px */
+    --spacing-6: calc(var(--spacing-base) * 6);     /* 24px */
+    --spacing-7: calc(var(--spacing-base) * 7);     /* 28px */
+    --spacing-8: calc(var(--spacing-base) * 8);     /* 32px */
+    --spacing-9: calc(var(--spacing-base) * 9);     /* 36px */
+    --spacing-10: calc(var(--spacing-base) * 10);   /* 40px */
+    --spacing-11: calc(var(--spacing-base) * 11);   /* 44px */
+    --spacing-12: calc(var(--spacing-base) * 12);   /* 48px */
+
+    /* ---------------------------------------------------------------------- */
+    /* Page spacing — outer layout / viewport edges                            */
+    /* ---------------------------------------------------------------------- */
+    --pad-page: var(--spacing-5);
+    --pad-page-m: var(--spacing-4);
+
+    /* ---------------------------------------------------------------------- */
+    /* Container spacing — cards, panels, tables, form shells                  */
+    /* ---------------------------------------------------------------------- */
+    --pad-container: var(--spacing-3-5);
+    --pad-container-m: var(--spacing-2-5);
+    --pad-sub: var(--spacing-3-5);
+    --pad-sub-m: var(--spacing-2-5);
+    --grid-gutter: var(--spacing-4);
+
+    /* ---------------------------------------------------------------------- */
+    /* Input field spacing — controls, buttons, compact stacks                 */
+    /* ---------------------------------------------------------------------- */
+    --pad-input: var(--spacing-2-5);
+    --pad-input-m: var(--spacing-2);
+
+    /* ---------------------------------------------------------------------- */
+    /* Responsive spacing — optional fluid tokens (clamp min ↔ max)          */
+    /* ---------------------------------------------------------------------- */
+    --pad-page-fluid: clamp(var(--pad-page-m), 2.5vw, var(--pad-page));
+    --pad-container-fluid: clamp(var(--pad-container-m), 1.75vw, var(--pad-container));
+}
