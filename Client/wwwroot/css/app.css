@@ -1,5 +1,6 @@
 /* -------------------------------------------------------------------------- */
-/* Theme tokens (spacing: spacing.css, borders: border.css, type: font.css)   */
+/* Theme tokens (spacing: spacing.css, borders: border.css, type: font.css,   */
+/* shadows: shadow.css)                                                         */
 /* Theme: var(--theme-*), var(--palette-*).                                    */
 /*                                                                             */
 /* KEY (semantic roles):                                                       */
@@ -35,8 +36,6 @@
 
     /* App-level aliases used by reusable components */
     --app-radius-lg: 16px;
-    --app-shadow-md: 0 10px 24px color-mix(in srgb, var(--theme-fg) 10%, transparent);
-    --app-shadow-lg: 0 16px 36px color-mix(in srgb, var(--theme-fg) 14%, transparent);
     --app-surface: var(--theme-bg);
     --app-surface-alt: var(--theme-surface-muted);
     --app-text-primary: var(--theme-fg-contrast);
@@ -50,7 +49,6 @@
     --app-primary-hover-bg: #482372;
     --app-primary-active-bg: #3f1d62;
     --app-primary-focus-ring: color-mix(in srgb, var(--palette-purple) 48%, transparent);
-    --app-primary-shadow-lift: 0 3px 14px rgba(72, 35, 114, 0.3);
 
     /* Secondary (outline) button: orange scale — hand-tuned from --palette-orange */
     --app-orange-soft-bg: #fff0e8;
@@ -61,7 +59,6 @@
     --app-orange-active-bg: #bb4610;
     --app-orange-active-fg: #ffffff;
     --app-orange-focus-ring: color-mix(in srgb, var(--palette-orange) 46%, transparent);
-    --app-orange-shadow-lift: 0 3px 14px rgba(232, 87, 20, 0.3);
 
     /* Tertiary button: blue-cyan scale — hand-tuned from --palette-cyan */
     --app-tertiary-soft-bg: #e8f5f8;
@@ -72,7 +69,6 @@
     --app-tertiary-active-bg: #1f7a8a;
     --app-tertiary-active-fg: #ffffff;
     --app-tertiary-focus-ring: color-mix(in srgb, var(--palette-cyan) 46%, transparent);
-    --app-tertiary-shadow-lift: 0 3px 14px rgba(42, 157, 176, 0.3);
 
     /* Support tones for contextual cards */
     --support-blue: var(--palette-accent-4);
@@ -94,9 +90,6 @@
     --app-dropdown-row-hover: color-mix(in srgb, var(--theme-surface-muted) 58%, var(--theme-bg));
     --app-dropdown-row-selected: color-mix(in srgb, var(--app-primary-soft-bg) 92%, var(--theme-bg));
     --app-dropdown-border: color-mix(in srgb, var(--theme-border) 78%, var(--theme-fg) 10%);
-    --app-dropdown-shadow: 0 14px 40px color-mix(in srgb, var(--theme-fg) 12%, transparent),
-        0 4px 12px color-mix(in srgb, var(--theme-fg) 6%, transparent),
-        0 0 0 1px color-mix(in srgb, var(--theme-border) 55%, transparent);
     --app-dropdown-radius: calc(var(--app-radius-lg) * 0.65);
 }
 
@@ -125,7 +118,6 @@
         --app-primary-hover-bg: #8874c9;
         --app-primary-active-bg: #7e63c4;
         --app-primary-focus-ring: color-mix(in srgb, var(--palette-purple) 42%, transparent);
-        --app-primary-shadow-lift: 0 3px 16px rgba(136, 116, 201, 0.34);
 
         --app-orange-soft-bg: #2c1f18;
         --app-orange-soft-border: #5c422f;
@@ -135,7 +127,6 @@
         --app-orange-active-bg: #b85a28;
         --app-orange-active-fg: #ffffff;
         --app-orange-focus-ring: color-mix(in srgb, var(--palette-orange) 42%, transparent);
-        --app-orange-shadow-lift: 0 3px 16px rgba(217, 114, 58, 0.34);
 
         --app-tertiary-soft-bg: #131e22;
         --app-tertiary-soft-border: #2a454e;
@@ -145,7 +136,6 @@
         --app-tertiary-active-bg: #3a8a9c;
         --app-tertiary-active-fg: #ffffff;
         --app-tertiary-focus-ring: color-mix(in srgb, var(--palette-cyan) 42%, transparent);
-        --app-tertiary-shadow-lift: 0 3px 16px rgba(74, 168, 188, 0.34);
     }
 }
 
@@ -174,7 +164,6 @@ html[data-theme="light"] {
     --app-primary-hover-bg: #482372;
     --app-primary-active-bg: #3f1d62;
     --app-primary-focus-ring: color-mix(in srgb, var(--palette-purple) 48%, transparent);
-    --app-primary-shadow-lift: 0 3px 14px rgba(72, 35, 114, 0.3);
 
     --app-orange-soft-bg: #fff0e8;
     --app-orange-soft-border: #f0c4ae;
@@ -184,7 +173,6 @@ html[data-theme="light"] {
     --app-orange-active-bg: #bb4610;
     --app-orange-active-fg: #ffffff;
     --app-orange-focus-ring: color-mix(in srgb, var(--palette-orange) 46%, transparent);
-    --app-orange-shadow-lift: 0 3px 14px rgba(232, 87, 20, 0.3);
 
     --app-tertiary-soft-bg: #e8f5f8;
     --app-tertiary-soft-border: #b8e0ea;
@@ -194,7 +182,6 @@ html[data-theme="light"] {
     --app-tertiary-active-bg: #1f7a8a;
     --app-tertiary-active-fg: #ffffff;
     --app-tertiary-focus-ring: color-mix(in srgb, var(--palette-cyan) 46%, transparent);
-    --app-tertiary-shadow-lift: 0 3px 14px rgba(42, 157, 176, 0.3);
 }
 
 html[data-theme="dark"] {
@@ -221,7 +208,6 @@ html[data-theme="dark"] {
     --app-primary-hover-bg: #8874c9;
     --app-primary-active-bg: #7e63c4;
     --app-primary-focus-ring: color-mix(in srgb, var(--palette-purple) 42%, transparent);
-    --app-primary-shadow-lift: 0 3px 16px rgba(136, 116, 201, 0.34);
 
     --app-orange-soft-bg: #2c1f18;
     --app-orange-soft-border: #5c422f;
@@ -231,7 +217,6 @@ html[data-theme="dark"] {
     --app-orange-active-bg: #b85a28;
     --app-orange-active-fg: #ffffff;
     --app-orange-focus-ring: color-mix(in srgb, var(--palette-orange) 42%, transparent);
-    --app-orange-shadow-lift: 0 3px 16px rgba(217, 114, 58, 0.34);
 
     --app-tertiary-soft-bg: #131e22;
     --app-tertiary-soft-border: #2a454e;
@@ -241,7 +226,6 @@ html[data-theme="dark"] {
     --app-tertiary-active-bg: #3a8a9c;
     --app-tertiary-active-fg: #ffffff;
     --app-tertiary-focus-ring: color-mix(in srgb, var(--palette-cyan) 42%, transparent);
-    --app-tertiary-shadow-lift: 0 3px 16px rgba(74, 168, 188, 0.34);
 }
 
 html, body {

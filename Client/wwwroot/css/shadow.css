@@ -1,0 +1,100 @@
+/* ==========================================================================
+   Shadow design system
+   --------------------------------------------------------------------------
+   Load after app.css.
+
+   Light mode: dark shadows (black ink) for depth on light surfaces.
+   Dark mode:  light shadows (white glow) for depth on dark surfaces.
+
+   Primitives:  var(--shadow-ink*), var(--shadow-glow*)
+   Elevation:   var(--shadow-xs) … var(--shadow-xl)
+   Semantic:    var(--shadow-card), var(--shadow-dropdown), var(--shadow-modal)
+   Aliases:     var(--app-shadow-*) — backward compatible with existing components
+
+   Usage:
+     box-shadow: var(--shadow-md);
+     box-shadow: var(--app-shadow-lg);
+   ========================================================================== */
+
+:root {
+    /* ---------------------------------------------------------------------- */
+    /* Shadow ink — light mode (dark shadows)                                  */
+    /* ---------------------------------------------------------------------- */
+    --shadow-ink-soft: rgb(0 0 0 / 0.06);
+    --shadow-ink: rgb(0 0 0 / 0.10);
+    --shadow-ink-strong: rgb(0 0 0 / 0.14);
+    --shadow-ink-border: rgb(0 0 0 / 0.08);
+    --shadow-glow-soft: rgb(255 255 255 / 0.04);
+
+    /* ---------------------------------------------------------------------- */
+    /* Elevation scale                                                         */
+    /* ---------------------------------------------------------------------- */
+    --shadow-xs: 0 1px 2px var(--shadow-ink-soft);
+    --shadow-sm: 0 2px 8px var(--shadow-ink-soft), 0 1px 2px var(--shadow-ink);
+    --shadow-md: 0 10px 24px var(--shadow-ink);
+    --shadow-lg: 0 16px 36px var(--shadow-ink-strong);
+    --shadow-xl:
+        0 14px 40px var(--shadow-ink-strong),
+        0 4px 12px var(--shadow-ink),
+        0 0 0 1px var(--shadow-ink-border);
+
+    /* ---------------------------------------------------------------------- */
+    /* Semantic shadows                                                        */
+    /* ---------------------------------------------------------------------- */
+    --shadow-card: var(--shadow-md);
+    --shadow-modal: var(--shadow-lg);
+    --shadow-dropdown: var(--shadow-xl);
+    --shadow-sticky: 0 2px 2px -1px var(--shadow-ink);
+
+    /* Backward-compatible app aliases */
+    --app-shadow-sm: var(--shadow-sm);
+    --app-shadow-md: var(--shadow-md);
+    --app-shadow-lg: var(--shadow-lg);
+    --app-dropdown-shadow: var(--shadow-dropdown);
+
+    /* ---------------------------------------------------------------------- */
+    /* Accent lift shadows — buttons (dark ink in light mode)                  */
+    /* ---------------------------------------------------------------------- */
+    --app-primary-shadow-lift: 0 3px 14px rgb(72 35 114 / 0.30);
+    --app-orange-shadow-lift: 0 3px 14px rgb(232 87 20 / 0.30);
+    --app-tertiary-shadow-lift: 0 3px 14px rgb(42 157 176 / 0.30);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark mode: light shadows */
+        --shadow-ink-soft: rgb(255 255 255 / 0.06);
+        --shadow-ink: rgb(255 255 255 / 0.10);
+        --shadow-ink-strong: rgb(255 255 255 / 0.14);
+        --shadow-ink-border: rgb(255 255 255 / 0.08);
+        --shadow-glow-soft: rgb(255 255 255 / 0.05);
+
+        --app-primary-shadow-lift: 0 3px 16px rgb(136 116 201 / 0.34);
+        --app-orange-shadow-lift: 0 3px 16px rgb(217 114 58 / 0.34);
+        --app-tertiary-shadow-lift: 0 3px 16px rgb(74 168 188 / 0.34);
+    }
+}
+
+html[data-theme="light"] {
+    --shadow-ink-soft: rgb(0 0 0 / 0.06);
+    --shadow-ink: rgb(0 0 0 / 0.10);
+    --shadow-ink-strong: rgb(0 0 0 / 0.14);
+    --shadow-ink-border: rgb(0 0 0 / 0.08);
+    --shadow-glow-soft: rgb(255 255 255 / 0.04);
+
+    --app-primary-shadow-lift: 0 3px 14px rgb(72 35 114 / 0.30);
+    --app-orange-shadow-lift: 0 3px 14px rgb(232 87 20 / 0.30);
+    --app-tertiary-shadow-lift: 0 3px 14px rgb(42 157 176 / 0.30);
+}
+
+html[data-theme="dark"] {
+    --shadow-ink-soft: rgb(255 255 255 / 0.06);
+    --shadow-ink: rgb(255 255 255 / 0.10);
+    --shadow-ink-strong: rgb(255 255 255 / 0.14);
+    --shadow-ink-border: rgb(255 255 255 / 0.08);
+    --shadow-glow-soft: rgb(255 255 255 / 0.05);
+
+    --app-primary-shadow-lift: 0 3px 16px rgb(136 116 201 / 0.34);
+    --app-orange-shadow-lift: 0 3px 16px rgb(217 114 58 / 0.34);
+    --app-tertiary-shadow-lift: 0 3px 16px rgb(74 168 188 / 0.34);
+}
