@@ -87,4 +87,7 @@
     --text-color-inverse: var(--theme-bg);
     --text-color-link: var(--palette-accent-1);
     --text-color-required: var(--palette-orange);
+
+    /* Backward-compatible alias */
+    --app-text-primary: var(--text-color-primary);
 }

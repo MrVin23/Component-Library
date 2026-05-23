@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
 /* Theme tokens (spacing: spacing.css, borders: border.css, type: font.css,   */
-/* shadows: shadow.css)                                                         */
+/* typography: typography.css, shadows: shadow.css)                           */
 /* Theme: var(--theme-*), var(--palette-*).                                    */
 /*                                                                             */
 /* KEY (semantic roles):                                                       */
@@ -38,7 +38,6 @@
     --app-radius-lg: 16px;
     --app-surface: var(--theme-bg);
     --app-surface-alt: var(--theme-surface-muted);
-    --app-text-primary: var(--theme-fg-contrast);
     --app-primary: var(--palette-accent-1);
     --app-primary-dark: color-mix(in srgb, var(--palette-accent-1) 72%, #000000);
     --app-secondary: var(--palette-accent-4);
@@ -228,17 +227,16 @@ html[data-theme="dark"] {
     --app-tertiary-focus-ring: color-mix(in srgb, var(--palette-cyan) 42%, transparent);
 }
 
-html, body {
-    font-family: var(--font-ui);
+html,
+body {
     background-color: var(--theme-bg);
-    color: var(--theme-fg);
 }
 
 /* -------------------------------------------------------------------------- */
 /* Reusable form primitives — use on native inputs and Blazor Input*        */
 /*   .app-field     : column stack for <label> wrapping text + control        */
-/*   .app-label     : caption above / beside a control                        */
-/*   .app-label-req : required marker (e.g. *)                                */
+/*   .app-label     : caption (typography in typography.css)                  */
+/*   .app-label-req : required marker (typography in typography.css)          */
 /*   .app-input     : single-line text-style controls                         */
 /* -------------------------------------------------------------------------- */
 .app-field {
@@ -248,32 +246,12 @@ html, body {
     margin: 0;
 }
 
-.app-label {
-    font-size: var(--text-size-label);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--text-tracking-label);
-    color: var(--text-color-primary);
-    font-family: var(--font-ui);
-}
-
-.app-label-req {
-    color: var(--text-color-required);
-}
-
 .app-input {
     min-width: 0;
     padding: var(--pad-input) var(--pad-sub);
     border: var(--border-container) solid var(--theme-border);
     border-radius: calc(var(--app-radius-lg) / 4);
     background: var(--app-surface);
-    color: var(--text-color-primary);
-    font-family: var(--font-ui);
-    font-size: var(--text-size-control);
-    line-height: var(--text-leading-body);
-}
-
-.app-input::placeholder {
-    color: var(--theme-fg-muted);
 }
 
 .app-input:focus-visible {
@@ -286,21 +264,12 @@ html, body {
     cursor: not-allowed;
 }
 
-h1:focus {
-    outline: none;
-}
-
-a {
-    color: #0071c1;
-}
-
 .primary-button {
     color: #fff;
     background-color: #1b6ec2;
     border: 1px solid #1861ac;
     border-radius: 4px;
     padding: 0.375rem 0.75rem;
-    font-size: 1rem;
     cursor: pointer;
 }
 
@@ -371,7 +340,6 @@ a {
     padding: 2rem 1.25rem;
     box-sizing: border-box;
     background: var(--theme-bg);
-    font-family: var(--font-ui);
 }
 
 .loading-screen__art {
@@ -406,19 +374,11 @@ a {
 
 .loading-progress-text {
     position: static;
-    text-align: center;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--theme-fg-muted);
 }
 
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
-
-code {
-    color: #c02d76;
-}
 
 .data-table {
     width: 100%;
@@ -430,10 +390,8 @@ code {
 .data-table td {
     border: 1px solid var(--theme-border);
     padding: 0.5rem 0.75rem;
-    text-align: left;
 }
 
 .data-table thead {
     background-color: var(--theme-surface-muted);
-    color: var(--theme-fg-contrast);
 }

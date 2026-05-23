@@ -1,0 +1,79 @@
+/* ==========================================================================
+   Typography styles
+   --------------------------------------------------------------------------
+   Load after font.css — uses type tokens from font.css and theme from app.css.
+
+   Base:     html/body defaults, links, code
+   Form:     .app-label, .app-input text styling
+   App UI:   loading screen text
+   ========================================================================== */
+
+html,
+body {
+    font-family: var(--font-ui);
+    color: var(--theme-fg);
+}
+
+a {
+    color: var(--text-color-link, #0071c1);
+}
+
+code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: #c02d76;
+}
+
+h1:focus {
+    outline: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Form typography — pairs with layout rules in app.css (.app-field, .app-input) */
+/* -------------------------------------------------------------------------- */
+.app-label {
+    font-family: var(--font-ui);
+    font-size: var(--text-size-label);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--text-tracking-label);
+    color: var(--text-color-primary);
+}
+
+.app-label-req {
+    color: var(--text-color-required);
+}
+
+.app-input {
+    font-family: var(--font-ui);
+    font-size: var(--text-size-control);
+    line-height: var(--text-leading-body);
+    color: var(--text-color-primary);
+}
+
+.app-input::placeholder {
+    color: var(--text-color-muted);
+}
+
+.primary-button {
+    font-size: var(--text-size-lg);
+}
+
+.loading-screen {
+    font-family: var(--font-ui);
+}
+
+.loading-progress-text {
+    text-align: center;
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.95rem;
+    color: var(--text-color-muted);
+}
+
+.data-table th,
+.data-table td {
+    text-align: left;
+}
+
+.data-table thead {
+    color: var(--text-color-primary);
+}
