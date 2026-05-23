@@ -1,0 +1,90 @@
+/* ==========================================================================
+   Typography design system
+   --------------------------------------------------------------------------
+   Load after app.css — text colors reference theme tokens (--theme-fg, etc.)
+   that switch with prefers-color-scheme and html[data-theme].
+
+   Google Fonts (index.html): Outfit 500, 600, 700
+
+   Families:  var(--font-ui), var(--font-mono)
+   Scale:     var(--text-size-*)
+   Semantic:  var(--text-size-body), var(--text-size-label), …
+   Colors:    var(--text-color-*)
+
+   Usage:
+     font-family: var(--font-ui);
+     font-size: var(--text-size-body);
+     font-weight: var(--font-weight-semibold);
+     color: var(--text-color-primary);
+   ========================================================================== */
+
+:root {
+    /* ---------------------------------------------------------------------- */
+    /* Font families                                                           */
+    /* ---------------------------------------------------------------------- */
+    --font-ui: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "Cascadia Code", "Segoe UI Mono", Consolas, monospace;
+
+    /* ---------------------------------------------------------------------- */
+    /* Font weights (match Outfit weights loaded in index.html)                */
+    /* ---------------------------------------------------------------------- */
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* ---------------------------------------------------------------------- */
+    /* Type scale (rem, 16px root)                                             */
+    /* ---------------------------------------------------------------------- */
+    --text-size-2xs: 0.6875rem;  /* 11px */
+    --text-size-xs: 0.75rem;     /* 12px */
+    --text-size-sm: 0.8125rem;   /* 13px */
+    --text-size-base: 0.875rem;  /* 14px */
+    --text-size-md: 0.9375rem;   /* 15px */
+    --text-size-lg: 1rem;        /* 16px */
+    --text-size-xl: 1.0625rem;   /* 17px */
+    --text-size-2xl: 1.125rem;   /* 18px */
+    --text-size-3xl: 1.25rem;    /* 20px */
+    --text-size-4xl: 1.75rem;    /* 28px */
+    --text-size-5xl: 2rem;       /* 32px */
+
+    /* ---------------------------------------------------------------------- */
+    /* Line height & letter spacing                                            */
+    /* ---------------------------------------------------------------------- */
+    --leading-tight: 1.25;
+    --leading-snug: 1.35;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+
+    --tracking-tight: -0.01em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.02em;
+
+    /* ---------------------------------------------------------------------- */
+    /* Semantic type roles                                                     */
+    /* ---------------------------------------------------------------------- */
+    --text-size-caption: var(--text-size-xs);
+    --text-size-label: var(--text-size-sm);
+    --text-size-body: var(--text-size-md);
+    --text-size-body-compact: var(--text-size-base);
+    --text-size-control: var(--text-size-md);
+    --text-size-button: var(--text-size-base);
+    --text-size-button-sm: var(--text-size-sm);
+    --text-size-button-lg: var(--text-size-lg);
+    --text-size-subheading: var(--text-size-3xl);
+    --text-size-heading: var(--text-size-4xl);
+    --text-size-display: clamp(2rem, 2.8vw, 2.6rem);
+
+    --text-leading-body: var(--leading-snug);
+    --text-leading-heading: var(--leading-tight);
+    --text-tracking-label: var(--tracking-wide);
+
+    /* ---------------------------------------------------------------------- */
+    /* Text colors (theme-aware — follows light / dark from app.css)           */
+    /* ---------------------------------------------------------------------- */
+    --text-color-primary: var(--theme-fg-contrast);
+    --text-color-secondary: var(--theme-fg);
+    --text-color-muted: var(--theme-fg-muted);
+    --text-color-inverse: var(--theme-bg);
+    --text-color-link: var(--palette-accent-1);
+    --text-color-required: var(--palette-orange);
+}

@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Theme tokens (spacing: spacing.css, borders: border.css)                     */
+/* Theme tokens (spacing: spacing.css, borders: border.css, type: font.css)   */
 /* Theme: var(--theme-*), var(--palette-*).                                    */
 /*                                                                             */
 /* KEY (semantic roles):                                                       */
@@ -15,7 +15,6 @@
 /* -------------------------------------------------------------------------- */
 :root {
     /* Theme */
-    --font-ui: "Outfit", system-ui, sans-serif;
     --theme-bg: #ffffff;
     --theme-fg: #1a1a1a;
     --theme-fg-muted: #5c5c5c;
@@ -266,14 +265,15 @@ html, body {
 }
 
 .app-label {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--theme-fg-contrast);
+    font-size: var(--text-size-label);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--text-tracking-label);
+    color: var(--text-color-primary);
     font-family: var(--font-ui);
 }
 
 .app-label-req {
-    color: var(--palette-orange);
+    color: var(--text-color-required);
 }
 
 .app-input {
@@ -282,10 +282,10 @@ html, body {
     border: var(--border-container) solid var(--theme-border);
     border-radius: calc(var(--app-radius-lg) / 4);
     background: var(--app-surface);
-    color: var(--theme-fg-contrast);
+    color: var(--text-color-primary);
     font-family: var(--font-ui);
-    font-size: 0.9375rem;
-    line-height: 1.35;
+    font-size: var(--text-size-control);
+    line-height: var(--text-leading-body);
 }
 
 .app-input::placeholder {
