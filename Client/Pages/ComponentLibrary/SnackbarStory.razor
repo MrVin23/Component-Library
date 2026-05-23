@@ -1,0 +1,101 @@
+@page "/componentlibrary-snackbar"
+@using Client.Components.Buttons.CustomButton
+@using Client.Components.Validation
+
+<PageTitle>Snackbar</PageTitle>
+
+<main class="button-story">
+    <h1 class="button-story__title">Snackbar</h1>
+    <p class="button-story__lead">
+        <code class="button-story__code">Snackbar.Show(message, severity)</code> uses the same support colors as
+        <code class="button-story__code">CustomAlert</code> (success green, warning, error red, info cyan). Auto-hides after five seconds.
+    </p>
+
+    <section class="button-story__section" aria-labelledby="snackbar-severity-heading">
+        <h2 id="snackbar-severity-heading" class="button-story__h2">By severity</h2>
+        <p class="button-story__muted">Typical mapping: save → success, validation → warning, failure → error, FYI → info.</p>
+
+        <div class="button-story__type-grid">
+            <article class="button-story__type-tile">
+                <h3 class="button-story__type-name">Success</h3>
+                <div class="button-story__type-sample">
+                    <CustomButton Text="Saved"
+                                  ButtonType="CustomButtonType.Primary"
+                                  OnClick="@(_ => _snackbar?.Show("Changes saved successfully.", AlertSeverity.Success))" />
+                </div>
+            </article>
+            <article class="button-story__type-tile">
+                <h3 class="button-story__type-name">Warning</h3>
+                <div class="button-story__type-sample">
+                    <CustomButton Text="Review required"
+                                  ButtonType="CustomButtonType.Secondary"
+                                  OnClick="@(_ => _snackbar?.Show("3 items need your attention before you can submit.", AlertSeverity.Warning))" />
+                </div>
+            </article>
+            <article class="button-story__type-tile">
+                <h3 class="button-story__type-name">Error</h3>
+                <div class="button-story__type-sample">
+                    <CustomButton Text="Save failed"
+                                  ButtonType="CustomButtonType.Danger"
+                                  OnClick="@(_ => _snackbar?.Show("Could not save: network error. Try again.", AlertSeverity.Error))" />
+                </div>
+            </article>
+            <article class="button-story__type-tile">
+                <h3 class="button-story__type-name">Info</h3>
+                <div class="button-story__type-sample">
+                    <CustomButton Text="Tip"
+                                  ButtonType="CustomButtonType.Tertiary"
+                                  OnClick="@(_ => _snackbar?.Show("Tip: use Ctrl+S to save from anywhere.", AlertSeverity.Info))" />
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="button-story__section" aria-labelledby="snackbar-more-heading">
+        <h2 id="snackbar-more-heading" class="button-story__h2">More samples</h2>
+        <p class="button-story__muted">Long body text and manual dismiss.</p>
+
+        <div class="button-story__type-grid">
+            <article class="button-story__type-tile">
+                <h3 class="button-story__type-name">Long success</h3>
+                <div class="button-story__type-sample">
+                    <CustomButton Text="Show long success"
+                                  ButtonType="CustomButtonType.Secondary"
+                                  OnClick="@(_ => _snackbar?.Show(LongSuccessMessage, AlertSeverity.Success))" />
+                </div>
+            </article>
+            <article class="button-story__type-tile">
+                <h3 class="button-story__type-name">Custom title</h3>
+                <div class="button-story__type-sample">
+                    <CustomButton Text="Sync complete"
+                                  ButtonType="CustomButtonType.Secondary"
+                                  OnClick="@(_ => _snackbar?.Show("12 files uploaded.", AlertSeverity.Info, title: "Sync"))" />
+                </div>
+            </article>
+            <article class="button-story__type-tile">
+                <h3 class="button-story__type-name">Dismiss early</h3>
+                <div class="button-story__type-sample">
+                    <CustomButton Text="Show then close"
+                                  ButtonType="CustomButtonType.Tertiary"
+                                  OnClick="ShowThenHideAsync" />
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+<Snackbar @ref="_snackbar" />
+
+@code {
+    private Snackbar? _snackbar;
+
+    private const string LongSuccessMessage =
+        "Your changes were saved successfully. You can continue editing or navigate away — this message will disappear shortly.";
+
+    private async Task ShowThenHideAsync(Microsoft.AspNetCore.Components.Web.MouseEventArgs _)
+    {
+        _snackbar?.Show("Closing in one second…", AlertSeverity.Warning);
+        await Task.Delay(1000);
+        _snackbar?.Hide();
+    }
+}

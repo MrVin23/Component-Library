@@ -1,0 +1,62 @@
+<div class="table-container" @attributes="AdditionalAttributes">
+    <div class="table-container__header">
+        @if (HasTitleBlock)
+        {
+            <h2 class="table-container__title" id="@_titleId">@Title</h2>
+        }
+        @if (ShowSearchToggle)
+        {
+            <div class="table-container__header-actions">
+                <CustomTooltip Position="TooltipPosition.Bottom" IconClass="bi-search">
+                    <TriggerContent>
+                        <button type="button"
+                                class="table-container__search-btn"
+                                aria-expanded="@_filterExpanded.ToString().ToLowerInvariant()"
+                                aria-controls="@_filterRegionId"
+                                aria-label="Toggle table search and filters"
+                                @onclick="ToggleFilterAsync"
+                                @onclick:stopPropagation="true">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                        </button>
+                    </TriggerContent>
+                    <ChildContent>
+                        @if (SearchTooltipContent is not null)
+                        {
+                            @SearchTooltipContent
+                        }
+                        else
+                        {
+                            <span>@SearchTooltip</span>
+                        }
+                    </ChildContent>
+                </CustomTooltip>
+            </div>
+        }
+    </div>
+
+    @if (_filterExpanded && FilterContent is not null)
+    {
+        @if (HasTitleBlock)
+        {
+            <div id="@_filterRegionId"
+                 class="table-container__filter"
+                 role="region"
+                 aria-labelledby="@_titleId">
+                @FilterContent
+            </div>
+        }
+        else
+        {
+            <div id="@_filterRegionId"
+                 class="table-container__filter"
+                 role="region"
+                 aria-label="Table filters">
+                @FilterContent
+            </div>
+        }
+    }
+
+    <div class="table-container__body">
+        @ChildContent
+    </div>
+</div>

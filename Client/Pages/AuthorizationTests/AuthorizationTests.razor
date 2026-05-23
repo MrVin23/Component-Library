@@ -1,0 +1,297 @@
+@page "/authorization-tests"
+@using System.Net
+@using System.Text.Json
+@using System.Security.Claims
+@using Client.Apis.UserPermissions
+@using Client.Components.Authorization
+@using Client.Routes
+@using Client.Utils.UserPermissions
+@using Shared.Dtos
+@using Shared.Dtos.Users
+@inject ApiAuth AuthApi
+@inject ApiTest TestApi
+@inject IAuthService AuthService
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+
+<CustomAutorizeView Role="Admin">
+    <PageTitle>Authorization Tests</PageTitle>
+
+    <div class="authorization-tests-page">
+        <div class="authorization-tests-page__backdrop" aria-hidden="true"></div>
+
+    <section class="authorization-tests">
+        <header class="authorization-tests__header">
+            <h1 class="authorization-tests__title">Authorization tests</h1>
+            <p class="authorization-tests__subtitle">
+                Validate permission behavior against the server `test-auth` controller.
+            </p>
+
+            <div class="authorization-tests__status">
+                <span class="authorization-tests__status-indicator @(isLoggedIn ? "authorization-tests__status-indicator--ok" : "authorization-tests__status-indicator--warn")"
+                      aria-hidden="true"></span>
+                <span class="authorization-tests__status-text">@authStateText</span>
+            </div>
+        </header>
+
+        @if (!string.IsNullOrWhiteSpace(pageMessage))
+        {
+            <div class="@PageBannerCssClass" role="@(pageMessageIsError ? "alert" : "status")">@pageMessage</div>
+        }
+
+        <div class="authorization-tests__grid">
+            <section class="authorization-tests__panel">
+                <h2 class="authorization-tests__panel-title">Session</h2>
+                <div class="authorization-tests__fields">
+                    <label class="app-field">
+                        <span class="app-label">Username <span class="app-label-req">*</span></span>
+                        <input class="app-input" @bind="loginRequest.Username" placeholder="Username" autocomplete="username" />
+                    </label>
+                    <label class="app-field">
+                        <span class="app-label">Password <span class="app-label-req">*</span></span>
+                        <input class="app-input" type="password" @bind="loginRequest.Password" placeholder="Password" autocomplete="current-password" />
+                    </label>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(loginValidationMessage))
+                {
+                    <div class="authorization-tests__validation-message">@loginValidationMessage</div>
+                }
+                <div class="authorization-tests__actions">
+                    <button class="authorization-tests__button authorization-tests__button--primary" @onclick="LoginAsync">Login</button>
+                    <button class="authorization-tests__button" @onclick="LogoutAsync">Logout</button>
+                    <button class="authorization-tests__button" @onclick="RefreshSessionStateAsync">Refresh state</button>
+                </div>
+            </section>
+
+            <section class="authorization-tests__panel">
+                <h2 class="authorization-tests__panel-title">Permission inspection</h2>
+                <p class="authorization-tests__hint">Read current user and resolved DB permissions.</p>
+                <div class="authorization-tests__actions">
+                    <button class="authorization-tests__button" @onclick="GetCurrentUserAsync">Get current user</button>
+                    <button class="authorization-tests__button" @onclick="GetMyPermissionsAsync">Get my DB permissions</button>
+                </div>
+            </section>
+
+            <section class="authorization-tests__panel">
+                <h2 class="authorization-tests__panel-title">Protected endpoint tests</h2>
+                <div class="authorization-tests__actions">
+                    <button class="authorization-tests__button" @onclick="TestReadOnlyAsync">Test read-only</button>
+                    <button class="authorization-tests__button" @onclick="TestReadWriteAsync">Test read-write</button>
+                    <button class="authorization-tests__button" @onclick="TestAllPermissionsAsync">Test all-permissions</button>
+                </div>
+
+                <label class="app-field authorization-tests__dynamic-field">
+                    <span class="app-label">Dynamic permission check <span class="app-label-req">*</span></span>
+                    <div class="authorization-tests__dynamic-row">
+                        <input class="app-input" @bind="dynamicPermission" placeholder="e.g. read-only" />
+                        <button class="authorization-tests__button authorization-tests__button--primary" @onclick="TestDynamicPermissionAsync">Test</button>
+                    </div>
+                </label>
+                @if (!string.IsNullOrWhiteSpace(dynamicPermissionValidationMessage))
+                {
+                    <div class="authorization-tests__validation-message">@dynamicPermissionValidationMessage</div>
+                }
+            </section>
+
+            <section class="authorization-tests__panel">
+                <h2 class="authorization-tests__panel-title">Expected results matrix</h2>
+                <p><strong>Viewer</strong>: read-only allow, read-write deny, all-permissions deny.</p>
+                <p><strong>User</strong>: read-only deny, read-write allow, all-permissions deny.</p>
+                <p><strong>Admin</strong>: read-only allow, read-write allow, all-permissions allow.</p>
+            </section>
+
+            <section class="authorization-tests__panel">
+                <h2 class="authorization-tests__panel-title">Role-based navigation</h2>
+                <p class="authorization-tests__hint">Navigate to role-protected pages using current client auth state.</p>
+                <p><strong>Current roles:</strong> @displayRoles</p>
+                <div class="authorization-tests__actions">
+                    <button class="authorization-tests__button authorization-tests__button--primary"
+                            @onclick="NavigateToUserAccessTestAsync">
+                        Open user test
+                    </button>
+                    <button class="authorization-tests__button authorization-tests__button--primary"
+                            @onclick="NavigateToAdminAccessTestAsync">
+                        Open admin test
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <section class="authorization-tests__panel authorization-tests__panel--result">
+            <h2 class="authorization-tests__panel-title">Last result</h2>
+            <p><strong>HTTP:</strong> @lastStatusCode</p>
+            <p><strong>Message:</strong> @lastMessage</p>
+            <pre class="authorization-tests__result-payload">@lastPayload</pre>
+        </section>
+        </section>
+    </div>
+</CustomAutorizeView>
+
+@code {
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+
+    private LoginRequest loginRequest = new();
+    private string dynamicPermission = "read-only";
+    private string authStateText = "Unknown";
+    private bool isLoggedIn;
+    private string loginValidationMessage = string.Empty;
+    private string dynamicPermissionValidationMessage = string.Empty;
+    private string pageMessage = string.Empty;
+    private bool pageMessageIsError;
+    private string lastStatusCode = "-";
+    private string lastMessage = "-";
+    private string lastPayload = "-";
+    private string displayRoles = "none";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshSessionStateAsync();
+    }
+
+    private async Task LoginAsync()
+    {
+        if (string.IsNullOrWhiteSpace(loginRequest.Username) || string.IsNullOrWhiteSpace(loginRequest.Password))
+        {
+            loginValidationMessage = "Username and password are required for login test.";
+            return;
+        }
+
+        loginValidationMessage = string.Empty;
+        var response = await AuthApi.LoginAsync(loginRequest);
+        await SetResultAsync("Login", response);
+        await RefreshSessionStateAsync();
+    }
+
+    private async Task LogoutAsync()
+    {
+        var response = await AuthApi.LogoutAsync();
+        await SetResultAsync("Logout", response);
+        await RefreshSessionStateAsync();
+    }
+
+    private async Task GetCurrentUserAsync()
+    {
+        var response = await AuthApi.GetCurrentUserAsync();
+        await SetResultAsync("GetCurrentUser", response);
+        await RefreshSessionStateAsync();
+    }
+
+    private async Task GetMyPermissionsAsync()
+    {
+        var response = await TestApi.GetMyPermissionsAsync();
+        await SetResultAsync("GetMyPermissions", response);
+    }
+
+    private async Task TestReadOnlyAsync()
+    {
+        var response = await TestApi.TestReadOnlyAccessAsync();
+        await SetResultAsync("TestReadOnlyAccess", response);
+    }
+
+    private async Task TestReadWriteAsync()
+    {
+        var response = await TestApi.TestReadWriteAccessAsync();
+        await SetResultAsync("TestReadWriteAccess", response);
+    }
+
+    private async Task TestAllPermissionsAsync()
+    {
+        var response = await TestApi.TestAllPermissionsAccessAsync();
+        await SetResultAsync("TestAllPermissionsAccess", response);
+    }
+
+    private async Task TestDynamicPermissionAsync()
+    {
+        if (string.IsNullOrWhiteSpace(dynamicPermission))
+        {
+            dynamicPermissionValidationMessage = "Permission name is required.";
+            return;
+        }
+
+        dynamicPermissionValidationMessage = string.Empty;
+        var permission = string.IsNullOrWhiteSpace(dynamicPermission) ? "read-only" : dynamicPermission.Trim();
+        var response = await TestApi.TestPermissionAsync(permission);
+        await SetResultAsync($"TestPermission({permission})", response);
+    }
+
+    private async Task RefreshSessionStateAsync()
+    {
+        await AuthService.RefreshClientAuthStateAsync();
+
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        isLoggedIn = user.Identity?.IsAuthenticated == true;
+        var roles = isLoggedIn
+            ? user.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(r => r)
+                .ToArray()
+            : [];
+
+        displayRoles = roles.Length == 0 ? "none" : string.Join(", ", roles);
+        authStateText = isLoggedIn
+            ? $"Authenticated as {user.Identity?.Name ?? "unknown"}"
+            : "Anonymous";
+    }
+
+    private async Task NavigateToUserAccessTestAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var hasUserAccess = NavigationAccessHelper.HasAccess(authState.User, NavigationAccess.UserOrAdmin);
+        Navigation.NavigateTo(hasUserAccess ? "/user-access-test" : "/not-authorized");
+    }
+
+    private async Task NavigateToAdminAccessTestAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var hasAdminAccess = NavigationAccessHelper.HasAccess(authState.User, NavigationAccess.Admin);
+        Navigation.NavigateTo(hasAdminAccess ? "/admin-access-test" : "/not-authorized");
+    }
+
+    private async Task SetResultAsync(string operation, HttpResponseMessage response)
+    {
+        lastStatusCode = $"{(int)response.StatusCode} {response.StatusCode}";
+        var body = await response.Content.ReadAsStringAsync();
+        lastPayload = string.IsNullOrWhiteSpace(body) ? "<empty>" : body;
+
+        if (response.IsSuccessStatusCode)
+        {
+            lastMessage = $"{operation} succeeded";
+            pageMessage = $"{operation} succeeded.";
+            pageMessageIsError = false;
+            return;
+        }
+
+        var apiError = TryDeserialize<ApiError>(body);
+        if (apiError != null && !string.IsNullOrWhiteSpace(apiError.Message))
+        {
+            lastMessage = $"{operation} failed: {apiError.Message}";
+            pageMessage = lastMessage;
+            pageMessageIsError = true;
+            return;
+        }
+
+        lastMessage = $"{operation} failed";
+        pageMessage = lastMessage;
+        pageMessageIsError = true;
+    }
+
+    private static T? TryDeserialize<T>(string content)
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<T>(content, JsonOptions);
+        }
+        catch
+        {
+            return default;
+        }
+    }
+
+    private string PageBannerCssClass =>
+        pageMessageIsError
+            ? "authorization-tests__banner authorization-tests__banner--error"
+            : "authorization-tests__banner authorization-tests__banner--success";
+}

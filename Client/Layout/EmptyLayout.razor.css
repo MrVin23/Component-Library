@@ -1,0 +1,7 @@
+.empty-layout {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--theme-bg);
+    color: var(--theme-fg);
+}

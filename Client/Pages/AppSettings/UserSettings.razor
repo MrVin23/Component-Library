@@ -1,0 +1,47 @@
+@page "/app-settings"
+@using Client.Apis.AppSettings
+@using Client.Components.Buttons.SwitchButton
+@using Client.Components.Containers.TitleContainer
+@using Client.Components.Validation
+@using Shared.Dtos.Users
+
+<PageTitle>App settings</PageTitle>
+
+<section class="user-management">
+    <TitleContainer
+        Title="App settings"
+        Description="Control how Stock Manager looks for your account. Changes apply after you save." />
+
+    @if (!string.IsNullOrEmpty(loadError))
+    {
+        <div class="app-settings-page__banner app-settings-page__banner--error" role="alert">@loadError</div>
+    }
+
+    @if (isLoading)
+    {
+        <p class="app-settings-page__loading" aria-live="polite">Loading your settings…</p>
+    }
+    else
+    {
+        <div class="app-settings-page__card">
+            <div class="app-settings-page__row">
+                <div class="app-settings-page__copy">
+                    <span class="app-label">Dark theme</span>
+                    <p class="app-settings-page__hint">
+                        Uses the same appearance as the toolbar toggle. Saved to your profile so it stays in sync across sessions.
+                    </p>
+                </div>
+                <CustomSwitchButton Variant="SwitchButtonVariant.Normal"
+                                    Value="darkMode"
+                                    ValueChanged="OnDarkModeToggleAsync" />
+            </div>
+
+            @if (isSaving)
+            {
+                <p class="app-settings-page__saving" aria-live="polite">Saving…</p>
+            }
+        </div>
+    }
+
+    <Snackbar @ref="_snackbar" />
+</section>

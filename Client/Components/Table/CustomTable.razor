@@ -1,0 +1,188 @@
+@typeparam TItem
+
+<div class="custom-table-container">
+    @{
+        var wrapperStyle = string.IsNullOrWhiteSpace(MaxHeight)
+            ? string.Empty
+            : $"max-height: {MaxHeight}; overflow-y: auto;";
+    }
+    @if (!string.IsNullOrEmpty(Title) || ShowRefreshButton || HeaderActions != null)
+    {
+        <div class="custom-table-header">
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <h3 class="custom-table-title">@Title</h3>
+            }
+            <div class="custom-table-actions">
+                @if (ShowRefreshButton)
+                {
+                    <button class="refresh-btn @(IsLoading ? "loading" : "")" 
+                            @onclick="OnRefreshClicked" 
+                            disabled="@IsLoading"
+                            title="Refresh">
+                        <span class="refresh-icon">↻</span>
+                    </button>
+                }
+                @HeaderActions
+            </div>
+        </div>
+    }
+
+    <div class="custom-table-wrapper @(IsLoading ? "is-loading" : "")" style="@wrapperStyle">
+        @if (IsLoading)
+        {
+            <div class="loading-overlay">
+                <div class="spinner"></div>
+                <span class="loading-text">@LoadingMessage</span>
+            </div>
+        }
+        <table class="custom-table @(Striped ? "striped" : "") @(Hoverable ? "hoverable" : "") @(Bordered ? "bordered" : "")">
+            <thead>
+                <tr>
+                    @if (ShowCheckboxSelection)
+                    {
+                        <th class="checkbox-column">
+                            <input type="checkbox" 
+                                   checked="@IsAllSelected" 
+                                   @onchange="OnSelectAllChanged"
+                                   class="custom-checkbox" />
+                        </th>
+                    }
+                    @if (ColumnDefinitions != null && ColumnDefinitions.Any())
+                    {
+                        @foreach (var column in ColumnDefinitions)
+                        {
+                            var isSortable = Sortable && column.Sortable;
+                            var sortKey = column.EffectiveSortKey;
+                            <th class="@(isSortable ? "sortable" : "") @column.HeaderClass"
+                                @onclick="@(isSortable ? async () => await OnSortClicked(sortKey) : () => { })">
+                                @column.Title
+                                @if (isSortable && SortColumn == sortKey)
+                                {
+                                    <span class="sort-indicator">@(SortAscending ? "▲" : "▼")</span>
+                                }
+                            </th>
+                        }
+                    }
+                    else if (Columns != null && Columns.Any())
+                    {
+                        @foreach (var column in Columns)
+                        {
+                            var isSortable = Sortable && column.Sortable;
+                            var sortKey = column.EffectiveSortKey;
+                            <th class="@(isSortable ? "sortable" : "") @column.HeaderClass"
+                                @onclick="@(isSortable ? async () => await OnSortClicked(sortKey) : () => { })">
+                                @column.Title
+                                @if (isSortable && SortColumn == sortKey)
+                                {
+                                    <span class="sort-indicator">@(SortAscending ? "▲" : "▼")</span>
+                                }
+                            </th>
+                        }
+                    }
+                    else
+                    {
+                        @HeaderTemplate
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (Items == null || !Items.Any())
+                {
+                    <tr class="empty-row">
+                        <td colspan="@GetColumnCount()">
+                            <div class="empty-state">
+                                @if (EmptyTemplate != null)
+                                {
+                                    @EmptyTemplate
+                                }
+                                else
+                                {
+                                    <span>@EmptyMessage</span>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Items)
+                    {
+                        <tr class="@(IsItemSelected(item) ? "selected" : "") @(RowClass?.Invoke(item) ?? "")"
+                            @onclick="() => OnRowClicked(item)">
+                            @if (ShowCheckboxSelection)
+                            {
+                                <td class="checkbox-column" @onclick:stopPropagation="true">
+                                    <input type="checkbox" 
+                                           checked="@IsItemSelected(item)" 
+                                           @onchange="(e) => OnItemSelectionChanged(item, (bool)e.Value!)"
+                                           class="custom-checkbox" />
+                                </td>
+                            }
+                            @if (ColumnDefinitions != null && ColumnDefinitions.Any())
+                            {
+                                @foreach (var column in ColumnDefinitions)
+                                {
+                                    <td class="@column.CellClass">
+                                        @if (column.Template != null)
+                                        {
+                                            @column.Template(item)
+                                        }
+                                        else
+                                        {
+                                            @column.GetFormattedValue(item)
+                                        }
+                                    </td>
+                                }
+                            }
+                            else if (RowTemplate != null)
+                            {
+                                @RowTemplate(item)
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+            @if (FooterTemplate != null)
+            {
+                <tfoot>
+                    <tr>
+                        @FooterTemplate
+                    </tr>
+                </tfoot>
+            }
+        </table>
+    </div>
+
+    @if (ShowPagination && TotalPages > 1)
+    {
+        <div class="custom-table-pagination">
+            <span class="pagination-info">
+                Showing @((CurrentPage - 1) * PageSize + 1) to @Math.Min(CurrentPage * PageSize, TotalItems) of @TotalItems
+            </span>
+            <div class="pagination-controls">
+                <button class="pagination-btn" 
+                        disabled="@(CurrentPage <= 1)" 
+                        @onclick="() => OnPageChanged(1)">
+                    ««
+                </button>
+                <button class="pagination-btn" 
+                        disabled="@(CurrentPage <= 1)" 
+                        @onclick="() => OnPageChanged(CurrentPage - 1)">
+                    «
+                </button>
+                <span class="pagination-current">Page @CurrentPage of @TotalPages</span>
+                <button class="pagination-btn" 
+                        disabled="@(CurrentPage >= TotalPages)" 
+                        @onclick="() => OnPageChanged(CurrentPage + 1)">
+                    »
+                </button>
+                <button class="pagination-btn" 
+                        disabled="@(CurrentPage >= TotalPages)" 
+                        @onclick="() => OnPageChanged(TotalPages)">
+                    »»
+                </button>
+            </div>
+        </div>
+    }
+</div>

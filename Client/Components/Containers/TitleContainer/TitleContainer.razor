@@ -1,0 +1,14 @@
+<div class="title-container" @attributes="AdditionalAttributes">
+    <header class="title-container__header">
+        <h1 class="title-container__title">@Title</h1>
+        @if (!string.IsNullOrWhiteSpace(Description))
+        {
+            <p class="title-container__description">@Description</p>
+        }
+    </header>
+
+    @if (ShowDivider)
+    {
+        <hr class="title-container__divider" />
+    }
+</div>

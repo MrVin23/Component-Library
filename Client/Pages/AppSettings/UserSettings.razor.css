@@ -1,0 +1,70 @@
+/* Shell matches UserManagementDashboard — full-width grid within MainLayout content */
+.user-management {
+    display: grid;
+    gap: var(--pad-container);
+    width: 100%;
+    box-sizing: border-box;
+    min-height: calc(100dvh - 4.5rem);
+    align-content: start;
+}
+
+@media (max-width: 767.98px) {
+    .user-management {
+        gap: var(--pad-container-m);
+        min-height: calc(100dvh - 4rem);
+    }
+}
+
+.app-settings-page__banner {
+    padding: var(--pad-container);
+    border-radius: calc(var(--app-radius-lg) / 2);
+    border: var(--border-container) solid var(--theme-border);
+    margin-bottom: var(--pad-sub);
+    font-size: 0.9375rem;
+}
+
+.app-settings-page__banner--error {
+    background: var(--support-red-bg);
+    color: var(--theme-fg-contrast);
+    border-color: color-mix(in srgb, var(--support-red) 38%, var(--theme-border));
+}
+
+.app-settings-page__loading {
+    margin: 0;
+    color: var(--theme-fg-muted);
+    font-size: 0.9375rem;
+}
+
+.app-settings-page__card {
+    border: var(--border-container) solid var(--theme-border);
+    border-radius: var(--app-radius-lg);
+    padding: var(--pad-container);
+    background: var(--app-surface);
+    box-shadow: var(--app-shadow-md);
+}
+
+.app-settings-page__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--grid-gutter);
+    flex-wrap: wrap;
+}
+
+.app-settings-page__copy {
+    flex: 1 1 14rem;
+    min-width: 0;
+}
+
+.app-settings-page__hint {
+    margin: var(--pad-input) 0 0;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--theme-fg-muted);
+}
+
+.app-settings-page__saving {
+    margin: var(--pad-sub) 0 0;
+    font-size: 0.8125rem;
+    color: var(--theme-fg-muted);
+}

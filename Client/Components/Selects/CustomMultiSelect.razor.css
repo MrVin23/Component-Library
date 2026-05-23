@@ -1,0 +1,256 @@
+.custom-select-container.primary {
+    gap: var(--pad-input);
+}
+
+.custom-select-container.pager {
+    gap: var(--pad-input-m);
+}
+
+.custom-select-label.pager {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--theme-fg-muted);
+}
+
+.custom-multi-select-wrapper {
+    position: relative;
+}
+
+.custom-multi-select-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.custom-multi-select-input-main {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: var(--pad-input) 2.5rem var(--pad-input) var(--pad-sub);
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.custom-multi-select-input-main::placeholder {
+    color: var(--theme-fg-muted);
+}
+
+.custom-multi-select-input-main:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--theme-border) 50%, var(--palette-accent-1));
+}
+
+.custom-multi-select-input-main:disabled {
+    cursor: not-allowed;
+}
+
+.custom-multi-select-wrapper.is-open .custom-multi-select-input-main {
+    cursor: text;
+}
+
+.custom-multi-select-arrow {
+    position: absolute;
+    right: var(--pad-sub);
+    color: var(--palette-accent-1);
+    font-size: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.custom-multi-select-wrapper.is-open .custom-multi-select-arrow {
+    transform: rotate(180deg);
+}
+
+.custom-multi-select-dropdown {
+    display: flex;
+    flex-direction: column;
+    max-height: min(22rem, 70vh);
+    min-height: 0;
+    overflow: hidden;
+    background: var(--app-dropdown-surface);
+}
+
+.custom-select-container.pager ::deep .custom-dropdown-panel {
+    margin-top: 0.22rem;
+}
+
+.custom-multi-select-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--pad-sub) var(--pad-container);
+    background: var(--app-dropdown-header-bg);
+    border-bottom: var(--border-container) solid var(--app-dropdown-border);
+    flex-shrink: 0;
+}
+
+.custom-multi-select-header .custom-multi-select-checkbox-item {
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.custom-multi-select-header .custom-multi-select-checkbox-item.select-all .custom-multi-select-checkbox-label {
+    font-weight: 600;
+    color: var(--theme-fg-contrast);
+}
+
+.custom-multi-select-count {
+    font-size: 0.75rem;
+    color: var(--theme-fg-contrast);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    background: color-mix(in srgb, var(--palette-accent-1) 14%, var(--app-dropdown-surface));
+    border: var(--border-container) solid color-mix(in srgb, var(--palette-accent-1) 22%, var(--app-dropdown-border));
+    padding: var(--pad-input-m) var(--pad-input);
+    border-radius: 999px;
+}
+
+.custom-multi-select-items {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: min(18rem, 56vh);
+    overflow-y: auto;
+    padding: var(--pad-input) 0;
+    background: var(--app-dropdown-surface);
+    scrollbar-color: color-mix(in srgb, var(--theme-border) 70%, transparent) var(--app-dropdown-surface);
+}
+
+.custom-multi-select-checkbox-item {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem var(--pad-container);
+    margin: 0 var(--pad-input);
+    border-radius: calc(var(--app-dropdown-radius) / 2);
+    cursor: pointer;
+    transition: background-color 0.12s ease;
+    user-select: none;
+}
+
+.custom-multi-select-checkbox-item:hover {
+    background: var(--app-dropdown-row-hover);
+}
+
+.custom-multi-select-checkbox-item.selected {
+    background: var(--app-dropdown-row-selected);
+    box-shadow: inset 3px 0 0 var(--palette-accent-1);
+}
+
+.custom-multi-select-checkbox-item.selected:hover {
+    background: color-mix(in srgb, var(--app-dropdown-row-selected) 82%, var(--palette-accent-1));
+}
+
+.custom-multi-select-checkmark {
+    position: relative;
+    height: 18px;
+    width: 18px;
+    min-width: 18px;
+    background: var(--app-dropdown-surface);
+    border: var(--border-container) solid var(--app-dropdown-border);
+    border-radius: calc(var(--app-radius-lg) / 4);
+    margin-right: var(--pad-sub);
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.custom-multi-select-checkbox-item:hover .custom-multi-select-checkmark {
+    border-color: color-mix(in srgb, var(--theme-border) 45%, var(--palette-accent-1));
+}
+
+.custom-multi-select-checkmark.checked {
+    background: var(--palette-accent-1);
+    border-color: var(--palette-accent-1);
+}
+
+.custom-multi-select-checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--theme-bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.custom-multi-select-checkmark.checked::after {
+    display: block;
+}
+
+.custom-multi-select-checkmark.indeterminate {
+    background: var(--palette-accent-1);
+    border-color: var(--palette-accent-1);
+}
+
+.custom-multi-select-checkmark.indeterminate::after {
+    display: block;
+    left: 3px;
+    top: 6px;
+    width: 8px;
+    height: 0;
+    border: solid var(--theme-bg);
+    border-width: 0 0 2px 0;
+    transform: none;
+}
+
+.custom-multi-select-checkbox-label {
+    font-size: 0.875rem;
+    color: var(--theme-fg-contrast);
+    line-height: 1.4;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.custom-multi-select-no-results {
+    color: var(--theme-fg-muted);
+    cursor: default;
+    font-style: italic;
+    padding: var(--pad-container);
+    text-align: center;
+    font-size: 0.875rem;
+    background: var(--app-dropdown-surface);
+}
+
+.custom-select-container.pager .custom-multi-select-input-main {
+    padding: var(--pad-input-m) 2rem var(--pad-input-m) var(--pad-sub-m);
+    font-size: 0.8125rem;
+    min-height: 2.25rem;
+}
+
+.custom-select-container.pager .custom-multi-select-header {
+    padding: var(--pad-input) var(--pad-sub);
+}
+
+.custom-select-container.pager .custom-multi-select-checkbox-item {
+    padding: var(--pad-input) var(--pad-sub);
+}
+
+.custom-select-container.pager .custom-multi-select-checkbox-label {
+    font-size: 0.8125rem;
+}
+
+.custom-select-container.pager .custom-multi-select-checkmark {
+    height: 16px;
+    width: 16px;
+    min-width: 16px;
+}
+
+.custom-select-container.pager .custom-multi-select-checkmark::after {
+    left: 4px;
+    top: 1px;
+    width: 4px;
+    height: 8px;
+}
+
+.custom-select-container.pager .custom-multi-select-checkmark.indeterminate::after {
+    left: 2px;
+    top: 5px;
+    width: 8px;
+}

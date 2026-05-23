@@ -1,0 +1,91 @@
+@page "/componentlibrary-alert"
+@using Client.Components.Validation
+
+<PageTitle>Alerts</PageTitle>
+
+<main class="button-story">
+    <h1 class="button-story__title">Alerts</h1>
+    <p class="button-story__lead">
+        <code class="button-story__code">CustomAlert</code> uses support colors and spacing from
+        <code class="button-story__code">app.css</code>.
+    </p>
+
+    <section class="button-story__section" aria-labelledby="alert-matrix-heading">
+        <h2 id="alert-matrix-heading" class="button-story__h2">By severity and variant</h2>
+        <p class="button-story__muted">Rows are severity; columns are Filled, Outlined, and Text.</p>
+
+        <div class="button-story__size-matrix">
+            <div class="button-story__size-matrix-corner" aria-hidden="true"></div>
+            <div class="button-story__size-colhead">Filled</div>
+            <div class="button-story__size-colhead">Outlined</div>
+            <div class="button-story__size-colhead">Text</div>
+
+            @foreach (var severity in StorySeverities)
+            {
+                <div class="button-story__size-rowlabel" id="@($"alert-row-{severity}")">@SeverityLabel(severity)</div>
+                @foreach (var variant in StoryAlertVariants)
+                {
+                    <div class="button-story__size-cell">
+                        <CustomAlert @key="@($"{severity}-{variant}")"
+                                     Message="@($"{SeverityLabel(severity)} — {VariantLabel(variant)}")"
+                                     Severity="severity"
+                                     Variant="variant"
+                                     IsVisible="true" />
+                    </div>
+                }
+            }
+        </div>
+    </section>
+
+    <section class="button-story__section" aria-labelledby="alert-filled-heading">
+        <h2 id="alert-filled-heading" class="button-story__h2">Filled only</h2>
+        <p class="button-story__muted">Typical inline messages at default (filled) style.</p>
+
+        <div class="button-story__type-grid">
+            @foreach (var severity in StorySeverities)
+            {
+                <article class="button-story__type-tile">
+                    <h3 class="button-story__type-name">@SeverityLabel(severity)</h3>
+                    <div class="button-story__type-sample">
+                        <CustomAlert Message="@($"{SeverityLabel(severity)}: operation completed.")"
+                                     Severity="severity"
+                                     Variant="AlertVariant.Filled"
+                                     IsVisible="true" />
+                    </div>
+                </article>
+            }
+        </div>
+    </section>
+</main>
+
+@code {
+    private static readonly AlertSeverity[] StorySeverities =
+    [
+        AlertSeverity.Info,
+        AlertSeverity.Success,
+        AlertSeverity.Warning,
+        AlertSeverity.Error,
+    ];
+
+    private static readonly AlertVariant[] StoryAlertVariants =
+    [
+        AlertVariant.Filled,
+        AlertVariant.Outlined,
+        AlertVariant.Text,
+    ];
+
+    private static string SeverityLabel(AlertSeverity s) => s switch
+    {
+        AlertSeverity.Success => "Success",
+        AlertSeverity.Warning => "Warning",
+        AlertSeverity.Error => "Error",
+        _ => "Info",
+    };
+
+    private static string VariantLabel(AlertVariant v) => v switch
+    {
+        AlertVariant.Outlined => "Outlined",
+        AlertVariant.Text => "Text",
+        _ => "Filled",
+    };
+}

@@ -1,0 +1,28 @@
+@namespace Client.Components.Breadcrumbs
+
+@if (Items is not null && Items.Count > 0)
+{
+    <nav class="breadcrumbs @CssClass" aria-label="@AriaLabel">
+        <ol class="breadcrumbs__list">
+            @for (var i = 0; i < Items.Count; i++)
+            {
+                var item = Items[i];
+                var isCurrentPage = i == Items.Count - 1 && !item.IsClickable;
+                <li class="breadcrumbs__item">
+                    @if (item.IsClickable)
+                    {
+                        <a class="breadcrumbs__link" href="@item.Href">@item.Text</a>
+                    }
+                    else if (isCurrentPage)
+                    {
+                        <span class="breadcrumbs__text" aria-current="page">@item.Text</span>
+                    }
+                    else
+                    {
+                        <span class="breadcrumbs__text breadcrumbs__text--plain">@item.Text</span>
+                    }
+                </li>
+            }
+        </ol>
+    </nav>
+}

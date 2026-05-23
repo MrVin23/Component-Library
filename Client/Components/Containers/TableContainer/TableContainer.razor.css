@@ -1,0 +1,89 @@
+.table-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pad-sub);
+    min-width: 0;
+}
+
+.table-container__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--pad-sub);
+}
+
+.table-container__title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--theme-fg-contrast);
+    font-family: var(--font-ui);
+    flex: 1;
+    min-width: 0;
+}
+
+.table-container__header-actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Override CustomTooltip’s default width:100% so the header row doesn’t swallow space. */
+.table-container__header-actions :deep(.custom-tooltip-wrapper) {
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    flex: 0 0 auto;
+}
+
+.table-container__search-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: 0;
+    padding: 0;
+    border: var(--border-container) solid var(--theme-border);
+    border-radius: calc(var(--app-radius-lg) / 2);
+    background: var(--app-surface);
+    color: var(--app-text-primary);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.table-container__search-btn:hover {
+    background: color-mix(in srgb, var(--app-primary) 8%, var(--app-surface));
+    border-color: color-mix(in srgb, var(--app-primary) 35%, var(--theme-border));
+    color: var(--app-primary);
+}
+
+.table-container__search-btn:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--app-primary) 55%, transparent);
+    outline-offset: 2px;
+}
+
+.table-container__filter {
+    padding: var(--pad-container);
+    border: var(--border-container) solid var(--theme-border);
+    border-radius: calc(var(--app-radius-lg) / 2);
+    background: color-mix(in srgb, var(--app-surface) 94%, var(--theme-border));
+    animation: table-container-filter-in 0.16s ease;
+}
+
+.table-container__body {
+    min-width: 0;
+}
+
+@keyframes table-container-filter-in {
+    from {
+        opacity: 0.92;
+        transform: translateY(-3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}

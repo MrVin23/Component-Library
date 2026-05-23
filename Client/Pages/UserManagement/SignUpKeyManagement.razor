@@ -1,0 +1,115 @@
+@page "/usermanagement-signup-keys"
+@layout MainLayout
+@using Client.Apis.UserPermissions
+@using Client.Components.Authorization
+@using Client.Components.Containers.FormContainer
+@using Client.Components.Table
+@using Client.Components.Containers.TitleContainer
+@using Client.Components.Validation
+@using Shared.Dtos
+@using Shared.Dtos.UserPermissions
+
+<CustomAutorizeView Role="Admin">
+    <TitleContainer
+        Title="Sign-up keys"
+        Description="Create keys for controlled self-service registration. Keys expire automatically; leave the key field empty to let the server generate one." />
+
+
+    <section class="user-management signup-key-management">
+    <BreadCrumbs Items="BreadcrumbItems" CssClass="signup-key-management__breadcrumbs" />
+
+    @if (!string.IsNullOrEmpty(bannerMessage))
+    {
+        <div class="@BannerCssClass" role="@(bannerIsError ? "alert" : "status")">@bannerMessage</div>
+    }
+
+    <div class="signup-key-management__layout">
+        <EditForm Model="createRequest" OnSubmit="HandleCreateSubmitAsync">
+            <FormContainer Title="Create sign-up key"
+                           ShowTitle="true"
+                           ShowResetButton="true"
+                           ShowSaveButton="true"
+                           ShowValidationSummary="true"
+                           SaveButtonHtmlType="submit"
+                           ResetButtonHtmlType="button"
+                           SaveDisabled="@isSaving"
+                           ResetDisabled="@isSaving"
+                           OnReset="HandleCreateResetAsync">
+                <div class="signup-key-management__fields">
+                    <label class="app-field">
+                        <span class="app-label">Custom key <span class="signup-key-management__optional">(optional)</span></span>
+                        <InputText class="app-input" @bind-Value="createRequest.Key" placeholder="Leave blank to auto-generate" autocomplete="off" />
+                        <ValidationMessage For="@(() => createRequest.Key)" />
+                    </label>
+                    <label class="app-field">
+                        <span class="app-label">Expires at <span class="app-label-req">*</span></span>
+                        <InputDate class="app-input signup-key-management__datetime" Type="InputDateType.DateTimeLocal" @bind-Value="createRequest.ExpiresAt" />
+                        <ValidationMessage For="@(() => createRequest.ExpiresAt)" />
+                    </label>
+                    <p class="signup-key-management__hint">Must be between 1 hour and 5 days from now (UTC rules on the server).</p>
+                </div>
+            </FormContainer>
+        </EditForm>
+
+        <div class="signup-key-management__list-panel">
+            <h2 class="signup-key-management__list-title">Existing keys</h2>
+            <div class="signup-key-management__table-wrap">
+                <CustomTable TItem="SignUpKeyResponse"
+                             Items="@keys"
+                             IsLoading="@isLoadingList"
+                             EmptyMessage="No sign-up keys yet."
+                             LoadingMessage="Loading sign-up keys...">
+                    <HeaderTemplate>
+                        <th scope="col">Key</th>
+                        <th scope="col" class="signup-key-management__col-copy">Copy</th>
+                        <th scope="col">Expires</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="signup-key-management__col-actions">Actions</th>
+                    </HeaderTemplate>
+                    <RowTemplate Context="row">
+                        <td><code class="signup-key-management__code">@row.Key</code></td>
+                        <td class="signup-key-management__col-copy">
+                            <CustomTooltip Position="TooltipPosition.Top">
+                                <TriggerContent>
+                                    <button type="button"
+                                            class="signup-key-management__copy-trigger"
+                                            aria-label="Copy key to clipboard"
+                                            disabled="@(isDeletingId == row.Id || isSaving)"
+                                            @onclick="@(() => CopyKeyToClipboardAsync(row.Key))"
+                                            @onclick:stopPropagation="true">
+                                        <i class="bi bi-clipboard" aria-hidden="true"></i>
+                                    </button>
+                                </TriggerContent>
+                                <ChildContent>Copy key to clipboard</ChildContent>
+                            </CustomTooltip>
+                        </td>
+                        <td>@FormatDate(row.ExpiresAt)</td>
+                        <td>
+                            @if (row.IsExpired)
+                            {
+                                <span class="signup-key-management__badge signup-key-management__badge--expired">Expired</span>
+                            }
+                            else if (row.IsActive)
+                            {
+                                <span class="signup-key-management__badge signup-key-management__badge--active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="signup-key-management__badge">Inactive</span>
+                            }
+                        </td>
+                        <td class="signup-key-management__col-actions">
+                            <TableActionsCell TItem="SignUpKeyResponse"
+                                              Item="row"
+                                              IsDisabled="@(isDeletingId == row.Id || isSaving)"
+                                              OnDelete="DeleteKeyFromRowAsync" />
+                        </td>
+                    </RowTemplate>
+                </CustomTable>
+            </div>
+        </div>
+    </div>
+
+        <Snackbar @ref="feedbackSnackbar" />
+    </section>
+</CustomAutorizeView>

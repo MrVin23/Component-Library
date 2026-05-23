@@ -1,0 +1,57 @@
+﻿@inherits LayoutComponentBase
+@inject Microsoft.AspNetCore.Components.Authorization.AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+@inject Client.Utils.UserPermissions.IAuthService AuthService
+@inject Client.Utils.AppSettings.ThemeHandler ThemeHandler
+
+<div class="page @(_sidebarCollapsed ? "page--sidebar-collapsed" : null)">
+    <aside class="sidebar-shell">
+        <SideNavBar Collapsed="_sidebarCollapsed" />
+    </aside>
+
+    <button type="button"
+            class="sidebar-backdrop"
+            @onclick="ToggleSidebar"
+            aria-label="Close navigation"></button>
+
+    <main class="main-area">
+        <TopNavBar SidebarCollapsed="_sidebarCollapsed" OnSidebarToggle="ToggleSidebar" />
+        <article class="content">
+            @if (_shellReady)
+            {
+                @Body
+            }
+            else
+            {
+                <p class="main-layout__preparing" aria-live="polite">Loading…</p>
+            }
+        </article>
+    </main>
+</div>
+
+@code {
+    private bool _sidebarCollapsed = true;
+    private bool _shellReady;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // 1) Encrypted session (fast): theme + cached settings without waiting for the network.
+        await ThemeHandler.ApplyFromStoredSessionAsync();
+
+        // 2) Server session + database user settings, then re-apply so storage and DOM match the API.
+        await AuthService.RefreshClientAuthStateAsync();
+
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+
+        if (!isAuthenticated)
+        {
+            Navigation.NavigateTo("/login", forceLoad: false);
+            return;
+        }
+
+        _shellReady = true;
+    }
+
+    private void ToggleSidebar() => _sidebarCollapsed = !_sidebarCollapsed;
+}

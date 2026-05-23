@@ -1,0 +1,30 @@
+.title-container {
+    display: grid;
+    gap: 0;
+}
+
+.title-container__header {
+    display: grid;
+    gap: calc(var(--pad-sub) * 0.35);
+}
+
+.title-container__title {
+    margin: 0;
+    font-size: clamp(2rem, 2.8vw, 2.6rem);
+    line-height: 1.1;
+    color: var(--theme-fg-contrast);
+}
+
+.title-container__description {
+    margin: 0;
+    max-width: 70ch;
+    font-size: 0.98rem;
+    color: var(--theme-fg-muted);
+}
+
+.title-container__divider {
+    width: 100%;
+    margin: calc(var(--pad-sub) * 0.45) 0 calc(var(--pad-sub) * 0.25);
+    border: 0;
+    border-top: 1px solid var(--theme-border);
+}

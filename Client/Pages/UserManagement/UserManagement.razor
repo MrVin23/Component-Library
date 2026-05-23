@@ -1,0 +1,168 @@
+@page "/usermanagement"
+@layout MainLayout
+@using Client.Components.Authorization
+@using Client.Apis.Users
+@using Client.Components.Buttons.CustomButton
+@using Client.Components.Containers.FormContainer
+@using Client.Components.Containers.TitleContainer
+@using Client.Components.Table
+@using Client.Components.Validation
+@using Shared.Dtos.Users
+
+<CustomAutorizeView Role="Admin">
+        <TitleContainer
+            Title="User management"
+            Description="Create, update, and remove user accounts used across the application." />
+
+        <section class="user-management users-management">
+            <BreadCrumbs Items="BreadcrumbItems" CssClass="users-management__breadcrumbs" />
+
+            @if (!string.IsNullOrEmpty(bannerMessage))
+            {
+                <div class="@BannerCssClass" role="@(bannerIsError ? "alert" : "status")">@bannerMessage</div>
+            }
+
+            <div class="users-management__layout">
+                <EditForm Model="@createRequest" OnSubmit="@HandleCreateSubmitAsync">
+                    <FormContainer Title="@PrimaryFormTitle"
+                                   ShowTitle="true"
+                                   ShowResetButton="true"
+                                   ResetButtonText="@(editingUserId.HasValue ? "Cancel" : "Reset")"
+                                   ShowSaveButton="true"
+                                   ShowValidationSummary="true"
+                                   SaveButtonHtmlType="submit"
+                                   ResetButtonHtmlType="button"
+                                   SaveDisabled="@isSaving"
+                                   ResetDisabled="@isSaving"
+                                   OnReset="@HandleCreateResetAsync">
+                        <div class="users-management__fields @(highlightPrimaryForm ? "users-management__fields--highlight" : string.Empty)">
+                            <label class="app-field">
+                                <span class="app-label">Username <span class="app-label-req">*</span></span>
+                                <InputText class="app-input" @bind-Value="createRequest.Username" placeholder="e.g. jdoe" autocomplete="off" />
+                                <ValidationMessage For="@(() => createRequest.Username)" />
+                            </label>
+                            <label class="app-field">
+                                <span class="app-label">Email <span class="app-label-req">*</span></span>
+                                <InputText class="app-input" @bind-Value="createRequest.Email" placeholder="user@example.com" autocomplete="off" />
+                                <ValidationMessage For="@(() => createRequest.Email)" />
+                            </label>
+                            <label class="app-field">
+                                <span class="app-label">First name</span>
+                                <InputText class="app-input" @bind-Value="createRequest.FirstName" placeholder="Given name" autocomplete="off" />
+                                <ValidationMessage For="@(() => createRequest.FirstName)" />
+                            </label>
+                            <label class="app-field">
+                                <span class="app-label">Last name</span>
+                                <InputText class="app-input" @bind-Value="createRequest.LastName" placeholder="Family name" autocomplete="off" />
+                                <ValidationMessage For="@(() => createRequest.LastName)" />
+                            </label>
+                            <label class="app-field users-management__field--password">
+                                <span class="app-label">
+                                    Password
+                                    @if (!editingUserId.HasValue)
+                                    {
+                                        <span class="app-label-req">*</span>
+                                    }
+                                </span>
+                                <InputText @bind-Value="createRequest.Password"
+                                           AdditionalAttributes="@GetPasswordInputAttributes()" />
+                                <ValidationMessage For="@(() => createRequest.Password)" />
+                            </label>
+                        </div>
+                    </FormContainer>
+                </EditForm>
+
+                <div class="users-management__list-panel">
+                    <TableContainer Title="Existing users"
+                                    SearchTooltip="Click the search icon to show or hide filters for this table."
+                                    FilterExpandedChanged="@OnUserListFilterPanelExpandedAsync">
+                        <FilterContent>
+                            <div class="users-management__user-filter">
+                                <div class="users-management__filter-fields-grid">
+                                    <label class="app-field">
+                                        <span class="app-label">Username</span>
+                                        <InputText class="app-input"
+                                                   @bind-Value="userFilterDraft.Username"
+                                                   placeholder="Filter by username"
+                                                   autocomplete="off"
+                                                   disabled="@isLoadingList" />
+                                    </label>
+                                    <label class="app-field">
+                                        <span class="app-label">Email</span>
+                                        <InputText class="app-input"
+                                                   @bind-Value="userFilterDraft.Email"
+                                                   placeholder="Filter by email"
+                                                   autocomplete="off"
+                                                   disabled="@isLoadingList" />
+                                    </label>
+                                    <label class="app-field">
+                                        <span class="app-label">First name</span>
+                                        <InputText class="app-input"
+                                                   @bind-Value="userFilterDraft.FirstName"
+                                                   placeholder="Filter by first name"
+                                                   autocomplete="off"
+                                                   disabled="@isLoadingList" />
+                                    </label>
+                                    <label class="app-field">
+                                        <span class="app-label">Last name</span>
+                                        <InputText class="app-input"
+                                                   @bind-Value="userFilterDraft.LastName"
+                                                   placeholder="Filter by last name"
+                                                   autocomplete="off"
+                                                   disabled="@isLoadingList" />
+                                    </label>
+                                </div>
+                                <footer class="users-management__filter-footer">
+                                    <div class="users-management__filter-actions">
+                                        <CustomButton Text="Cancel"
+                                                      ButtonType="CustomButtonType.Tertiary"
+                                                      ButtonHtmlType="button"
+                                                      Disabled="@isLoadingList"
+                                                      OnClick="HandleUserListFilterCancelAsync" />
+                                        <CustomButton Text="Search"
+                                                      ButtonType="CustomButtonType.FormGreen"
+                                                      IconClass="bi bi-check-lg"
+                                                      ButtonHtmlType="button"
+                                                      Disabled="@isLoadingList"
+                                                      OnClick="HandleUserListFilterSearchAsync" />
+                                    </div>
+                                </footer>
+                            </div>
+                        </FilterContent>
+                        <ChildContent>
+                            <div class="users-management__table-wrap">
+                                <CustomTable TItem="UserResponse"
+                                             Items="@filteredUsers"
+                                             IsLoading="@isLoadingList"
+                                             EmptyMessage="@UsersTableEmptyMessage"
+                                             LoadingMessage="Loading users...">
+                                    <HeaderTemplate>
+                                        <th scope="col">Username</th>
+                                        <th scope="col" class="users-management__col-email">Email</th>
+                                        <th scope="col" class="users-management__col-name">Name</th>
+                                        <th scope="col" class="users-management__col-actions">Actions</th>
+                                    </HeaderTemplate>
+                                    <RowTemplate Context="user">
+                                        <td>
+                                            <code class="users-management__code">@user.Username</code>
+                                        </td>
+                                        <td class="users-management__col-email">@user.Email</td>
+                                        <td class="users-management__col-name">@FormatFullName(user)</td>
+                                        <td class="users-management__col-actions">
+                                            <TableActionsCell TItem="UserResponse"
+                                                              Item="@user"
+                                                              IsDisabled="@(isSaving || isDeletingId == user.Id)"
+                                                              OnEdit="@((UserResponse row) => StartEditFromRowAsync(row))"
+                                                              OnDelete="@((UserResponse row) => DeleteUserFromRowAsync(row))" />
+                                        </td>
+                                    </RowTemplate>
+                                </CustomTable>
+                            </div>
+                        </ChildContent>
+                    </TableContainer>
+                </div>
+            </div>
+
+            <Snackbar @ref="feedbackSnackbar" />
+        </section>
+</CustomAutorizeView>

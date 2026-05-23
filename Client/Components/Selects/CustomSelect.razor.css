@@ -1,0 +1,59 @@
+/* Layout + label: global .app-field / .app-label; variants tune density only */
+.custom-select-container.primary {
+    gap: var(--pad-input);
+}
+
+.custom-select-container.pager {
+    gap: var(--pad-input-m);
+}
+
+.custom-select-label.pager {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--theme-fg-muted);
+}
+
+/* Native select styled like .app-input + chevron (theme-aware fill) */
+.custom-select {
+    min-width: 0;
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235c5c5c' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--pad-sub) center;
+    padding-right: 2.25rem;
+    transition: border-color 0.15s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+    .custom-select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a3a3a3' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+    }
+}
+
+html[data-theme="light"] .custom-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235c5c5c' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+}
+
+html[data-theme="dark"] .custom-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a3a3a3' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+}
+
+.custom-select:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--theme-border) 50%, var(--palette-accent-1));
+}
+
+.custom-select:disabled {
+    cursor: not-allowed;
+}
+
+.custom-select.pager {
+    padding: var(--pad-input-m) 2rem var(--pad-input-m) var(--pad-sub-m);
+    min-width: 7.5rem;
+    font-size: 0.8125rem;
+}
+
+.custom-select.primary {
+    padding: var(--pad-input) 2.5rem var(--pad-input) var(--pad-sub);
+    min-width: 9.375rem;
+}

@@ -1,0 +1,19 @@
+<CustomTooltip Position="TooltipPosition.Right">
+    <TriggerContent>
+        <NavLink class="@LinkClass"
+                 href="@Href"
+                 Match="@Match"
+                 aria-label="@Label">
+            <span class="nav-bar-button__icon" aria-hidden="true">@Icon</span>
+            <span class="nav-bar-button__label">@Label</span>
+        </NavLink>
+    </TriggerContent>
+    <ChildContent>@(Title ?? Label)</ChildContent>
+</CustomTooltip>
+
+@code {
+    private string LinkClass =>
+        SideNavCollapsed
+            ? "nav-bar-button nav-bar-button--collapsed"
+            : "nav-bar-button";
+}

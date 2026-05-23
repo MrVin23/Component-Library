@@ -1,0 +1,32 @@
+@switch (Id)
+{
+    case SideNavIconId.Home:
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z" /></svg>
+        break;
+    case SideNavIconId.UserManagement:
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3" /><path d="M3.5 18a5.5 5.5 0 0 1 11 0" /><circle cx="17.5" cy="9.5" r="2.5" /><path d="M14.5 18.5a4.5 4.5 0 0 1 6 0" /></svg>
+        break;
+    case SideNavIconId.Counter:
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M12 8v8M8 12h8" /></svg>
+        break;
+    case SideNavIconId.Weather:
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.5A4.5 4.5 0 0 1 8.5 10H9a3 3 0 0 1 5.78-1.16A4 4 0 0 1 20 14.5" /><path d="M16 14v6M13 17h6" /></svg>
+        break;
+    case SideNavIconId.ComponentLibrary:
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="8" rx="1.5" /><rect x="13" y="4" width="8" height="5" rx="1.5" /><rect x="13" y="11" width="8" height="9" rx="1.5" /><rect x="3" y="14" width="8" height="6" rx="1.5" /></svg>
+        break;
+    case SideNavIconId.More:
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h7" /></svg>
+        break;
+    case SideNavIconId.NotFound:
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="9" /><path d="M9 10h.01M15 10h.01M9.5 15a3.5 3.5 0 0 0 5 0" /></svg>
+        break;
+    case SideNavIconId.SignIn:
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><path d="M10 17 15 12 10 7" /><path d="M15 12H3" /></svg>
+        break;
+}
+
+@code {
+    [Parameter]
+    public SideNavIconId Id { get; set; }
+}

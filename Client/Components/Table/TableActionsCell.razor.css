@@ -1,0 +1,116 @@
+.table-actions-cell {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    font-family: var(--font-ui);
+}
+
+.table-actions-kebab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 1.125rem;
+    color: var(--theme-fg-muted);
+    background: transparent;
+    border: none;
+    border-radius: calc(var(--app-radius-lg) / 2);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.table-actions-kebab:hover:not(:disabled) {
+    color: var(--app-primary);
+    background: color-mix(in srgb, var(--app-primary) 10%, var(--theme-bg));
+}
+
+.table-actions-kebab:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.table-actions-kebab:focus-visible {
+    outline: 2px solid var(--app-primary);
+    outline-offset: 2px;
+}
+
+/* Overlay to capture clicks outside dropdown */
+.table-actions-dropdown-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+}
+
+/* position: fixed so dropdown escapes overflow (scrollable tables, modals).
+   Top/bottom/left are set by JS based on viewport space (above vs below trigger). */
+.table-actions-dropdown {
+    position: fixed;
+    z-index: 100;
+    min-width: 160px;
+    padding: var(--pad-input-m) 0;
+    background: var(--app-surface);
+    border: var(--border-container) solid var(--theme-border);
+    border-radius: var(--app-radius-lg);
+    box-shadow: var(--app-shadow-lg);
+    animation: tableActionsDropdownIn 0.15s ease;
+}
+
+@keyframes tableActionsDropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.table-actions-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: var(--pad-sub);
+    width: 100%;
+    padding: var(--pad-input) var(--pad-sub);
+    font-size: 0.875rem;
+    text-align: left;
+    color: var(--theme-fg);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+.table-actions-dropdown-item:hover:not(:disabled) {
+    background: var(--app-surface-alt);
+}
+
+.table-actions-dropdown-item:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.table-actions-dropdown-item i {
+    font-size: 1rem;
+    color: var(--theme-fg-muted);
+    flex-shrink: 0;
+}
+
+.table-actions-dropdown-item:hover:not(:disabled) i {
+    color: var(--app-primary);
+}
+
+.table-actions-dropdown-danger:hover:not(:disabled),
+.table-actions-dropdown-item.table-actions-dropdown-danger i {
+    color: var(--support-red) !important;
+}
+
+.table-actions-dropdown-divider {
+    height: var(--border-container);
+    margin: var(--pad-input-m) 0;
+    background: var(--theme-border);
+}

@@ -1,0 +1,142 @@
+@typeparam TItem
+@inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
+
+<div class="table-actions-cell @(IsDropdownOpen ? "open" : "")" @onclick:stopPropagation="true">
+    <button type="button"
+            @ref="_kebabRef"
+            class="table-actions-kebab"
+            @onclick="ToggleDropdown"
+            disabled="@IsDisabled"
+            title="Actions"
+            aria-haspopup="true"
+            aria-expanded="@IsDropdownOpen"
+            aria-label="Open actions menu">
+        <i class="bi bi-three-dots-vertical"></i>
+    </button>
+
+    @if (IsDropdownOpen)
+    {
+        <div class="table-actions-dropdown-overlay" @onclick="CloseDropdown"></div>
+        <div class="table-actions-dropdown" @ref="_dropdownRef">
+            @if (OnView.HasDelegate)
+            {
+                <button type="button"
+                        class="table-actions-dropdown-item"
+                        @onclick="() => InvokeAndClose(OnView)"
+                        disabled="@IsDisabled">
+                    <i class="bi bi-eye"></i>
+                    <span>@ViewLabel</span>
+                </button>
+            }
+            @if (OnEdit.HasDelegate)
+            {
+                <button type="button"
+                        class="table-actions-dropdown-item"
+                        @onclick="() => InvokeAndClose(OnEdit)"
+                        disabled="@IsDisabled">
+                    <i class="bi bi-pencil"></i>
+                    <span>@EditLabel</span>
+                </button>
+            }
+            @if (OnDelete.HasDelegate)
+            {
+                <button type="button"
+                        class="table-actions-dropdown-item table-actions-dropdown-danger"
+                        @onclick="() => InvokeAndClose(OnDelete)"
+                        disabled="@IsDisabled">
+                    <i class="bi bi-trash"></i>
+                    <span>@DeleteLabel</span>
+                </button>
+            }
+            @if (OnView.HasDelegate || OnEdit.HasDelegate || OnDelete.HasDelegate)
+            {
+                @if (AdditionalOptions?.Any() == true)
+                {
+                    <div class="table-actions-dropdown-divider"></div>
+                }
+            }
+            @if (AdditionalOptions != null)
+            {
+                @foreach (var option in AdditionalOptions)
+                {
+                    <button type="button"
+                            class="table-actions-dropdown-item @(option.CssClass ?? "")"
+                            @onclick="() => InvokeOptionAndClose(option)"
+                            disabled="@(IsDisabled || option.IsDisabled)">
+                        <i class="@option.Icon"></i>
+                        <span>@option.Label</span>
+                    </button>
+                }
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public TItem Item { get; set; } = default!;
+    [Parameter] public bool IsDisabled { get; set; }
+    [Parameter] public string ViewLabel { get; set; } = "View";
+    [Parameter] public string EditLabel { get; set; } = "Edit";
+    [Parameter] public string DeleteLabel { get; set; } = "Delete";
+    [Parameter] public EventCallback<TItem> OnView { get; set; }
+    [Parameter] public EventCallback<TItem> OnEdit { get; set; }
+    [Parameter] public EventCallback<TItem> OnDelete { get; set; }
+    [Parameter] public IEnumerable<TableActionOption<TItem>>? AdditionalOptions { get; set; }
+
+    private bool IsDropdownOpen { get; set; }
+    private ElementReference _kebabRef;
+    private ElementReference _dropdownRef;
+    private IJSObjectReference? _jsModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (IsDropdownOpen && _jsModule != null)
+        {
+            try
+            {
+                await _jsModule.InvokeVoidAsync("positionDropdown", _kebabRef, _dropdownRef);
+            }
+            catch (ObjectDisposedException) { /* Component disposed during async */ }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/Table/TableActionsCell.razor.js");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_jsModule != null)
+        {
+            await _jsModule.DisposeAsync();
+        }
+    }
+
+    private void ToggleDropdown()
+    {
+        if (!IsDisabled)
+            IsDropdownOpen = !IsDropdownOpen;
+    }
+
+    private void CloseDropdown()
+    {
+        IsDropdownOpen = false;
+    }
+
+    private async Task InvokeAndClose(EventCallback<TItem> callback)
+    {
+        await callback.InvokeAsync(Item);
+        CloseDropdown();
+    }
+
+    private async Task InvokeOptionAndClose(TableActionOption<TItem> option)
+    {
+        if (!option.IsDisabled && !IsDisabled)
+        {
+            await option.OnClick.InvokeAsync(Item);
+        }
+        CloseDropdown();
+    }
+}

@@ -1,0 +1,21 @@
+@namespace Client.Components.Validation
+
+@if (IsVisible)
+{
+    <div class="@GetAlertRootClass()" role="alert">
+        <i class="bi @GetIconClass() custom-alert__icon" aria-hidden="true"></i>
+        <div class="custom-alert__body">
+            @if (ChildContent != null)
+            {
+                @ChildContent
+            }
+            else
+            {
+                @Message
+            }
+        </div>
+        <button type="button" class="custom-alert__close" @onclick="HandleClose" aria-label="Close">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+    </div>
+}

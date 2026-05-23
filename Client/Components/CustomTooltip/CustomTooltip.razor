@@ -1,0 +1,24 @@
+@implements IAsyncDisposable
+
+<span class="custom-tooltip-wrapper"
+      @ref="_wrapperRef"
+      @onmouseenter="OnShowAsync"
+      @onmouseleave="OnHideAsync">
+    @if (TriggerContent != null)
+    {
+        @TriggerContent
+    }
+    else
+    {
+        <i class="bi @IconClass custom-tooltip-icon"></i>
+    }
+    @if (_visible)
+    {
+        <div @ref="_bubbleRef" class="custom-tooltip-bubble @PositionClass">
+            <div class="custom-tooltip-arrow"></div>
+            <div class="custom-tooltip-content">
+                @ChildContent
+            </div>
+        </div>
+    }
+</span>

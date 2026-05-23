@@ -1,0 +1,171 @@
+.custom-select-container.primary {
+    gap: var(--pad-input);
+}
+
+.custom-select-container.pager {
+    gap: var(--pad-input-m);
+}
+
+.custom-select-label.pager {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--theme-fg-muted);
+}
+
+.custom-search-select-wrapper {
+    position: relative;
+}
+
+.custom-search-select-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.custom-search-select-input-main {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: var(--pad-input) 2.5rem var(--pad-input) var(--pad-sub);
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.custom-search-select-input-main::placeholder {
+    color: var(--theme-fg-muted);
+}
+
+.custom-search-select-input-main:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--theme-border) 50%, var(--palette-accent-1));
+}
+
+.custom-search-select-input-main:disabled {
+    cursor: not-allowed;
+}
+
+.custom-search-select-wrapper.is-open .custom-search-select-input-main {
+    cursor: text;
+}
+
+.custom-search-select-arrow {
+    position: absolute;
+    right: var(--pad-sub);
+    color: var(--palette-accent-1);
+    font-size: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.custom-search-select-wrapper.is-open .custom-search-select-arrow {
+    transform: rotate(180deg);
+}
+
+.custom-search-select-dropdown {
+    display: flex;
+    flex-direction: column;
+    max-height: min(20rem, 65vh);
+    min-height: 0;
+    overflow: hidden;
+    background: var(--app-dropdown-surface);
+}
+
+.custom-select-container.pager ::deep .custom-dropdown-panel {
+    margin-top: 0.22rem;
+}
+
+.custom-search-select-items {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: min(18rem, 56vh);
+    overflow-y: auto;
+    padding: var(--pad-input) 0;
+    background: var(--app-dropdown-surface);
+    scrollbar-color: color-mix(in srgb, var(--theme-border) 70%, transparent) var(--app-dropdown-surface);
+}
+
+.custom-search-select-clear-button {
+    width: 100%;
+    padding: var(--pad-sub) var(--pad-container);
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    color: var(--support-red);
+    background: var(--app-dropdown-header-bg);
+    border: none;
+    border-bottom: var(--border-container) solid var(--app-dropdown-border);
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.12s ease, color 0.12s ease;
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.custom-search-select-clear-button:hover {
+    background: var(--support-red-bg);
+    color: color-mix(in srgb, var(--support-red) 88%, var(--theme-fg-contrast));
+}
+
+.custom-search-select-clear-button:focus {
+    outline: none;
+}
+
+.custom-search-select-clear-button:focus-visible {
+    outline: 2px solid var(--app-primary-focus-ring);
+    outline-offset: -2px;
+}
+
+.custom-search-select-item {
+    padding: var(--pad-sub) var(--pad-container);
+    margin: 0 var(--pad-input);
+    border-radius: calc(var(--app-dropdown-radius) / 2);
+    font-size: 0.875rem;
+    color: var(--theme-fg-contrast);
+    cursor: pointer;
+    transition: background-color 0.12s ease;
+}
+
+.custom-search-select-item:hover {
+    background: var(--app-dropdown-row-hover);
+}
+
+.custom-search-select-item.selected {
+    background: var(--app-dropdown-row-selected);
+    color: var(--theme-fg-contrast);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--palette-accent-1);
+}
+
+.custom-search-select-item.no-results {
+    color: var(--theme-fg-muted);
+    cursor: default;
+    font-style: italic;
+    padding: var(--pad-container);
+    margin: 0 var(--pad-input);
+    text-align: center;
+    background: var(--app-dropdown-surface);
+}
+
+.custom-search-select-item.no-results:hover {
+    background: var(--app-dropdown-surface);
+}
+
+.custom-select-container.pager .custom-search-select-input-main {
+    padding: var(--pad-input-m) 2rem var(--pad-input-m) var(--pad-sub-m);
+    font-size: 0.8125rem;
+    min-height: 2.25rem;
+}
+
+.custom-select-container.pager .custom-search-select-item {
+    padding: 0.625rem var(--pad-sub);
+    font-size: 0.8125rem;
+}
+
+.custom-select-container.pager .custom-search-select-clear-button {
+    padding: 0.625rem var(--pad-sub);
+    font-size: 0.8125rem;
+}

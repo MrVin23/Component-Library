@@ -1,0 +1,172 @@
+@page "/componentlibrary-formcontainer"
+@using Client.Components.Buttons.CustomButton
+@using Client.Components.Containers.FormContainer
+
+<PageTitle>Form container</PageTitle>
+
+<main class="form-container-story">
+    <h1 class="form-container-story__title">Form container</h1>
+    <p class="form-container-story__lead">
+        <code class="form-container-story__code">FormContainer</code> wraps form fields with optional title and
+        bottom-right <code class="form-container-story__code">Reset</code> / <code class="form-container-story__code">Save</code>
+        actions built from <code class="form-container-story__code">CustomButton</code>. Padding uses
+        <code class="form-container-story__code">var(--pad-container)</code> from <code class="form-container-story__code">app.css</code>.
+        Under an <code class="form-container-story__code">EditForm</code>, use <code class="form-container-story__code">DataAnnotationsValidator</code>
+        as a sibling and set <code class="form-container-story__code">ShowValidationSummary</code> to show errors in a
+        <code class="form-container-story__code">CustomAlert</code> (same role as <code class="form-container-story__code">ValidationSummary</code>).
+    </p>
+
+    <section class="form-container-story__section" aria-labelledby="form-container-playground-heading">
+        <h2 id="form-container-playground-heading" class="form-container-story__h2">Playground</h2>
+        <p class="form-container-story__muted">Toggle visibility of the title and footer actions.</p>
+
+        <div class="form-container-story__controls" role="group" aria-label="Form container options">
+            <label class="form-container-story__check">
+                <input type="checkbox" @bind="_showTitle" />
+                <span>Show title</span>
+            </label>
+            <label class="form-container-story__check">
+                <input type="checkbox" @bind="_showReset" />
+                <span>Show reset</span>
+            </label>
+            <label class="form-container-story__check">
+                <input type="checkbox" @bind="_showSave" />
+                <span>Show save</span>
+            </label>
+        </div>
+
+        <FormContainer Title="Warehouse details"
+                       ShowTitle="@_showTitle"
+                       ShowResetButton="@_showReset"
+                       ShowSaveButton="@_showSave"
+                       OnReset="HandleResetAsync"
+                       OnSave="HandleSaveAsync">
+            <div class="form-container-story__fields">
+                <label class="app-field">
+                    <span class="app-label">Code</span>
+                    <input class="app-input" @bind="_code" @bind:event="oninput" />
+                </label>
+                <label class="app-field">
+                    <span class="app-label">Description</span>
+                    <input class="app-input" @bind="_description" @bind:event="oninput" />
+                </label>
+            </div>
+        </FormContainer>
+
+        <p class="form-container-story__log" role="status" aria-live="polite">@_lastAction</p>
+    </section>
+
+    <section class="form-container-story__section" aria-labelledby="form-container-editform-heading">
+        <h2 id="form-container-editform-heading" class="form-container-story__h2">Inside <code class="form-container-story__code">EditForm</code></h2>
+        <p class="form-container-story__muted">
+            Place <code class="form-container-story__code">FormContainer</code> inside <code class="form-container-story__code">EditForm</code>,
+            keep <code class="form-container-story__code">DataAnnotationsValidator</code> next to it, set <code class="form-container-story__code">ShowValidationSummary</code>
+            for a grouped error list, and set <code class="form-container-story__code">SaveButtonHtmlType</code> to <code class="form-container-story__code">submit</code>
+            so Save participates in form submission.
+        </p>
+
+        <h3 id="form-container-validation-summary-heading" class="form-container-story__h3">Validation summary example</h3>
+        <p class="form-container-story__muted">
+            The live form below sets <code class="form-container-story__code">ShowValidationSummary="true"</code>.
+            Clear <strong>SKU</strong> and <strong>Name</strong>, then click <strong>Save</strong>: validation messages are listed in a
+            <code class="form-container-story__code">CustomAlert</code> under the title (same data as <code class="form-container-story__code">ValidationSummary</code>),
+            with per-field <code class="form-container-story__code">ValidationMessage</code> lines still shown under each input.
+        </p>
+        <figure class="form-container-story__figure" aria-label="Sample markup for validation summary">
+            <figcaption class="form-container-story__figure-caption">Typical markup</figcaption>
+            <pre class="form-container-story__sample"><code>@ValidationSummarySampleMarkup</code></pre>
+        </figure>
+
+        <EditForm Model="_editModel" OnValidSubmit="HandleEditFormValidSubmit">
+            <DataAnnotationsValidator />
+            <FormContainer Title="Stock item"
+                           ShowTitle="true"
+                           ShowResetButton="true"
+                           ShowSaveButton="true"
+                           ShowValidationSummary="true"
+                           SaveButtonHtmlType="submit"
+                           OnReset="HandleEditFormResetAsync">
+                <div class="form-container-story__fields">
+                    <label class="app-field">
+                        <span class="app-label">SKU <span class="app-label-req">*</span></span>
+                        <InputText class="app-input" @bind-Value="_editModel.Sku" />
+                        <ValidationMessage For="@(() => _editModel.Sku)" />
+                    </label>
+                    <label class="app-field">
+                        <span class="app-label">Name <span class="app-label-req">*</span></span>
+                        <InputText class="app-input" @bind-Value="_editModel.Name" />
+                        <ValidationMessage For="@(() => _editModel.Name)" />
+                    </label>
+                </div>
+            </FormContainer>
+        </EditForm>
+
+        <p class="form-container-story__log form-container-story__log--subtle" role="status" aria-live="polite">@_editFormMessage</p>
+    </section>
+</main>
+
+@code {
+    private bool _showTitle = true;
+    private bool _showReset = true;
+    private bool _showSave = true;
+    private string _code = "WH-01";
+    private string _description = "Main warehouse";
+    private string _lastAction = "No actions yet.";
+
+    private readonly EditFormModel _editModel = new();
+    private string _editFormMessage = "Clear SKU and Name, then click Save to see the validation summary alert.";
+
+    private const string ValidationSummarySampleMarkup = """
+<EditForm Model="_editModel" OnValidSubmit="HandleEditFormValidSubmit">
+    <DataAnnotationsValidator />
+    <FormContainer Title="Stock item"
+                   ShowValidationSummary="true"
+                   SaveButtonHtmlType="submit">
+        <InputText @bind-Value="_editModel.Sku" />
+        <ValidationMessage For="@(() => _editModel.Sku)" />
+        <!-- more fields + ValidationMessage as needed -->
+    </FormContainer>
+</EditForm>
+""";
+
+    private Task HandleResetAsync(MouseEventArgs _)
+    {
+        _code = "WH-01";
+        _description = "Main warehouse";
+        _lastAction = "Reset (playground): fields restored to defaults.";
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    private Task HandleSaveAsync(MouseEventArgs _)
+    {
+        _lastAction = $"Save (playground): Code=\"{_code}\", Description=\"{_description}\".";
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    private Task HandleEditFormResetAsync(MouseEventArgs _)
+    {
+        _editModel.Sku = string.Empty;
+        _editModel.Name = string.Empty;
+        _editFormMessage = "EditForm: model cleared.";
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    private Task HandleEditFormValidSubmit()
+    {
+        _editFormMessage = $"EditForm: valid submit with SKU \"{_editModel.Sku}\" and name \"{_editModel.Name}\".";
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    private sealed class EditFormModel
+    {
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "SKU is required.")]
+        public string Sku { get; set; } = string.Empty;
+
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Name is required.")]
+        public string Name { get; set; } = string.Empty;
+    }
+}

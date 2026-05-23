@@ -1,0 +1,55 @@
+<nav id="app-sidebar"
+     class="side-nav @(Collapsed ? "side-nav--collapsed" : null)"
+     aria-label="Main navigation">
+    <CascadingValue Value="@Collapsed" Name="SideNavCollapsed" IsFixed="true">
+        <div class="side-nav__glow" aria-hidden="true"></div>
+        <div class="side-nav__header">
+            <span class="side-nav__title">Explore</span>
+        </div>
+        <div class="side-nav__links">
+            @foreach (var item in VisibleMainNavItems)
+            {
+                <div class="side-nav__item">
+                    @if (Collapsed)
+                    {
+                        <NavBarButton Href="@item.Href" Match="@item.Match" Label="@item.Label" Title="@item.Tooltip">
+                            <Icon>
+                                <NavItemIcon Id="@item.Icon" />
+                            </Icon>
+                        </NavBarButton>
+                    }
+                    else
+                    {
+                        <ExpandedNavButton Href="@item.Href" Match="@item.Match" Label="@item.Label">
+                            <Icon>
+                                <NavItemIcon Id="@item.Icon" />
+                            </Icon>
+                        </ExpandedNavButton>
+                    }
+                </div>
+            }
+
+            @* Dropdowns only when the sidebar is expanded (wide); hidden in collapsed / icon rail mode *@
+            @if (!Collapsed && VisibleComponentLibraryNavItems.Count > 0)
+            {
+                <div class="side-nav__item side-nav__item--dropdown">
+                    <NavBarDropdown Label="Component library">
+                        <Icon>
+                            <NavItemIcon Id="@SideNavIconId.ComponentLibrary" />
+                        </Icon>
+                        <ChildContent>
+                            @foreach (var item in VisibleComponentLibraryNavItems)
+                            {
+                                <ExpandedNavButton Href="@item.Href" Match="@item.Match" Label="@item.Label">
+                                    <Icon>
+                                        <NavItemIcon Id="@item.Icon" />
+                                    </Icon>
+                                </ExpandedNavButton>
+                            }
+                        </ChildContent>
+                    </NavBarDropdown>
+                </div>
+            }
+        </div>
+    </CascadingValue>
+</nav>

@@ -1,0 +1,19 @@
+@namespace Client.Components.Validation
+
+@if (IsVisible)
+{
+    <div class="snackbar-host">
+        <div class="@SnackbarRootClass" role="alert" aria-live="polite" aria-atomic="true">
+            <div class="snackbar__header">
+                <i class="bi @IconClass snackbar__icon" aria-hidden="true"></i>
+                <strong class="snackbar__title">@EffectiveHeaderTitle</strong>
+                <button type="button" class="snackbar__close" @onclick="HandleClose" aria-label="Close">
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="snackbar__body">
+                @Message
+            </div>
+        </div>
+    </div>
+}

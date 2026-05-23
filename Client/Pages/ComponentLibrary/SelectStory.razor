@@ -1,0 +1,84 @@
+@page "/componentlibrary-selects"
+@using Client.Components.CustomSelect
+
+<PageTitle>Selects</PageTitle>
+
+<main class="select-story">
+    <h1 class="select-story__title">Selects</h1>
+    <p class="select-story__lead">
+        <code class="select-story__code">CustomSearchSelect</code> and <code class="select-story__code">CustomMultiSelect</code>
+        use <code class="select-story__code">app-field</code>, <code class="select-story__code">app-label</code>, and
+        <code class="select-story__code">app-input</code> from <code class="select-story__code">app.css</code>, with list UI
+        inside <code class="select-story__code">CustomDropdownPanel</code>.
+    </p>
+
+    <section class="select-story__section" aria-labelledby="search-select-heading">
+        <h2 id="search-select-heading" class="select-story__h2">CustomSearchSelect</h2>
+        <p class="select-story__muted">Single choice with filter. Primary and pager density.</p>
+
+        <div class="select-story__grid">
+            <article class="select-story__tile">
+                <h3 class="select-story__tile-name">Primary</h3>
+                <CustomSearchSelect TItem="string"
+                                    Label="Region"
+                                    Items="@_demoItems"
+                                    @bind-SelectedValue="_searchPrimary"
+                                    Placeholder="Choose a region"
+                                    SelectType="CustomSelectType.Primary"
+                                    Width="100%" />
+                <p class="select-story__state">Selected: <strong>@(string.IsNullOrEmpty(_searchPrimary) ? "—" : _searchPrimary)</strong></p>
+            </article>
+            <article class="select-story__tile">
+                <h3 class="select-story__tile-name">Pager</h3>
+                <CustomSearchSelect TItem="string"
+                                    Label="Region"
+                                    Items="@_demoItems"
+                                    @bind-SelectedValue="_searchPager"
+                                    Placeholder="Choose"
+                                    SelectType="CustomSelectType.Pager"
+                                    Width="100%" />
+                <p class="select-story__state">Selected: <strong>@(string.IsNullOrEmpty(_searchPager) ? "—" : _searchPager)</strong></p>
+            </article>
+        </div>
+    </section>
+
+    <section class="select-story__section" aria-labelledby="multi-select-heading">
+        <h2 id="multi-select-heading" class="select-story__h2">CustomMultiSelect</h2>
+        <p class="select-story__muted">Multiple selection with select-all header and filter.</p>
+
+        <div class="select-story__grid">
+            <article class="select-story__tile">
+                <h3 class="select-story__tile-name">Primary</h3>
+                <CustomMultiSelect TItem="string"
+                                   Label="Regions"
+                                   Items="@_demoItems"
+                                   @bind-SelectedValues="_multiPrimary"
+                                   Placeholder="Pick one or more"
+                                   SelectType="CustomSelectType.Primary"
+                                   Width="100%" />
+                <p class="select-story__state">Count: <strong>@_multiPrimary.Count</strong> — @(_multiPrimary.Count == 0 ? "—" : string.Join(", ", _multiPrimary))</p>
+            </article>
+            <article class="select-story__tile">
+                <h3 class="select-story__tile-name">Pager</h3>
+                <CustomMultiSelect TItem="string"
+                                   Label="Regions"
+                                   Items="@_demoItems"
+                                   @bind-SelectedValues="_multiPager"
+                                   Placeholder="Pick"
+                                   SelectType="CustomSelectType.Pager"
+                                   Width="100%" />
+                <p class="select-story__state">Count: <strong>@_multiPager.Count</strong> — @(_multiPager.Count == 0 ? "—" : string.Join(", ", _multiPager))</p>
+            </article>
+        </div>
+    </section>
+</main>
+
+@code {
+    private static readonly List<string> _demoItems = ["North", "South", "East", "West", "Central"];
+
+    private string? _searchPrimary;
+    private string? _searchPager;
+
+    private List<string> _multiPrimary = [];
+    private List<string> _multiPager = [];
+}

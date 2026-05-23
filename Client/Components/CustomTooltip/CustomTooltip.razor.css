@@ -1,0 +1,91 @@
+/* ================================
+   Tooltip Wrapper — flex so trigger fills nav rows; bubble is position:fixed via JS
+   ================================ */
+.custom-tooltip-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    overflow: visible;
+    cursor: help;
+}
+
+.custom-tooltip-icon {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    transition: color 0.15s ease;
+}
+
+.custom-tooltip-wrapper:hover .custom-tooltip-icon {
+    color: #667eea;
+}
+
+/* ================================
+   Tooltip Bubble — placement is set in CustomTooltip.razor.js (viewport-fixed)
+   ================================ */
+.custom-tooltip-bubble {
+    position: fixed;
+    /* Above cards (isolation/stacking), images, and app chrome; within 32-bit z-index range */
+    z-index: 2147483647;
+    pointer-events: none;
+    white-space: normal;
+    overflow: visible;
+    margin: 0;
+    animation: customTooltipFadeIn 0.15s ease;
+}
+
+.custom-tooltip-content {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    min-width: 0;
+    max-width: min(280px, 90vw);
+    width: max-content;
+}
+
+.custom-tooltip-arrow {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #1e293b;
+    transform: rotate(45deg);
+}
+
+/* Arrow placement relative to bubble (bubble moves as a whole) */
+.custom-tooltip-bubble.tooltip-top .custom-tooltip-arrow {
+    bottom: -4px;
+    left: 50%;
+    margin-left: -4px;
+}
+
+.custom-tooltip-bubble.tooltip-bottom .custom-tooltip-arrow {
+    top: -4px;
+    left: 50%;
+    margin-left: -4px;
+}
+
+.custom-tooltip-bubble.tooltip-left .custom-tooltip-arrow {
+    right: -4px;
+    top: 50%;
+    margin-top: -4px;
+}
+
+.custom-tooltip-bubble.tooltip-right .custom-tooltip-arrow {
+    left: -4px;
+    top: 50%;
+    margin-top: -4px;
+}
+
+@keyframes customTooltipFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

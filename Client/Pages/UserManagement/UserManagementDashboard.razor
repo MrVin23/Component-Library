@@ -1,0 +1,56 @@
+@page "/usermanagement-dashboard"
+@using Client.Components.Authorization
+@using Client.Components.Containers.CardContainer
+@using Client.Components.Containers.TitleContainer
+
+<CustomAutorizeView Role="Admin">
+    <section class="user-management">
+        <TitleContainer
+            Title="User Management Dashboard"
+            Description="Manage access, security, and authorization from one place. Choose an action below to continue." />
+
+        <div class="user-management__grid">
+            <a class="user-management__card-link" href="/usermanagement">
+                <CardContainer Color="CardContainerEnum.Blue" Width="100%" Height="200px" MinHeight="200px" MinWidth="0" MaxWidth="unset">
+                    <h2>Manage Users</h2>
+                    <p>Create, edit, activate, and deactivate user accounts.</p>
+                </CardContainer>
+            </a>
+
+            <a class="user-management__card-link" href="/usermanagement-roles">
+                <CardContainer Color="CardContainerEnum.Green" Width="100%" Height="200px" MinHeight="200px" MinWidth="0" MaxWidth="unset">
+                    <h2>Manage Roles</h2>
+                    <p>Define role groups that represent business responsibilities.</p>
+                </CardContainer>
+            </a>
+
+            <a class="user-management__card-link" href="/usermanagement-permissions">
+                <CardContainer Color="CardContainerEnum.Orange" Width="100%" Height="200px" MinHeight="200px" MinWidth="0" MaxWidth="unset">
+                    <h2>Manage Permissions</h2>
+                    <p>Maintain granular permission rules for application features.</p>
+                </CardContainer>
+            </a>
+
+            <a class="user-management__card-link" href="/usermanagement-role-permissions">
+                <CardContainer Color="CardContainerEnum.Purple" Width="100%" Height="200px" MinHeight="200px" MinWidth="0" MaxWidth="unset">
+                    <h2>Manage Roles to Permissions</h2>
+                    <p>Map each role to the exact permissions it should include.</p>
+                </CardContainer>
+            </a>
+
+            <a class="user-management__card-link" href="/usermanagement-user-roles">
+                <CardContainer Color="CardContainerEnum.Secondary" Width="100%" Height="200px" MinHeight="200px" MinWidth="0" MaxWidth="unset">
+                    <h2>Manage User Roles</h2>
+                    <p>Assign roles directly to users and maintain user-role links.</p>
+                </CardContainer>
+            </a>
+
+            <a class="user-management__card-link" href="/usermanagement-signup-keys">
+                <CardContainer Color="CardContainerEnum.Yellow" Width="100%" Height="200px" MinHeight="200px" MinWidth="0" MaxWidth="unset">
+                    <h2>Sign-up keys</h2>
+                    <p>Issue and revoke keys used on the self-service registration screen.</p>
+                </CardContainer>
+            </a>
+        </div>
+    </section>
+</CustomAutorizeView>

@@ -1,0 +1,124 @@
+@page "/account"
+@layout MainLayout
+@using Client.Components.Breadcrumbs
+@using Client.Components.Containers.TitleContainer
+
+<PageTitle>Account</PageTitle>
+
+<section class="user-management user-account">
+    <TitleContainer
+        Title="Your account"
+        Description="Profile and preferences cached in your browser session (encrypted session storage)." />
+
+    <BreadCrumbs Items="BreadcrumbItems" CssClass="user-account__breadcrumbs" />
+
+    @if (isLoading)
+    {
+        <p class="user-account__loading" aria-live="polite">Loading account…</p>
+    }
+    else if (!isSignedIn)
+    {
+        <div class="user-account__banner user-account__banner--error" role="alert">
+            No signed-in user was found in session storage. Sign in to view your account details.
+        </div>
+    }
+    else if (user != null)
+    {
+        <div class="user-account__layout">
+            <div class="user-account__panel">
+                <h2 class="user-account__panel-title">Profile</h2>
+                <dl class="user-account__dl">
+                    <div class="user-account__row">
+                        <dt class="app-label">User ID</dt>
+                        <dd class="user-account__value">@user.Id</dd>
+                    </div>
+                    <div class="user-account__row">
+                        <dt class="app-label">Username</dt>
+                        <dd class="user-account__value"><code class="user-account__code">@user.Username</code></dd>
+                    </div>
+                    <div class="user-account__row">
+                        <dt class="app-label">Email</dt>
+                        <dd class="user-account__value">@DisplayOrDash(user.Email)</dd>
+                    </div>
+                    <div class="user-account__row">
+                        <dt class="app-label">First name</dt>
+                        <dd class="user-account__value">@DisplayOrDash(user.FirstName)</dd>
+                    </div>
+                    <div class="user-account__row">
+                        <dt class="app-label">Last name</dt>
+                        <dd class="user-account__value">@DisplayOrDash(user.LastName)</dd>
+                    </div>
+                    <div class="user-account__row">
+                        <dt class="app-label">Display name</dt>
+                        <dd class="user-account__value">@DisplayName(user)</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="user-account__panel">
+                <h2 class="user-account__panel-title">Roles</h2>
+                @if (user.Roles is { Count: > 0 })
+                {
+                    <ul class="user-account__roles" aria-label="Assigned roles">
+                        @foreach (var role in user.Roles)
+                        {
+                            <li><span class="user-account__badge">@role</span></li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="user-account__muted">No roles listed in the current session.</p>
+                }
+
+                @if (user.RoleDetails is { Count: > 0 })
+                {
+                    <h3 class="user-account__subheading">Role details</h3>
+                    <div class="user-account__table-wrap">
+                        <table class="user-account__table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var detail in user.RoleDetails)
+                                {
+                                    <tr>
+                                        <td><code class="user-account__code">@detail.Name</code></td>
+                                        <td>@DisplayOrDash(detail.Description)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+
+            <div class="user-account__panel">
+                <h2 class="user-account__panel-title">Session preferences</h2>
+                <p class="user-account__muted user-account__muted--block">
+                    Stored with your login in encrypted session storage (<span class="user-account__mono">currentUser</span>).
+                </p>
+                <dl class="user-account__dl">
+                    <div class="user-account__row">
+                        <dt class="app-label">Dark theme</dt>
+                        <dd class="user-account__value">
+                            @(session?.Settings != null
+                                ? (session.Settings.DarkMode ? "On" : "Off")
+                                : "Not set in session (defaults apply)")
+                        </dd>
+                    </div>
+                    @if (session?.Settings != null)
+                    {
+                        <div class="user-account__row">
+                            <dt class="app-label">Settings record ID</dt>
+                            <dd class="user-account__value">@session.Settings.Id</dd>
+                        </div>
+                    }
+                </dl>
+            </div>
+        </div>
+    }
+</section>

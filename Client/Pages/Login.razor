@@ -1,0 +1,224 @@
+@page "/login"
+@layout EmptyLayout
+@using Client.Components.Buttons.CustomButton
+@using Shared.Dtos
+@using Shared.Dtos.Users
+
+<PageTitle>@(isSignUpMode ? "Sign up" : "Sign in")</PageTitle>
+
+<div class="login-page">
+    <div class="login-page__backdrop" aria-hidden="true"></div>
+
+    <div class="login-page__panel@(isSignUpMode ? " login-page__panel--signup" : "")">
+        <header class="login-page__header">
+            <h1 class="login-page__title">@(isSignUpMode ? "Create account" : "Welcome back")</h1>
+            <p class="login-page__subtitle">
+                @(isSignUpMode
+                    ? "Enter your details and a valid sign-up key."
+                    : "Sign in with your username (case-sensitive) and password.")
+            </p>
+            @if (!string.IsNullOrEmpty(connectionHint))
+            {
+                <div class="login-page__hint-banner" role="status">@connectionHint</div>
+            }
+        </header>
+
+        @if (isSignUpMode)
+        {
+            <EditForm Model="@signUpRequest" OnSubmit="HandleSignUpSubmit">
+                <div class="login-page__form login-page__form--signup">
+                    <div class="login-page__form-cell login-page__form-cell--half">
+                        <label class="app-field">
+                            <span class="app-label">First name</span>
+                            <InputText class="app-input" @bind-Value="signUpRequest.FirstName" placeholder="First name" autocomplete="given-name" />
+                            <ValidationMessage For="@(() => signUpRequest.FirstName)" />
+                            @if (GetFieldError("FirstName") is { } firstNameError)
+                            {
+                                <span class="login-page__server-field-error">@firstNameError</span>
+                            }
+                        </label>
+                    </div>
+                    <div class="login-page__form-cell login-page__form-cell--half">
+                        <label class="app-field">
+                            <span class="app-label">Last name</span>
+                            <InputText class="app-input" @bind-Value="signUpRequest.LastName" placeholder="Last name" autocomplete="family-name" />
+                            <ValidationMessage For="@(() => signUpRequest.LastName)" />
+                            @if (GetFieldError("LastName") is { } lastNameError)
+                            {
+                                <span class="login-page__server-field-error">@lastNameError</span>
+                            }
+                        </label>
+                    </div>
+
+                    <div class="login-page__form-cell login-page__form-cell--half">
+                        <label class="app-field">
+                            <span class="app-label">Username</span>
+                            <InputText class="app-input" @bind-Value="signUpRequest.Username" placeholder="Choose a username" autocomplete="username" />
+                            <ValidationMessage For="@(() => signUpRequest.Username)" />
+                            @if (GetFieldError("Username") is { } usernameError)
+                            {
+                                <span class="login-page__server-field-error">@usernameError</span>
+                            }
+                        </label>
+                    </div>
+
+                    <div class="login-page__form-cell login-page__form-cell--half">
+                        <label class="app-field">
+                            <span class="app-label">Email</span>
+                            <InputText class="app-input" @bind-Value="signUpRequest.Email" placeholder="you@example.com" autocomplete="email" />
+                            <ValidationMessage For="@(() => signUpRequest.Email)" />
+                            @if (GetFieldError("Email") is { } emailError)
+                            {
+                                <span class="login-page__server-field-error">@emailError</span>
+                            }
+                        </label>
+                    </div>
+
+                    <div class="login-page__form-cell login-page__form-cell--half">
+                        <label class="app-field">
+                            <span class="app-label">Password</span>
+                            <div class="login-page__password-row">
+                                <input class="app-input login-page__password-input"
+                                       type="@(showPassword ? "text" : "password")"
+                                       @bind="signUpRequest.Password"
+                                       placeholder="Create a password"
+                                       autocomplete="new-password" />
+                                <CustomButton ButtonType="CustomButtonType.FormGrey"
+                                              IconClass="@(showPassword ? "bi bi-eye-slash" : "bi bi-eye")"
+                                              ButtonHtmlType="button"
+                                              OnClick="TogglePasswordVisibility"
+                                              aria-label="@(showPassword ? "Hide password" : "Show password")" />
+                            </div>
+                            <ValidationMessage For="@(() => signUpRequest.Password)" />
+                            @if (GetFieldError("Password") is { } passwordError)
+                            {
+                                <span class="login-page__server-field-error">@passwordError</span>
+                            }
+                            <span class="login-page__hint">At least 8 characters with upper, lower, number, and special character.</span>
+                        </label>
+                    </div>
+
+                    <div class="login-page__form-cell login-page__form-cell--half">
+                        <label class="app-field">
+                            <span class="app-label">Confirm password</span>
+                            <div class="login-page__password-row">
+                                <input class="app-input login-page__password-input"
+                                       type="@(showConfirmPassword ? "text" : "password")"
+                                       @bind="signUpRequest.ConfirmPassword"
+                                       placeholder="Confirm password"
+                                       autocomplete="new-password" />
+                                <CustomButton ButtonType="CustomButtonType.FormGrey"
+                                              IconClass="@(showConfirmPassword ? "bi bi-eye-slash" : "bi bi-eye")"
+                                              ButtonHtmlType="button"
+                                              OnClick="ToggleConfirmPasswordVisibility"
+                                              aria-label="@(showConfirmPassword ? "Hide password" : "Show password")" />
+                            </div>
+                            <ValidationMessage For="@(() => signUpRequest.ConfirmPassword)" />
+                            @if (GetFieldError("ConfirmPassword") is { } confirmPasswordError)
+                            {
+                                <span class="login-page__server-field-error">@confirmPasswordError</span>
+                            }
+                        </label>
+                    </div>
+
+                    <div class="login-page__form-cell login-page__form-cell--half">
+                        <label class="app-field">
+                            <span class="app-label">Sign-up key</span>
+                            <InputText class="app-input" @bind-Value="signUpRequest.SignUpKey" placeholder="Key from your administrator" autocomplete="off" />
+                            <ValidationMessage For="@(() => signUpRequest.SignUpKey)" />
+                            @if (GetFieldError("SignUpKey") is { } signUpKeyError)
+                            {
+                                <span class="login-page__server-field-error">@signUpKeyError</span>
+                            }
+                        </label>
+                    </div>
+
+                    <div class="login-page__form-cell login-page__form-cell--half login-page__form-cell--actions login-page__form-cell--actions-with-field">
+                        <CustomButton ButtonHtmlType="submit"
+                                      ButtonType="CustomButtonType.FormGreen"
+                                      Text="@(isLoading ? "Creating account…" : "Sign up")"
+                                      Width="100%"
+                                      Disabled="@isLoading">
+                            @if (isLoading)
+                            {
+                                <span class="login-page__spinner" role="status" aria-hidden="true"></span>
+                            }
+                        </CustomButton>
+                    </div>
+                </div>
+            </EditForm>
+
+            <p class="login-page__switch">
+                <span class="login-page__switch-label">Already have an account?</span>
+                <CustomButton Text="Sign in"
+                              ButtonType="CustomButtonType.Ghost"
+                              ButtonHtmlType="button"
+                              OnClick="SwitchToSignIn" />
+            </p>
+        }
+        else
+        {
+            <EditForm Model="@loginRequest" OnSubmit="HandleLoginSubmit">
+                <div class="login-page__form login-page__form--single">
+                <div class="login-page__form-cell login-page__form-cell--full">
+                <label class="app-field">
+                    <span class="app-label">Username</span>
+                    <InputText class="app-input" @bind-Value="loginRequest.Username" placeholder="Username" autocomplete="username" />
+                    <ValidationMessage For="@(() => loginRequest.Username)" />
+                </label>
+                </div>
+
+                <div class="login-page__form-cell login-page__form-cell--full">
+                <label class="app-field">
+                    <span class="app-label">Password</span>
+                    <div class="login-page__password-row">
+                        <input class="app-input login-page__password-input"
+                               type="@(showPassword ? "text" : "password")"
+                               @bind="loginRequest.Password"
+                               placeholder="Password"
+                               autocomplete="current-password" />
+                        <CustomButton ButtonType="CustomButtonType.FormGrey"
+                                      IconClass="@(showPassword ? "bi bi-eye-slash" : "bi bi-eye")"
+                                      ButtonHtmlType="button"
+                                      OnClick="TogglePasswordVisibility"
+                                      aria-label="@(showPassword ? "Hide password" : "Show password")" />
+                    </div>
+                    <ValidationMessage For="@(() => loginRequest.Password)" />
+                </label>
+                </div>
+
+                <div class="login-page__form-cell login-page__form-cell--full login-page__form-cell--actions">
+                <CustomButton ButtonHtmlType="submit"
+                              ButtonType="CustomButtonType.Primary"
+                              Text="@(isLoading ? "Signing in…" : "Sign in")"
+                              Width="100%"
+                              Disabled="@isLoading">
+                    @if (isLoading)
+                    {
+                        <span class="login-page__spinner" role="status" aria-hidden="true"></span>
+                    }
+                </CustomButton>
+                </div>
+                </div>
+            </EditForm>
+
+            <p class="login-page__switch">
+                <span class="login-page__switch-label">Need an account?</span>
+                <CustomButton Text="Sign up"
+                              ButtonType="CustomButtonType.Ghost"
+                              ButtonHtmlType="button"
+                              OnClick="SwitchToSignUp" />
+            </p>
+        }
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="login-page__banner login-page__banner--error" role="alert">@errorMessage</div>
+        }
+
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="login-page__banner login-page__banner--success" role="status">@successMessage</div>
+        }
+    </div>
+</div>

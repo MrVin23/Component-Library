@@ -1,0 +1,236 @@
+.login-page {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--pad-page);
+    font-family: var(--font-ui);
+    min-width: 0;
+}
+
+.login-page__backdrop {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(120% 80% at 10% 0%, color-mix(in srgb, var(--palette-cyan) 18%, transparent), transparent 55%),
+        radial-gradient(90% 70% at 100% 20%, color-mix(in srgb, var(--palette-purple) 14%, transparent), transparent 50%),
+        radial-gradient(70% 50% at 50% 100%, color-mix(in srgb, var(--palette-orange) 10%, transparent), transparent 45%);
+    opacity: 0.9;
+}
+
+.login-page__panel {
+    position: relative;
+    width: 100%;
+    max-width: 28rem;
+    min-width: 0;
+    padding: clamp(1.25rem, 4vw, 1.75rem);
+    border-radius: var(--app-radius-lg);
+    border: var(--border-container) solid var(--theme-border);
+    background: color-mix(in srgb, var(--theme-bg) 92%, transparent);
+    box-shadow: var(--app-shadow-lg);
+    backdrop-filter: blur(10px);
+    box-sizing: border-box;
+    overflow-x: clip;
+}
+
+/* Wider card + stronger frame so the two-column sign-up form fits comfortably */
+.login-page__panel--signup {
+    max-width: min(44rem, calc(100vw - 2 * var(--pad-page)));
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    border-width: 2px;
+}
+
+.login-page__panel *,
+.login-page__panel *::before,
+.login-page__panel *::after {
+    box-sizing: border-box;
+}
+
+.login-page__panel form {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+.login-page__header {
+    margin-bottom: 1.25rem;
+}
+
+.login-page__title {
+    margin: 0 0 0.35rem;
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--theme-fg-contrast);
+}
+
+.login-page__subtitle {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--theme-fg-muted);
+}
+
+.login-page__hint-banner {
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--theme-fg-muted);
+    background: var(--theme-surface-muted);
+    border: 1px solid var(--theme-border);
+}
+
+.login-page__form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem 1.25rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* Sign-up: two columns at every width (panel is wider in --signup). Sign-in uses --single. */
+.login-page__form--signup {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.login-page__form--single {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.login-page__form-cell {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.login-page__form-cell--full {
+    grid-column: 1 / -1;
+}
+
+.login-page__form .app-field {
+    margin: 0;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.login-page__panel .app-input {
+    display: block;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.login-page__password-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+    align-items: stretch;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.login-page__password-row .login-page__password-input {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.login-page__password-row ::deep .custom-button {
+    height: 100%;
+    min-height: 2.75rem;
+    align-self: stretch;
+}
+
+.login-page__form-cell--actions {
+    margin-top: 0.15rem;
+}
+
+.login-page__form-cell--actions ::deep .custom-button {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Sign-up key + submit share one row: pin button to bottom next to the taller field column */
+.login-page__form--signup .login-page__form-cell--actions-with-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: 0;
+    min-width: 0;
+}
+
+.login-page__hint {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: var(--theme-fg-muted);
+}
+
+.login-page__server-field-error {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    color: #c62828;
+}
+
+html[data-theme="dark"] .login-page__server-field-error {
+    color: #ff8a80;
+}
+
+.login-page__switch {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem 0.5rem;
+    margin: 1rem 0 0;
+    font-size: 0.9rem;
+    color: var(--theme-fg-muted);
+}
+
+.login-page__switch-label {
+    margin: 0;
+}
+
+.login-page__banner {
+    margin-top: 1rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.login-page__banner--error {
+    border: 1px solid color-mix(in srgb, #c62828 35%, var(--theme-border));
+    background: color-mix(in srgb, #c62828 12%, var(--theme-bg));
+    color: var(--theme-fg-contrast);
+}
+
+.login-page__banner--success {
+    border: 1px solid color-mix(in srgb, #2e7d32 35%, var(--theme-border));
+    background: color-mix(in srgb, #2e7d32 10%, var(--theme-bg));
+    color: var(--theme-fg-contrast);
+}
+
+.login-page__spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.35rem;
+    vertical-align: -0.15em;
+    border: 2px solid color-mix(in srgb, currentColor 35%, transparent);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: login-page-spin 0.7s linear infinite;
+}
+
+@keyframes login-page-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

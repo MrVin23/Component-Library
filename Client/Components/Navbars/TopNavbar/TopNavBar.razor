@@ -1,0 +1,70 @@
+<header class="top-nav">
+    <div class="top-nav__spectrum" aria-hidden="true"></div>
+    <div class="top-nav__inner">
+        <button type="button"
+                class="top-nav__sidebar-toggle"
+                @onclick="OnSidebarToggle"
+                aria-expanded="@(!SidebarCollapsed)"
+                aria-controls="app-sidebar"
+                title="@(SidebarCollapsed ? "Expand navigation" : "Collapse navigation")">
+            <span class="top-nav__toggle-icon" aria-hidden="true">
+                <span class="top-nav__toggle-bar"></span>
+                <span class="top-nav__toggle-bar"></span>
+                <span class="top-nav__toggle-bar"></span>
+            </span>
+            <span class="top-nav__toggle-label">Menu</span>
+        </button>
+
+        <a class="top-nav__brand" href="">STOCK MANAGER</a>
+
+        <span class="top-nav__spacer"></span>
+
+        <nav class="top-nav__extras" aria-label="Toolbar actions">
+            <CustomSwitchButton Variant="SwitchButtonVariant.DarkLightMode"
+                                ApplyBuiltinTheme="false"
+                                Disabled="_themeSaving"
+                                Value="_isDarkMode"
+                                ValueChanged="OnDarkModeChangedAsync" />
+
+            @if (_isSignedIn)
+            {
+                <div class="top-nav__account">
+                    <button type="button"
+                            class="top-nav__account-trigger"
+                            @onclick="ToggleAccountDropdown"
+                            @onblur="OnAccountTriggerBlur"
+                            aria-haspopup="menu"
+                            aria-expanded="@_accountMenuOpen"
+                            title="Account menu">
+                        @_displayName
+                        <span class="top-nav__account-caret" aria-hidden="true">▾</span>
+                    </button>
+
+                    @if (_accountMenuOpen)
+                    {
+                        <div class="top-nav__account-menu" role="menu" aria-label="Account options">
+                            <button type="button"
+                                    class="top-nav__account-item"
+                                    @onclick="NavigateToAccountAsync"
+                                    role="menuitem">
+                                Account
+                            </button>
+                            <button type="button"
+                                    class="top-nav__account-item"
+                                    @onclick="NavigateToAppSettingsAsync"
+                                    role="menuitem">
+                                Settings
+                            </button>
+                            <button type="button"
+                                    class="top-nav__account-item top-nav__account-item--logout"
+                                    @onclick="LogoutAsync"
+                                    role="menuitem">
+                                Logout
+                            </button>
+                        </div>
+                    }
+                </div>
+            }
+        </nav>
+    </div>
+</header>

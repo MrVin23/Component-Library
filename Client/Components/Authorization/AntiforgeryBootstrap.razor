@@ -1,0 +1,60 @@
+@namespace Client.Components.Authorization
+@using Client.Apis
+@inject ApiAntiforgery ApiAntiforgery
+@inject AntiforgeryTokenStore AntiforgeryTokens
+
+@if (!_ready && _error is null)
+{
+    <div class="antiforgery-bootstrap">Loading…</div>
+}
+else if (_error is not null)
+{
+    <div class="antiforgery-bootstrap antiforgery-bootstrap--error">
+        <p>@_error</p>
+        <button type="button" class="btn btn-primary" @onclick="RetryAsync">Retry</button>
+    </div>
+}
+else
+{
+    @ChildContent
+}
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private bool _ready;
+    private string? _error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTokenAsync();
+    }
+
+    private async Task RetryAsync()
+    {
+        _error = null;
+        _ready = false;
+        await LoadTokenAsync();
+        StateHasChanged();
+    }
+
+    private async Task LoadTokenAsync()
+    {
+        try
+        {
+            var dto = await ApiAntiforgery.GetRequestTokenAsync();
+            if (string.IsNullOrEmpty(dto?.RequestToken))
+            {
+                _error = "Security token was empty. Check API configuration.";
+                return;
+            }
+
+            AntiforgeryTokens.RequestToken = dto.RequestToken;
+            _ready = true;
+        }
+        catch (Exception ex)
+        {
+            _error = $"Could not load security token: {ex.Message}";
+        }
+    }
+}

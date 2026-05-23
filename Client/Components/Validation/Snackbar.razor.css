@@ -1,0 +1,136 @@
+/* Uses tokens from wwwroot/css/app.css — severity modifiers align with CustomAlert */
+
+.snackbar-host {
+    position: fixed;
+    right: var(--pad-page);
+    bottom: var(--pad-page);
+    z-index: 11;
+    pointer-events: none;
+}
+
+.snackbar {
+    pointer-events: auto;
+    min-width: min(18rem, calc(100vw - 2 * var(--pad-page)));
+    max-width: 22rem;
+    font-family: var(--font-ui);
+    color: var(--theme-fg);
+    background: var(--app-surface);
+    border: var(--border-container) solid var(--theme-border);
+    border-radius: calc(var(--app-radius-lg) / 2);
+    box-shadow: var(--app-shadow-lg);
+    overflow: hidden;
+}
+
+.snackbar__header {
+    display: flex;
+    align-items: center;
+    gap: var(--pad-input);
+    padding: var(--pad-sub) var(--pad-container);
+    border-bottom: var(--border-container) solid var(--theme-border);
+    background: var(--app-surface-alt);
+    color: var(--app-text-primary);
+}
+
+.snackbar__icon {
+    flex-shrink: 0;
+    font-size: 1.125rem;
+    color: currentColor;
+}
+
+.snackbar__title {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: inherit;
+}
+
+.snackbar__close {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: var(--border-container) solid transparent;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--theme-fg) 6%, transparent);
+    color: var(--theme-fg-muted);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.snackbar__close:hover {
+    background: color-mix(in srgb, var(--theme-fg) 10%, transparent);
+    color: var(--theme-fg-contrast);
+}
+
+.snackbar__close i {
+    font-size: 0.875rem;
+}
+
+.snackbar__body {
+    padding: var(--pad-container);
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--theme-fg);
+}
+
+/* --- Success (green) --- */
+.snackbar--success {
+    border-color: color-mix(in srgb, var(--support-green) 48%, var(--theme-border));
+}
+
+.snackbar--success .snackbar__header {
+    background: var(--support-green-bg);
+    border-bottom-color: color-mix(in srgb, var(--support-green) 42%, var(--theme-border));
+    color: color-mix(in srgb, var(--support-green) 38%, var(--theme-fg-contrast));
+}
+
+/* --- Warning (yellow / orange) --- */
+.snackbar--warning {
+    border-color: color-mix(in srgb, var(--support-orange) 45%, var(--theme-border));
+}
+
+.snackbar--warning .snackbar__header {
+    background: var(--support-yellow-bg);
+    border-bottom-color: color-mix(in srgb, var(--support-yellow) 50%, var(--theme-border));
+    color: color-mix(in srgb, var(--support-orange) 42%, var(--theme-fg-contrast));
+}
+
+/* --- Error (red) --- */
+.snackbar--error {
+    border-color: color-mix(in srgb, var(--support-red) 48%, var(--theme-border));
+}
+
+.snackbar--error .snackbar__header {
+    background: var(--support-red-bg);
+    border-bottom-color: color-mix(in srgb, var(--support-red) 45%, var(--theme-border));
+    color: color-mix(in srgb, var(--support-red) 32%, var(--theme-fg-contrast));
+}
+
+/* --- Info (cyan) --- */
+.snackbar--info {
+    border-color: color-mix(in srgb, var(--support-blue) 45%, var(--theme-border));
+}
+
+.snackbar--info .snackbar__header {
+    background: var(--support-blue-bg);
+    border-bottom-color: color-mix(in srgb, var(--support-blue) 40%, var(--theme-border));
+    color: color-mix(in srgb, var(--support-blue) 30%, var(--theme-fg-contrast));
+}
+
+@media (max-width: 640px) {
+    .snackbar-host {
+        right: var(--pad-page-m);
+        bottom: var(--pad-page-m);
+        left: var(--pad-page-m);
+    }
+
+    .snackbar {
+        min-width: 0;
+        max-width: none;
+    }
+}

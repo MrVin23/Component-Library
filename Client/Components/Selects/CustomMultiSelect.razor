@@ -1,0 +1,75 @@
+@namespace Client.Components.CustomSelect
+@typeparam TItem
+
+<div class="app-field @ContainerCssClass" style="width: @Width;">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="app-label @LabelCssClass">@Label</label>
+    }
+    <div class="custom-multi-select-wrapper @(_isOpen ? "is-open" : "")">
+        <div class="custom-multi-select-input-wrapper"
+             @ref="_triggerRef"
+             @onmousedown="OnTriggerMouseDown">
+            <input type="text"
+                   class="app-input custom-multi-select-input-main"
+                   style="height: @Height;"
+                   placeholder="@InputPlaceholder"
+                   value="@InputValue"
+                   @ref="_inputRef"
+                   @onfocus="OnInputFocus"
+                   @onclick="OnInputClick"
+                   @oninput="OnSearchInput"
+                   @onkeydown="OnInputKeyDown"
+                   disabled="@Disabled"
+                   @attributes="AdditionalAttributes" />
+            <span class="custom-multi-select-arrow"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Toggle list"
+                  @onclick="OnChevronClick"
+                  @onclick:stopPropagation="true"
+                  @onkeydown="OnChevronKeyDown">▼</span>
+        </div>
+        
+        <CustomDropdownPanel @ref="_dropdownPanel" IsOpen="_isOpen" OnClose="CloseDropdown">
+            <div class="custom-multi-select-dropdown">
+                @* Fixed Select All / Unselect All header *@
+                <div class="custom-multi-select-header">
+                    <div class="custom-multi-select-checkbox-item select-all"
+                         @onclick="ToggleSelectAll"
+                         @onclick:stopPropagation="true">
+                        <span class="custom-multi-select-checkmark @(IsAllSelected ? "checked" : "") @(IsIndeterminate ? "indeterminate" : "")"></span>
+                        <span class="custom-multi-select-checkbox-label">@SelectAllText</span>
+                    </div>
+                    <span class="custom-multi-select-count">@SelectedCount / @TotalCount</span>
+                </div>
+                
+                @* Scrollable items list *@
+                <div class="custom-multi-select-items">
+                    @if (FilteredItems.Any())
+                    {
+                        @foreach (var item in FilteredItems)
+                        {
+                            var isSelected = IsItemSelected(item);
+                            <div @key="ValueFunc(item)"
+                                 class="custom-multi-select-checkbox-item @(isSelected ? "selected" : "")"
+                                 @onclick="() => ToggleItem(item)"
+                                 @onclick:stopPropagation="true">
+                                <span class="custom-multi-select-checkmark @(isSelected ? "checked" : "")"></span>
+                                <span class="custom-multi-select-checkbox-label">@DisplayFunc(item)</span>
+                            </div>
+                        }
+                    }
+                    else if (!string.IsNullOrWhiteSpace(_searchText))
+                    {
+                        <div class="custom-multi-select-no-results">No results found</div>
+                    }
+                    else
+                    {
+                        <div class="custom-multi-select-no-results">No items available</div>
+                    }
+                </div>
+            </div>
+        </CustomDropdownPanel>
+    </div>
+</div>

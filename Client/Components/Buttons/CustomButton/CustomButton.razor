@@ -1,0 +1,21 @@
+<button type="@ButtonHtmlType"
+        class="@ButtonCssClass"
+        style="width: @Width; height: @Height;"
+        disabled="@Disabled"
+        @onclick="HandleClick"
+        @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(IconClass) && IconPosition == ButtonIconPosition.Left)
+    {
+        <i class="@IconClass"></i>
+    }
+    @if (!string.IsNullOrEmpty(Text))
+    {
+        <span>@Text</span>
+    }
+    @ChildContent
+    @if (!string.IsNullOrEmpty(IconClass) && IconPosition == ButtonIconPosition.Right)
+    {
+        <i class="@IconClass"></i>
+    }
+</button>
+

@@ -1,0 +1,17 @@
+@page "/not-authorized"
+@layout MainLayout
+@inject NavigationManager Navigation
+
+<PageTitle>Not Authorized</PageTitle>
+
+<h3>Not Authorized</h3>
+<p>You do not have permission to access this content.</p>
+
+@* Navigate to login page *@
+<CustomButton ButtonText="Login" ButtonType="ButtonType.Primary" ButtonClick="NavigateToLogin" />
+@code {
+    private void NavigateToLogin()
+    {
+        Navigation.NavigateTo("/login");
+    }
+}

@@ -1,0 +1,175 @@
+/* Shell matches App settings / user-management pages — uses tokens from wwwroot/css/app.css */
+.user-management {
+    display: grid;
+    gap: var(--pad-container);
+    width: 100%;
+    box-sizing: border-box;
+    min-height: calc(100dvh - 4.5rem);
+    align-content: start;
+}
+
+@media (max-width: 767.98px) {
+    .user-management {
+        gap: var(--pad-container-m);
+        min-height: calc(100dvh - 4rem);
+    }
+}
+
+.user-account__breadcrumbs {
+    margin: 0 0 var(--pad-sub);
+}
+
+.user-account__loading {
+    margin: 0;
+    color: var(--theme-fg-muted);
+    font-size: 0.9375rem;
+}
+
+.user-account__layout {
+    display: grid;
+    gap: var(--grid-gutter);
+    align-items: start;
+}
+
+@media (min-width: 900px) {
+    .user-account__layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .user-account__layout .user-account__panel:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+    }
+}
+
+.user-account__panel {
+    border: var(--border-container) solid var(--theme-border);
+    border-radius: var(--app-radius-lg);
+    padding: var(--pad-container);
+    background: var(--app-surface);
+    box-shadow: var(--app-shadow-md);
+}
+
+.user-account__panel-title {
+    margin: 0 0 var(--pad-sub);
+    font-size: 1.1rem;
+    color: var(--theme-fg-contrast);
+}
+
+.user-account__subheading {
+    margin: var(--pad-container) 0 var(--pad-sub);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--theme-fg-contrast);
+}
+
+.user-account__dl {
+    margin: 0;
+}
+
+.user-account__row {
+    display: grid;
+    gap: var(--pad-input);
+    padding: var(--pad-sub) 0;
+    border-bottom: var(--border-container) solid var(--theme-border);
+}
+
+.user-account__row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.user-account__row:first-child {
+    padding-top: 0;
+}
+
+.user-account__value {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--theme-fg);
+    word-break: break-word;
+}
+
+.user-account__muted {
+    margin: 0;
+    color: var(--theme-fg-muted);
+    font-size: 0.95rem;
+}
+
+.user-account__muted--block {
+    margin-bottom: var(--pad-sub);
+}
+
+.user-account__mono {
+    font-family: ui-monospace, monospace;
+    font-size: 0.88em;
+}
+
+.user-account__code {
+    font-size: 0.85rem;
+    word-break: break-word;
+}
+
+.user-account__roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.user-account__badge {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: calc(var(--app-radius-lg) / 3);
+    background: var(--theme-surface-muted);
+    border: var(--border-container) solid var(--theme-border);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--theme-fg-contrast);
+}
+
+.user-account__table-wrap {
+    overflow-x: auto;
+    margin-top: var(--pad-sub);
+}
+
+.user-account__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.user-account__table th,
+.user-account__table td {
+    padding: var(--pad-input) var(--pad-sub);
+    text-align: left;
+    border-bottom: var(--border-container) solid var(--theme-border);
+    vertical-align: top;
+}
+
+.user-account__table th {
+    font-weight: 600;
+    color: var(--theme-fg-contrast);
+    background: var(--theme-surface-muted);
+}
+
+.user-account__banner {
+    margin: 0;
+    padding: var(--pad-sub) var(--pad-container);
+    border-radius: calc(var(--app-radius-lg) / 2);
+    border: var(--border-container) solid var(--theme-border);
+    font-size: 0.95rem;
+}
+
+.user-account__banner--error {
+    background: var(--support-red-bg);
+    color: var(--support-red);
+    border-color: color-mix(in srgb, var(--support-red) 35%, var(--theme-border));
+}
+
+@media (max-width: 767.98px) {
+    .user-account__panel {
+        padding: var(--pad-container-m);
+    }
+}

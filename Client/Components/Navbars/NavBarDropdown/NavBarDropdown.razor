@@ -1,0 +1,22 @@
+<div class="@RootClass">
+    <button type="button"
+            class="nav-bar-dropdown__trigger"
+            @onclick="Toggle"
+            aria-expanded="@_open"
+            aria-controls="@_panelId">
+        <span class="nav-bar-dropdown__icon" aria-hidden="true">@Icon</span>
+        <span class="nav-bar-dropdown__label">@Label</span>
+        <span class="nav-bar-dropdown__chevron" aria-hidden="true">
+            <!-- Chevron down when closed; CSS rotates to up when open -->
+            <svg class="nav-bar-dropdown__chevron-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 8 6 6 6-6" />
+            </svg>
+        </span>
+    </button>
+
+    <div id="@_panelId" class="@PanelClass">
+        <div class="nav-bar-dropdown__inner">
+            @ChildContent
+        </div>
+    </div>
+</div>

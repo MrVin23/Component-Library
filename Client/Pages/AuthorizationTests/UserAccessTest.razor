@@ -1,0 +1,11 @@
+@page "/user-access-test"
+@using Client.Components.Authorization
+
+<PageTitle>User Access Test</PageTitle>
+
+<CustomAutorizeView Role="User,Admin">
+    <div class="user-access-test-page">
+        <h1>User Access Test</h1>
+        <p>This page is available to <strong>User</strong> and <strong>Admin</strong> roles.</p>
+    </div>
+</CustomAutorizeView>

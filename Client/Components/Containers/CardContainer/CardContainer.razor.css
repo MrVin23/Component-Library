@@ -1,0 +1,142 @@
+.card-container {
+    position: relative;
+    border-radius: var(--app-radius-lg);
+    padding: 1rem 1.25rem;
+    box-shadow: var(--app-shadow-md);
+    background-color: var(--app-surface);
+    display: block;
+    box-sizing: border-box;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+        transform 0.6s ease,
+        box-shadow 0.6s ease,
+        background 0.6s ease;
+}
+
+.card-container::before {
+    content: "";
+    position: absolute;
+    top: -80%;
+    left: -80%;
+    width: 240%;
+    height: 240%;
+    background: linear-gradient(
+        135deg,
+        transparent 0,
+        transparent 44%,
+        color-mix(in srgb, var(--app-secondary) 24%, transparent) 46%,
+        color-mix(in srgb, var(--theme-bg) 86%, #ffffff) 50%,
+        color-mix(in srgb, var(--app-secondary) 34%, transparent) 54%,
+        transparent 56%,
+        transparent 100%
+    );
+    opacity: 0;
+    mix-blend-mode: screen;
+    transform: rotate(-35deg) translate3d(-10%, -30%, 0);
+    transition:
+        opacity 0s ease,
+        transform 0s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.card-container::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 10% -10%, color-mix(in srgb, var(--theme-bg) 22%, #ffffff), transparent 55%);
+    opacity: 0;
+    mix-blend-mode: soft-light;
+    transition: opacity 0s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.card-container:hover {
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: var(--app-shadow-lg);
+}
+
+.card-container:hover::before {
+    opacity: 1;
+    transform: rotate(-35deg) translate3d(20%, 60%, 0);
+    transition:
+        opacity 0.85s ease,
+        transform 0.85s ease;
+}
+
+.card-container:hover::after {
+    opacity: 0.45;
+    transition: opacity 0.85s ease;
+}
+
+.card-primary {
+    background: linear-gradient(135deg, var(--app-primary) 0%, var(--app-primary-dark) 100%);
+    color: #f9fafb;
+}
+
+.card-secondary {
+    background: linear-gradient(135deg, var(--app-secondary) 0%, color-mix(in srgb, var(--app-secondary) 48%, #111827) 100%);
+    color: var(--theme-fg-contrast);
+}
+
+.card-tertiary {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--theme-fg) 78%, #000000) 0%, color-mix(in srgb, var(--theme-fg) 62%, #000000) 100%);
+    color: color-mix(in srgb, var(--theme-fg-contrast) 92%, #ffffff);
+}
+
+.card-blue {
+    background: linear-gradient(135deg, var(--support-blue) 0%, var(--support-blue-bg) 100%);
+    color: #eff6ff;
+}
+
+.card-green {
+    background: linear-gradient(135deg, var(--support-green) 0%, var(--support-green-bg) 100%);
+    color: #ecfdf3;
+}
+
+.card-red {
+    background: linear-gradient(135deg, var(--support-red) 0%, var(--support-red-bg) 100%);
+    color: #fef2f2;
+}
+
+.card-yellow {
+    background: linear-gradient(135deg, var(--support-yellow) 0%, var(--support-yellow-bg) 100%);
+    color: #fefce8;
+}
+
+.card-purple {
+    background: linear-gradient(135deg, var(--support-purple) 0%, var(--support-purple-bg) 100%);
+    color: #f5f3ff;
+}
+
+.card-orange {
+    background: linear-gradient(135deg, var(--support-orange) 0%, var(--support-orange-bg) 100%);
+    color: #fff7ed;
+}
+
+.card-pink {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--palette-accent-1) 58%, #ec4899) 0%, color-mix(in srgb, var(--palette-accent-2) 38%, #be185d) 100%);
+    color: var(--theme-fg-contrast);
+}
+
+.card-brown {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--palette-accent-2) 54%, #78350f) 0%, color-mix(in srgb, var(--palette-accent-3) 28%, #92400e) 100%);
+    color: var(--theme-fg-contrast);
+}
+
+.card-gray {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--theme-fg-muted) 70%, #374151) 0%, color-mix(in srgb, var(--theme-fg-muted) 84%, #6b7280) 100%);
+    color: var(--theme-fg-contrast);
+}
+
+.card-black {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--theme-fg) 90%, #000000) 0%, color-mix(in srgb, var(--theme-fg) 72%, #000000) 100%);
+    color: color-mix(in srgb, var(--theme-fg-contrast) 90%, #ffffff);
+}
+
+.card-white {
+    background: linear-gradient(135deg, var(--app-surface) 0%, var(--app-surface-alt) 100%);
+    color: var(--app-text-primary);
+}

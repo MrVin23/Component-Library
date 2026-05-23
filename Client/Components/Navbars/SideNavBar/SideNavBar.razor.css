@@ -1,0 +1,102 @@
+.side-nav {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    padding: 0.75rem 0 1rem;
+    background: linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--palette-purple) 18%, var(--theme-bg)) 0%,
+        color-mix(in srgb, var(--palette-purple) 6%, var(--theme-bg)) 45%,
+        var(--theme-bg) 100%
+    );
+    border-right: 1px solid var(--theme-border);
+    overflow-x: visible;
+    overflow-y: auto;
+}
+
+.side-nav__glow {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(
+        180deg,
+        var(--palette-cyan) 0%,
+        var(--palette-purple) 40%,
+        var(--palette-orange) 75%,
+        var(--palette-yellow) 100%
+    );
+    opacity: 0.85;
+    pointer-events: none;
+}
+
+.side-nav__header {
+    padding: 0.35rem 1rem 0.85rem 1.25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--theme-border) 80%, var(--palette-purple));
+}
+
+.side-nav__title {
+    font-family: "Outfit", var(--font-ui, system-ui), sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--theme-fg-muted);
+}
+
+.side-nav--collapsed .side-nav__title {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border: none;
+}
+
+.side-nav__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 0.5rem 0;
+}
+
+.side-nav__item {
+    border-radius: 12px;
+}
+
+/* Collapsed rail: center each control */
+.side-nav--collapsed .side-nav__item {
+    display: flex;
+    justify-content: center;
+}
+
+.side-nav--collapsed .side-nav__links {
+    gap: 0.2rem;
+    padding: 0.45rem 0.35rem 0;
+}
+
+.side-nav--collapsed ::deep .custom-tooltip-wrapper {
+    width: fit-content;
+    justify-content: center;
+    margin-inline: auto;
+}
+
+.side-nav__item--dropdown {
+    margin-top: 0.15rem;
+}
+
+/* Collapsed rail: icon-only handled inside NavBarButton / NavBarDropdown */
+
+.side-nav--collapsed .side-nav__header {
+    padding-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .side-nav--collapsed .side-nav__header {
+        border-bottom: none;
+        min-height: 0.5rem;
+    }
+}

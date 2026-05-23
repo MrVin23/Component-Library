@@ -1,0 +1,55 @@
+@using Client.Components.Buttons.CustomButton
+@using Client.Components.Validation
+
+<div class="form-container" @attributes="AdditionalAttributes">
+    @if (HasTitleBlock)
+    {
+        <h2 class="form-container__title">@Title</h2>
+    }
+
+    @if (ValidationSummaryAlertVisible)
+    {
+        <div class="form-container__validation">
+            <CustomAlert Severity="AlertSeverity.Error"
+                         Variant="AlertVariant.Filled"
+                         IsVisible="true"
+                         OnClose="HandleValidationSummaryClose">
+                <ul class="form-container__validation-list">
+                    @foreach (var message in ValidationSummaryMessages)
+                    {
+                        <li class="form-container__validation-item">@message</li>
+                    }
+                </ul>
+            </CustomAlert>
+        </div>
+    }
+
+    <div class="form-container__body">
+        @ChildContent
+    </div>
+
+    @if (HasActionRow)
+    {
+        <footer class="form-container__footer">
+            <div class="form-container__actions">
+                @if (ShowResetButton)
+                {
+                    <CustomButton Text="@ResetButtonText"
+                                  ButtonType="CustomButtonType.Tertiary"
+                                  ButtonHtmlType="@ResetButtonHtmlType"
+                                  Disabled="@ResetDisabled"
+                                  OnClick="HandleResetAsync" />
+                }
+                @if (ShowSaveButton)
+                {
+                    <CustomButton Text="@SaveButtonText"
+                                  ButtonType="CustomButtonType.FormGreen"
+                                  IconClass="bi bi-check-lg"
+                                  ButtonHtmlType="@SaveButtonHtmlType"
+                                  Disabled="@SaveDisabled"
+                                  OnClick="HandleSaveAsync" />
+                }
+            </div>
+        </footer>
+    }
+</div>

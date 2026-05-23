@@ -1,0 +1,7 @@
+@namespace Client.Components.CustomSelect
+@if (IsOpen)
+{
+    <div class="custom-dropdown-panel @CssClass" @ref="DropdownPanelRef">
+        @ChildContent
+    </div>
+}

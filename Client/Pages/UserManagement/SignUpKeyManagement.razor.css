@@ -1,0 +1,175 @@
+.signup-key-management__breadcrumbs {
+    margin: 0 0 var(--pad-sub);
+}
+
+.signup-key-management__layout {
+    display: grid;
+    gap: var(--grid-gutter);
+    align-items: start;
+}
+
+@media (min-width: 900px) {
+    .signup-key-management__layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    }
+}
+
+.signup-key-management__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pad-container);
+}
+
+.signup-key-management__optional {
+    font-weight: 500;
+    color: var(--theme-fg-muted);
+    font-size: 0.8rem;
+}
+
+.signup-key-management__hint {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--theme-fg-muted);
+    line-height: 1.4;
+}
+
+.signup-key-management__datetime {
+    min-height: 2.75rem;
+}
+
+.signup-key-management__list-panel {
+    border: var(--border-container) solid var(--theme-border);
+    border-radius: var(--app-radius-lg);
+    padding: var(--pad-container);
+    background: var(--app-surface);
+    box-shadow: var(--app-shadow-md);
+}
+
+.signup-key-management__list-title {
+    margin: 0 0 var(--pad-sub);
+    font-size: 1.1rem;
+    color: var(--theme-fg-contrast);
+}
+
+.signup-key-management__muted {
+    margin: 0;
+    color: var(--theme-fg-muted);
+    font-size: 0.95rem;
+}
+
+.signup-key-management__table-wrap {
+    overflow-x: auto;
+    margin-top: var(--pad-sub);
+}
+
+.signup-key-management__table {
+    margin-top: 0;
+    font-size: 0.9rem;
+}
+
+.signup-key-management__col-copy {
+    width: 1%;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.signup-key-management__col-copy :deep(.custom-tooltip-wrapper) {
+    width: auto;
+    display: inline-flex;
+    justify-content: center;
+    cursor: default;
+}
+
+.signup-key-management__copy-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0.28rem 0.35rem;
+    border: var(--border-container) solid var(--theme-border);
+    border-radius: calc(var(--app-radius-lg) / 4);
+    background: var(--app-surface);
+    color: var(--theme-fg-muted);
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.signup-key-management__copy-trigger:hover:not(:disabled) {
+    color: var(--app-primary);
+    border-color: var(--app-primary-soft-border);
+    background: var(--app-primary-soft-bg);
+}
+
+.signup-key-management__copy-trigger:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.signup-key-management__copy-trigger .bi {
+    font-size: 0.95rem;
+}
+
+.signup-key-management__code {
+    font-size: 0.82rem;
+    word-break: break-all;
+}
+
+.signup-key-management__col-actions {
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.signup-key-management__badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--theme-surface-muted);
+    color: var(--theme-fg-contrast);
+}
+
+.signup-key-management__badge--active {
+    background: var(--support-green-bg);
+    color: var(--support-green);
+}
+
+.signup-key-management__badge--expired {
+    background: var(--support-red-bg);
+    color: var(--support-red);
+}
+
+.signup-key-management__banner {
+    margin: 0 0 var(--pad-container);
+    padding: var(--pad-sub) var(--pad-container);
+    border-radius: calc(var(--app-radius-lg) / 2);
+    border: var(--border-container) solid var(--theme-border);
+    font-size: 0.95rem;
+}
+
+.signup-key-management__banner--success {
+    background: var(--support-green-bg);
+    color: var(--support-green);
+    border-color: color-mix(in srgb, var(--support-green) 35%, var(--theme-border));
+}
+
+.signup-key-management__banner--error {
+    background: var(--support-red-bg);
+    color: var(--support-red);
+    border-color: color-mix(in srgb, var(--support-red) 35%, var(--theme-border));
+}
+
+/* Multiline snackbar body on this page (key on its own line, long tokens wrap). */
+.signup-key-management :deep(.snackbar__body) {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+@media (max-width: 767.98px) {
+    .signup-key-management__list-panel {
+        padding: var(--pad-container-m);
+    }
+}

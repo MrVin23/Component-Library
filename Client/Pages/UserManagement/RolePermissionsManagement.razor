@@ -1,0 +1,97 @@
+@page "/usermanagement-role-permissions"
+@layout MainLayout
+@using Client.Components.Authorization
+@using Client.Components.Containers.FormContainer
+@using Client.Components.Containers.TitleContainer
+@using Client.Components.CustomSelect
+@using Client.Components.Table
+@using Client.Components.Validation
+@using Microsoft.AspNetCore.Components.Web
+@using Shared.Dtos.UserPermissions
+
+<CustomAutorizeView Role="Admin">
+    <TitleContainer
+        Title="Role permissions"
+        Description="Assign permissions to roles and review existing role–permission links." />
+
+    <section class="user-management role-permissions-management">
+    <BreadCrumbs Items="BreadcrumbItems" CssClass="role-permissions-management__breadcrumbs" />
+
+    @if (!string.IsNullOrEmpty(bannerMessage))
+    {
+        <div class="@BannerCssClass" role="@(bannerIsError ? "alert" : "status")">@bannerMessage</div>
+    }
+
+    <div class="role-permissions-management__layout">
+        <FormContainer Title="Link permission to role"
+                       ShowTitle="true"
+                       ShowResetButton="true"
+                       ShowSaveButton="true"
+                       SaveButtonText="Link"
+                       ShowValidationSummary="false"
+                       SaveButtonHtmlType="button"
+                       ResetButtonHtmlType="button"
+                       SaveDisabled="@isSaving"
+                       ResetDisabled="@isSaving"
+                       OnSave="@HandleLinkAsync"
+                       OnReset="@HandleClearAsync">
+            <div class="role-permissions-management__fields">
+                <CustomSearchSelect TItem="RoleWithPermissionsResponse"
+                                    Label="Role"
+                                    Items="@roles"
+                                    SelectedValue="@selectedRole"
+                                    SelectedValueChanged="@((RoleWithPermissionsResponse? v) => OnSelectedRoleChanged(v))"
+                                    Placeholder="Search and select a role"
+                                    SearchPlaceholder="Search roles..."
+                                    DisplayFunc="@((RoleWithPermissionsResponse r) => r.Name)"
+                                    ValueFunc="@((RoleWithPermissionsResponse r) => r.Id.ToString())"
+                                    Width="100%" />
+                <CustomSearchSelect TItem="PermissionResponse"
+                                    Label="Permission"
+                                    Items="@permissions"
+                                    SelectedValue="@selectedPermission"
+                                    SelectedValueChanged="@((PermissionResponse? v) => OnSelectedPermissionChanged(v))"
+                                    Placeholder="Search and select a permission"
+                                    SearchPlaceholder="Search permissions..."
+                                    DisplayFunc="@((PermissionResponse p) => p.Name)"
+                                    ValueFunc="@((PermissionResponse p) => p.Id.ToString())"
+                                    Width="100%" />
+            </div>
+        </FormContainer>
+
+        <div class="role-permissions-management__list-panel">
+            <h2 class="role-permissions-management__list-title">Existing links</h2>
+
+            <div class="role-permissions-management__table-wrap">
+                <CustomTable TItem="RolePermissionResponse"
+                             Items="@rolePermissionLinks"
+                             IsLoading="@isLoadingList"
+                             EmptyMessage="No role–permission links yet."
+                             LoadingMessage="Loading links...">
+                    <HeaderTemplate>
+                        <th scope="col">Role</th>
+                        <th scope="col" class="role-permissions-management__col-permission">Permission</th>
+                        <th scope="col" class="role-permissions-management__col-actions">Actions</th>
+                    </HeaderTemplate>
+                    <RowTemplate Context="link">
+                        <td>
+                            <code class="role-permissions-management__code">@link.RoleName</code>
+                        </td>
+                        <td class="role-permissions-management__col-permission">
+                            <code class="role-permissions-management__code">@link.PermissionName</code>
+                        </td>
+                        <td class="role-permissions-management__col-actions">
+                            <TableActionsCell TItem="RolePermissionResponse"
+                                              Item="@link"
+                                              IsDisabled="@(isSaving || isDeletingId == link.Id)"
+                                              OnDelete="@((RolePermissionResponse row) => DeleteLinkFromRowAsync(row))" />
+                        </td>
+                    </RowTemplate>
+                </CustomTable>
+            </div>
+        </div>
+    </div>
+
+        <Snackbar @ref="feedbackSnackbar" />
+    </section>
+</CustomAutorizeView>

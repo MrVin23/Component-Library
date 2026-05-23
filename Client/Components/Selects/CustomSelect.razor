@@ -1,0 +1,24 @@
+@namespace Client.Components.CustomSelect
+@typeparam TItem
+
+<div class="app-field @ContainerCssClass" style="width: @Width;">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="app-label @LabelCssClass">@Label</label>
+    }
+    <select class="app-input @SelectCssClass"
+            style="height: @Height;"
+            @bind="SelectedValueString"
+            disabled="@Disabled"
+            @attributes="AdditionalAttributes">
+        @if (!string.IsNullOrEmpty(Placeholder) && SelectedValue == null)
+        {
+            <option value="" disabled selected>@Placeholder</option>
+        }
+        @foreach (var item in Items)
+        {
+            <option value="@ValueFunc(item)">@DisplayFunc(item)</option>
+        }
+    </select>
+</div>
+

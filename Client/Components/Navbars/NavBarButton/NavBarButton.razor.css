@@ -1,0 +1,146 @@
+/* Expanded: match NavBarDropdown trigger (classic tinted button). Collapsed: icon-rail overrides below. */
+.nav-bar-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.45rem 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--palette-yellow) 28%, var(--theme-border));
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--palette-yellow) 8%, var(--theme-bg));
+    color: var(--theme-fg-contrast);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.nav-bar-button:hover {
+    background: color-mix(in srgb, var(--palette-yellow) 16%, var(--theme-bg));
+    border-color: color-mix(in srgb, var(--palette-orange) 40%, var(--theme-border));
+    color: var(--theme-fg-contrast);
+}
+
+.nav-bar-button.active {
+    background: color-mix(in srgb, var(--palette-purple) 14%, var(--theme-bg));
+    border-color: color-mix(in srgb, var(--palette-purple) 45%, var(--theme-border));
+    color: var(--theme-fg-contrast);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--palette-cyan) 22%, transparent),
+        inset 0 1px 0 color-mix(in srgb, #fff 6%, transparent);
+}
+
+.nav-bar-button.active .nav-bar-button__icon {
+    color: var(--palette-orange);
+}
+
+/* Expanded: same icon accent as dropdown */
+.nav-bar-button:not(.nav-bar-button--collapsed) .nav-bar-button__icon {
+    color: var(--palette-purple);
+}
+
+.nav-bar-button__icon {
+    flex-shrink: 0;
+    width: 1.45rem;
+    height: 1.45rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        color 0.18s ease,
+        transform 0.18s ease,
+        filter 0.18s ease;
+}
+
+.nav-bar-button__icon ::deep svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.nav-bar-button__label {
+    white-space: nowrap;
+    flex: 1;
+    text-align: start;
+}
+
+/* Collapsed sidebar: compact icon rail chip */
+.nav-bar-button--collapsed {
+    justify-content: center;
+    align-items: center;
+    padding: 0.3rem;
+    min-height: 3rem;
+    width: 3rem;
+    max-width: 3rem;
+    margin: 0;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--theme-border) 70%, transparent);
+    background: color-mix(in srgb, var(--theme-bg) 40%, transparent);
+    color: var(--theme-fg);
+}
+
+.nav-bar-button--collapsed:hover {
+    background: color-mix(in srgb, var(--palette-orange) 14%, var(--theme-bg));
+    border-color: color-mix(in srgb, var(--palette-orange) 35%, var(--theme-border));
+    color: var(--theme-fg-contrast);
+}
+
+.nav-bar-button--collapsed:hover .nav-bar-button__icon {
+    color: var(--palette-orange);
+    transform: translateY(-1px) scale(1.04);
+    filter: drop-shadow(0 0 0.35rem color-mix(in srgb, var(--palette-orange) 35%, transparent));
+}
+
+.nav-bar-button--collapsed.active {
+    background: color-mix(in srgb, var(--palette-purple) 18%, var(--theme-bg));
+    border-color: color-mix(in srgb, var(--palette-purple) 50%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--palette-cyan) 25%, transparent),
+        inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent);
+}
+
+.nav-bar-button--collapsed.active .nav-bar-button__icon {
+    color: var(--palette-purple);
+    transform: none;
+    filter: none;
+}
+
+.nav-bar-button--collapsed .nav-bar-button__label {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.nav-bar-button--collapsed .nav-bar-button__icon {
+    margin: 0;
+    width: 3.1rem;
+    max-width: 3.1rem;
+    min-width: 2.1rem;
+    aspect-ratio: 1;
+    height: auto;
+    flex: 0 0 auto;
+    color: var(--palette-cyan);
+}
+
+/* CustomTooltip trigger: full rail width, pointer cursor (not help) */
+::deep .custom-tooltip-wrapper {
+    width: 100%;
+    justify-content: center;
+    cursor: pointer;
+}

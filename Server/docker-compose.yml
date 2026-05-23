@@ -1,0 +1,49 @@
+version: '3.8'
+# Run from repo root: docker-compose -f Server/docker-compose.yml up
+# Or from Server/: docker-compose up
+
+services:
+  # Service name = hostname inside the Compose network (use Host=postgres, not "server").
+  postgres:
+    # AWS Public ECR mirrors Docker Hub; avoids Docker Hub OAuth (401) when auth.docker.io fails.
+    image: public.ecr.aws/docker/library/postgres:16-alpine
+    environment:
+      - POSTGRES_USER=template-user   # Docker: Username
+      - POSTGRES_PASSWORD=Tb2024cP    # Docker: Pasword
+      - POSTGRES_DB=local-database       # Docker: Maitenance database
+    ports:
+      - "5432:5432"                   # Docker: Port
+    restart: always
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+ 
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=template.user@email.com
+      - PGADMIN_DEFAULT_PASSWORD=Tb2024cP
+    ports: 
+      - "5052:80"   # Correct port mapping for pgAdmin
+    restart: always
+    volumes:
+      - pgadmin:/root/.pgadmin
+
+  server:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - PORT=8080
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=local-database;Username=template-user;Password=Tb2024cP
+      - Cors__AllowedOrigins=http://localhost:5074;http://localhost;http://localhost:5173;http://localhost:5174
+    depends_on:
+      - postgres
+
+volumes:
+  database-data:
+  pgadmin:
+
+  # This file is used to set up the local servers in docker on your PC

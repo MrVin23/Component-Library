@@ -1,0 +1,68 @@
+/* Uses --palette-purple, --theme-*, --app-primary-hover-bg from wwwroot/css/app.css */
+
+.breadcrumbs {
+    font-family: var(--font-ui);
+}
+
+.breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+    gap: 0;
+}
+
+.breadcrumbs__item {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+}
+
+/* Slash separator between segments (not before first item). */
+.breadcrumbs__item + .breadcrumbs__item::before {
+    content: "/";
+    display: inline-block;
+    margin: 0 0.5rem;
+    color: var(--theme-fg-muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.85;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Clickable: soft purple, darkens on hover */
+.breadcrumbs__link {
+    color: color-mix(in srgb, var(--palette-purple) 34%, var(--theme-fg-muted));
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: calc(var(--app-radius-lg) / 5);
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.breadcrumbs__link:hover {
+    color: var(--palette-purple);
+}
+
+.breadcrumbs__link:focus-visible {
+    outline: 2px solid var(--app-primary-focus-ring);
+    outline-offset: 2px;
+}
+
+/* Non-clickable: stronger than links, reads as “here” / not a control */
+.breadcrumbs__text {
+    color: color-mix(in srgb, var(--palette-purple) 52%, var(--theme-fg-contrast));
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: default;
+    letter-spacing: 0.01em;
+}
+
+/* Middle segments with no href (labels): still non-clickable but visually softer than current page */
+.breadcrumbs__text--plain {
+    color: color-mix(in srgb, var(--palette-purple) 28%, var(--theme-fg-muted));
+    font-weight: 500;
+}

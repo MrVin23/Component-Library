@@ -1,0 +1,88 @@
+@page "/usermanagement-permissions"
+@layout MainLayout
+@using Client.Apis.UserPermissions
+@using Client.Components.Authorization
+@using Client.Components.Breadcrumbs
+@using Client.Components.Containers.FormContainer
+@using Client.Components.Containers.TitleContainer
+@using Client.Components.Table
+@using Client.Components.Validation
+@using Shared.Dtos.UserPermissions
+
+<CustomAutorizeView Role="Admin">
+    <TitleContainer
+        Title="Permission management"
+        Description="Create, update, and remove permissions used across role assignments." />
+
+    <section class="user-management permission-management">
+    <BreadCrumbs Items="BreadcrumbItems" CssClass="permission-management__breadcrumbs" />
+
+    @if (!string.IsNullOrEmpty(bannerMessage))
+    {
+        <div class="@BannerCssClass" role="@(bannerIsError ? "alert" : "status")">@bannerMessage</div>
+    }
+
+    <div class="permission-management__layout">
+        <EditForm Model="@createRequest" OnSubmit="@HandleCreateSubmitAsync">
+            <FormContainer Title="@PrimaryFormTitle"
+                           ShowTitle="true"
+                           ShowResetButton="true"
+                           ResetButtonText="@(editingPermissionId.HasValue ? "Cancel" : "Reset")"
+                           ShowSaveButton="true"
+                           ShowValidationSummary="true"
+                           SaveButtonHtmlType="submit"
+                           ResetButtonHtmlType="button"
+                           SaveDisabled="@isSaving"
+                           ResetDisabled="@isSaving"
+                           OnReset="@HandleCreateResetAsync">
+                <div class="permission-management__fields @(highlightPrimaryForm ? "permission-management__fields--highlight" : string.Empty)">
+                    <label class="app-field">
+                        <span class="app-label">Permission name <span class="app-label-req">*</span></span>
+                        <InputText class="app-input" @bind-Value="createRequest.Name" placeholder="e.g. users.read" autocomplete="off" />
+                        <ValidationMessage For="@(() => createRequest.Name)" />
+                    </label>
+                    <label class="app-field">
+                        <span class="app-label">Description</span>
+                        <InputTextArea class="app-textarea permission-management__textarea" @bind-Value="createRequest.Description" placeholder="Optional description for this permission" />
+                        <ValidationMessage For="@(() => createRequest.Description)" />
+                    </label>
+                </div>
+            </FormContainer>
+        </EditForm>
+
+        <div class="permission-management__list-panel">
+            <h2 class="permission-management__list-title">Existing permissions</h2>
+
+            <div class="permission-management__table-wrap">
+                <CustomTable TItem="PermissionResponse"
+                             Items="@permissions"
+                             IsLoading="@isLoadingList"
+                             EmptyMessage="No permissions found."
+                             LoadingMessage="Loading permissions...">
+                    <HeaderTemplate>
+                        <th scope="col">Name</th>
+                        <th scope="col" class="permission-management__col-description">Description</th>
+                        <th scope="col" class="permission-management__col-actions">Actions</th>
+                    </HeaderTemplate>
+                    <RowTemplate Context="permission">
+                        <td>
+                            <code class="permission-management__code">@permission.Name</code>
+                        </td>
+                        <td class="permission-management__col-description">@(string.IsNullOrWhiteSpace(permission.Description) ? "-" : permission.Description)</td>
+                        <td class="permission-management__col-actions">
+                            <TableActionsCell TItem="PermissionResponse"
+                                              Item="@permission"
+                                              IsDisabled="@(isSaving || isDeletingId == permission.Id)"
+                                              OnEdit="@((PermissionResponse row) => StartEditFromRowAsync(row))"
+                                              OnDelete="@((PermissionResponse row) => DeletePermissionFromRowAsync(row))" />
+                        </td>
+                    </RowTemplate>
+                </CustomTable>
+            </div>
+
+        </div>
+    </div>
+
+        <Snackbar @ref="feedbackSnackbar" />
+    </section>
+</CustomAutorizeView>

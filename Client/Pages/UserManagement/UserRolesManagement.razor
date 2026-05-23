@@ -1,0 +1,110 @@
+@page "/usermanagement-user-roles"
+@page "/usermanagement-userpermissions"
+@layout MainLayout
+@using Client.Components.Authorization
+@using Client.Components.Breadcrumbs
+@using Client.Components.Containers.FormContainer
+@using Client.Components.Containers.TitleContainer
+@using Client.Components.CustomSelect
+@using Client.Components.Table
+@using Client.Components.Validation
+@using Shared.Dtos.UserPermissions
+@using Shared.Dtos.Users
+
+<CustomAutorizeView Role="Admin">
+    <TitleContainer
+        Title="User roles"
+        Description="Assign roles to users and review current user-role links." />
+
+    <section class="user-management user-roles-management">
+    <BreadCrumbs Items="BreadcrumbItems" CssClass="user-roles-management__breadcrumbs" />
+
+    @if (!string.IsNullOrEmpty(bannerMessage))
+    {
+        <div class="@BannerCssClass" role="@(bannerIsError ? "alert" : "status")">@bannerMessage</div>
+    }
+
+    <div class="user-roles-management__layout">
+        <EditForm Model="@linkRequest" OnSubmit="@HandleLinkSubmitAsync">
+            <FormContainer Title="Link role to user"
+                           ShowTitle="true"
+                           ShowResetButton="true"
+                           ShowSaveButton="true"
+                           SaveButtonText="Link"
+                           ShowValidationSummary="true"
+                           SaveButtonHtmlType="submit"
+                           ResetButtonHtmlType="button"
+                           SaveDisabled="@isSaving"
+                           ResetDisabled="@isSaving"
+                           OnReset="@HandleClearAsync">
+                <div class="user-roles-management__fields">
+                    <div class="app-field">
+                        <div class="user-roles-management__select @(IsUserInvalid ? "user-roles-management__select--invalid" : string.Empty)">
+                            <CustomSearchSelect TItem="UserResponse"
+                                                Label="User"
+                                                Items="@users"
+                                                SelectedValue="@selectedUser"
+                                                SelectedValueChanged="@((UserResponse? v) => OnSelectedUserChanged(v))"
+                                                Placeholder="Search and select a user"
+                                                SearchPlaceholder="Search users..."
+                                                DisplayFunc="@DisplayUser"
+                                                ValueFunc="@((UserResponse u) => u.Id.ToString())"
+                                                Width="100%" />
+                        </div>
+                        <ValidationMessage For="@(() => linkRequest.UserId)" />
+                    </div>
+                    <div class="app-field">
+                        <div class="user-roles-management__select @(IsRoleInvalid ? "user-roles-management__select--invalid" : string.Empty)">
+                            <CustomSearchSelect TItem="RoleWithPermissionsResponse"
+                                                Label="Role"
+                                                Items="@roles"
+                                                SelectedValue="@selectedRole"
+                                                SelectedValueChanged="@((RoleWithPermissionsResponse? v) => OnSelectedRoleChanged(v))"
+                                                Placeholder="Search and select a role"
+                                                SearchPlaceholder="Search roles..."
+                                                DisplayFunc="@((RoleWithPermissionsResponse r) => r.Name)"
+                                                ValueFunc="@((RoleWithPermissionsResponse r) => r.Id.ToString())"
+                                                Width="100%" />
+                        </div>
+                        <ValidationMessage For="@(() => linkRequest.RoleId)" />
+                    </div>
+                </div>
+            </FormContainer>
+        </EditForm>
+
+        <div class="user-roles-management__list-panel">
+            <h2 class="user-roles-management__list-title">Existing links</h2>
+
+            <div class="user-roles-management__table-wrap">
+                <CustomTable TItem="UserRoleResponse"
+                             Items="@userRoleLinks"
+                             IsLoading="@isLoadingList"
+                             EmptyMessage="No user-role links yet."
+                             LoadingMessage="Loading links...">
+                    <HeaderTemplate>
+                        <th scope="col">User</th>
+                        <th scope="col" class="user-roles-management__col-role">Role</th>
+                        <th scope="col" class="user-roles-management__col-actions">Actions</th>
+                    </HeaderTemplate>
+                    <RowTemplate Context="link">
+                        <td>
+                            <code class="user-roles-management__code">@FormatUserFromLink(link)</code>
+                        </td>
+                        <td class="user-roles-management__col-role">
+                            <code class="user-roles-management__code">@link.RoleName</code>
+                        </td>
+                        <td class="user-roles-management__col-actions">
+                            <TableActionsCell TItem="UserRoleResponse"
+                                              Item="@link"
+                                              IsDisabled="@(isSaving || isDeletingId == link.Id)"
+                                              OnDelete="@((UserRoleResponse row) => DeleteLinkFromRowAsync(row))" />
+                        </td>
+                    </RowTemplate>
+                </CustomTable>
+            </div>
+        </div>
+    </div>
+
+        <Snackbar @ref="feedbackSnackbar" />
+    </section>
+</CustomAutorizeView>
