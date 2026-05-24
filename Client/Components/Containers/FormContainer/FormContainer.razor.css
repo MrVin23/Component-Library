@@ -3,18 +3,19 @@
     flex-direction: column;
     gap: var(--pad-sub);
     padding: var(--pad-container);
-    border: var(--border-container) solid var(--theme-border);
-    border-radius: calc(var(--app-radius-lg) / 2);
+    border: var(--border-container-style);
+    border-radius: var(--radius-md);
     background: var(--app-surface);
-    box-shadow: var(--app-shadow-md);
+    box-shadow: var(--shadow-card);
 }
 
 .form-container__title {
-    margin: 0;
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--app-text-primary);
+    margin: var(--spacing-0);
     font-family: var(--font-ui);
+    font-size: var(--text-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-leading-heading);
+    color: var(--text-color-primary);
 }
 
 .form-container__validation {
@@ -22,11 +23,11 @@
 }
 
 .form-container__validation-list {
-    margin: 0;
-    padding-inline-start: 1.25rem;
+    margin: var(--spacing-0);
+    padding-inline-start: var(--spacing-5);
     color: inherit;
-    font-size: 0.9375rem;
-    line-height: 1.45;
+    font-size: var(--text-size-body);
+    line-height: var(--leading-normal);
 }
 
 .form-container__validation-item {
@@ -34,7 +35,7 @@
 }
 
 .form-container__validation-item:last-child {
-    margin-bottom: 0;
+    margin-bottom: var(--spacing-0);
 }
 
 .form-container__body {
@@ -45,7 +46,7 @@
 .form-container__footer {
     margin-top: var(--pad-input);
     padding-top: var(--pad-container);
-    border-top: var(--border-container) solid var(--theme-border);
+    border-top: var(--border-container) solid var(--border-color-divider);
 }
 
 .form-container__actions {

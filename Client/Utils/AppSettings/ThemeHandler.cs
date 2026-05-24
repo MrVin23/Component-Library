@@ -4,8 +4,9 @@ using Shared.Dtos.Users;
 
 namespace Client.Utils.AppSettings;
 
+// security risk: DEMO ONLY — revert localStorage/offline theme paths before production (see securityNotes.md).
 /// <summary>
-/// Applies <c>data-theme</c> from encrypted session (<see cref="ClientSession"/>) and notifies subscribers.
+/// Applies <c>data-theme</c> from encrypted session (<see cref="ClientSession"/>) or browser localStorage (offline).
 /// </summary>
 public sealed class ThemeHandler
 {
@@ -18,38 +19,38 @@ public sealed class ThemeHandler
         _js = js;
     }
 
-    /// <summary>Current dark mode preference (matches session when authenticated).</summary>
-    public bool IsDarkMode { get; private set; } = true;
+    /// <summary>Current dark mode preference.</summary>
+    public bool IsDarkMode { get; private set; }
 
     public event Action? Changed;
 
     public async Task ApplyFromStoredSessionAsync()
     {
         var session = await ClientSessionStorage.ReadAsync(_secureStorage);
-        var dark = ResolveDarkMode(session);
+        var dark = session?.Settings != null
+            ? session.Settings.DarkMode
+            // security risk: DEMO ONLY — use session/server default only in production (remove ReadDarkModeFromBrowserAsync fallback).
+            : await ReadDarkModeFromBrowserAsync();
+
         IsDarkMode = dark;
         await ApplyDomAsync(dark);
         RaiseChanged();
     }
 
-    /// <summary>Optimistic update: session + DOM. Callers (navbar, app settings) may follow with an API save.</summary>
+    /// <summary>Optimistic update: localStorage + optional session. API save is caller responsibility.</summary>
     public async Task SetThemeLocalAsync(bool dark)
     {
         var session = await ClientSessionStorage.ReadAsync(_secureStorage);
-        if (session?.User == null)
+        if (session?.User != null)
         {
-            IsDarkMode = dark;
-            await ApplyDomAsync(dark);
-            RaiseChanged();
-            return;
+            session.Settings ??= ClientSessionStorage.DefaultSettings(session.User.Id);
+            session.Settings.DarkMode = dark;
+            session.Settings.UserId = session.User.Id;
+            await _secureStorage.SetAsync(ClientSessionStorage.SessionKey, session);
         }
 
-        session.Settings ??= ClientSessionStorage.DefaultSettings(session.User.Id);
-        session.Settings.DarkMode = dark;
-        session.Settings.UserId = session.User.Id;
-        await _secureStorage.SetAsync(ClientSessionStorage.SessionKey, session);
-
         IsDarkMode = dark;
+        // security risk: DEMO ONLY — setTheme writes to localStorage via theme.js; restrict to authenticated session in production if needed.
         await ApplyDomAsync(dark);
         RaiseChanged();
     }
@@ -60,6 +61,7 @@ public sealed class ThemeHandler
         var session = await ClientSessionStorage.ReadAsync(_secureStorage);
         if (session?.User == null)
         {
+            // security risk: DEMO ONLY — do not apply settings for anonymous users in production.
             IsDarkMode = settings.DarkMode;
             await ApplyDomAsync(settings.DarkMode);
             RaiseChanged();
@@ -74,11 +76,17 @@ public sealed class ThemeHandler
         RaiseChanged();
     }
 
-    private static bool ResolveDarkMode(ClientSession? session)
+    // security risk: DEMO ONLY — remove before production; theme should come from server session only.
+    private async Task<bool> ReadDarkModeFromBrowserAsync()
     {
-        if (session?.Settings != null)
-            return session.Settings.DarkMode;
-        return true;
+        try
+        {
+            return await _js.InvokeAsync<bool>("themeInterop.isDarkMode");
+        }
+        catch (JSException)
+        {
+            return false;
+        }
     }
 
     private async Task ApplyDomAsync(bool dark)

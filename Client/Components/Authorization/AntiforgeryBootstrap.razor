@@ -1,7 +1,10 @@
 @namespace Client.Components.Authorization
+@* security risk: DEMO ONLY — remove @using Client.Routes and @inject NavigationManager before production. *@
 @using Client.Apis
+@using Client.Routes
 @inject ApiAntiforgery ApiAntiforgery
 @inject AntiforgeryTokenStore AntiforgeryTokens
+@inject NavigationManager Navigation
 
 @if (!_ready && _error is null)
 {
@@ -27,6 +30,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        // security risk: DEMO ONLY — remove this block before production; always require a valid antiforgery token.
+        if (ComponentLibraryRoutes.IsPublicStoryRoute(Navigation))
+        {
+            _ready = true;
+            return;
+        }
+
         await LoadTokenAsync();
     }
 
@@ -45,16 +55,28 @@ else
             var dto = await ApiAntiforgery.GetRequestTokenAsync();
             if (string.IsNullOrEmpty(dto?.RequestToken))
             {
-                _error = "Security token was empty. Check API configuration.";
+                // security risk: DEMO ONLY — revert to setting _error and not rendering ChildContent.
+                ProceedWithoutToken();
                 return;
             }
 
             AntiforgeryTokens.RequestToken = dto.RequestToken;
             _ready = true;
         }
-        catch (Exception ex)
+        catch
         {
-            _error = $"Could not load security token: {ex.Message}";
+            // security risk: DEMO ONLY — revert to setting _error and not rendering ChildContent.
+            ProceedWithoutToken();
         }
+    }
+
+    // security risk: DEMO ONLY — remove this method before production.
+    private void ProceedWithoutToken()
+    {
+        if (!ComponentLibraryRoutes.IsPublicStoryRoute(Navigation))
+            Navigation.NavigateTo(ComponentLibraryRoutes.DefaultRoute, replace: true);
+
+        _error = null;
+        _ready = true;
     }
 }

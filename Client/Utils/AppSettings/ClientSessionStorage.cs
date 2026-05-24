@@ -10,8 +10,9 @@ public static class ClientSessionStorage
 {
     public const string SessionKey = "currentUser";
 
+    // security risk: DEMO ONLY — confirm production default (e.g. DarkMode = true) with product requirements.
     public static UserSettingsResponse DefaultSettings(int userId) =>
-        new() { Id = 0, UserId = userId, DarkMode = true };
+        new() { Id = 0, UserId = userId, DarkMode = false };
 
     public static async Task<ClientSession?> ReadAsync(ISecureStorageService storage)
     {

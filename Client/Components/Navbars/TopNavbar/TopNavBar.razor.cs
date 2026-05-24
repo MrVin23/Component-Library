@@ -36,7 +36,7 @@ public partial class TopNavBar : IDisposable
     [Parameter]
     public EventCallback OnSidebarToggle { get; set; }
 
-    private bool _isDarkMode = true;
+    private bool _isDarkMode;
     private bool _themeSaving;
     private bool _accountMenuOpen;
     private bool _isSignedIn;
@@ -47,9 +47,12 @@ public partial class TopNavBar : IDisposable
         if (_themeSaving)
             return;
 
-        var previousDark = ThemeHandler.IsDarkMode;
         await ThemeHandler.SetThemeLocalAsync(value);
         _isDarkMode = ThemeHandler.IsDarkMode;
+
+        // security risk: DEMO ONLY — remove early return; always persist theme via API when signed in (and handle failures strictly).
+        if (!_isSignedIn)
+            return;
 
         _themeSaving = true;
         try
@@ -60,20 +63,16 @@ public partial class TopNavBar : IDisposable
                 var payload = await ReadApiResponseAsync<UserSettingsResponse>(response);
                 if (payload?.Data != null)
                     await ThemeHandler.SyncSettingsAsync(payload.Data);
-                return;
             }
-
-            await ThemeHandler.SetThemeLocalAsync(previousDark);
-            _isDarkMode = ThemeHandler.IsDarkMode;
         }
         catch
         {
-            await ThemeHandler.SetThemeLocalAsync(previousDark);
-            _isDarkMode = ThemeHandler.IsDarkMode;
+            // security risk: DEMO ONLY — revert to rolling back theme on API failure in production.
         }
         finally
         {
             _themeSaving = false;
+            _isDarkMode = ThemeHandler.IsDarkMode;
         }
     }
 

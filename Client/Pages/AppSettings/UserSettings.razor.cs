@@ -22,7 +22,7 @@ public partial class UserSettings : ComponentBase
 
     private Snackbar? _snackbar;
 
-    private bool darkMode = true;
+    private bool darkMode;
     private bool isLoading = true;
     private bool isSaving;
     private string loadError = string.Empty;
@@ -59,10 +59,16 @@ public partial class UserSettings : ComponentBase
 
             var err = await ReadApiErrorAsync(response);
             loadError = err?.Message ?? response.ReasonPhrase ?? "Could not load settings.";
+            // security risk: DEMO ONLY — remove local fallback; require API for settings in production.
+            await ThemeHandler.ApplyFromStoredSessionAsync();
+            darkMode = ThemeHandler.IsDarkMode;
         }
         catch (Exception ex)
         {
             loadError = $"Request failed: {ex.Message}";
+            // security risk: DEMO ONLY — remove local fallback; require API for settings in production.
+            await ThemeHandler.ApplyFromStoredSessionAsync();
+            darkMode = ThemeHandler.IsDarkMode;
         }
         finally
         {
@@ -111,9 +117,8 @@ public partial class UserSettings : ComponentBase
         }
         catch (Exception ex)
         {
-            darkMode = previous;
-            await ThemeHandler.SetThemeLocalAsync(previous);
-            _snackbar?.Show($"Request failed: {ex.Message}", AlertSeverity.Error);
+            // security risk: DEMO ONLY — revert to rolling back theme on save failure in production.
+            _snackbar?.Show($"Saved locally only: {ex.Message}", AlertSeverity.Warning);
         }
         finally
         {

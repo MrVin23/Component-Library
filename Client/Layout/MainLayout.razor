@@ -1,6 +1,8 @@
 ﻿@inherits LayoutComponentBase
-@inject Microsoft.AspNetCore.Components.Authorization.AuthenticationStateProvider AuthStateProvider
+@* security risk: DEMO ONLY — remove @using Client.Routes before production. *@
+@using Client.Routes
 @inject NavigationManager Navigation
+@inject Microsoft.AspNetCore.Components.Authorization.AuthenticationStateProvider AuthStateProvider
 @inject Client.Utils.UserPermissions.IAuthService AuthService
 @inject Client.Utils.AppSettings.ThemeHandler ThemeHandler
 
@@ -35,16 +37,21 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // security risk: DEMO ONLY — remove isComponentLibraryStory bypass before production; require auth for all routes.
+        var isComponentLibraryStory = ComponentLibraryRoutes.IsPublicStoryRoute(Navigation);
+
         // 1) Encrypted session (fast): theme + cached settings without waiting for the network.
         await ThemeHandler.ApplyFromStoredSessionAsync();
 
-        // 2) Server session + database user settings, then re-apply so storage and DOM match the API.
-        await AuthService.RefreshClientAuthStateAsync();
+        // security risk: DEMO ONLY — always call RefreshClientAuthStateAsync() in production.
+        if (!isComponentLibraryStory)
+            await AuthService.RefreshClientAuthStateAsync();
 
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
 
-        if (!isAuthenticated)
+        // security risk: DEMO ONLY — redirect all unauthenticated users to /login in production.
+        if (!isAuthenticated && !isComponentLibraryStory)
         {
             Navigation.NavigateTo("/login", forceLoad: false);
             return;
