@@ -41,24 +41,6 @@
             }
         </div>
     </section>
-
-    <section class="button-story__section" aria-labelledby="button-types-heading">
-        <h2 id="button-types-heading" class="button-story__h2">By type</h2>
-        <p class="button-story__muted">One tile per variant at default (medium) size.</p>
-
-        <div class="button-story__type-grid">
-            @foreach (var variant in StoryVariants)
-            {
-                <article class="button-story__type-tile">
-                    <h3 class="button-story__type-name">@TypeLabel(variant)</h3>
-                    <div class="button-story__type-sample">
-                        <CustomButton ButtonType="variant"
-                                      Text="@($"{TypeLabel(variant)} action")" />
-                    </div>
-                </article>
-            }
-        </div>
-    </section>
 </main>
 
 @code {
