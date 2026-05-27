@@ -1,47 +1,41 @@
 @page "/componentlibrary-button"
 @using Client.Components.Buttons.CustomButton
+@using Client.Components.Containers.TitleContainer
 
 <PageTitle>Buttons</PageTitle>
 
-<main class="button-story">
-    <h1 class="button-story__title">Buttons</h1>
-    <p class="button-story__lead">
-        <code class="button-story__code">CustomButton</code> uses the same theme and spacing tokens as
-        <code class="button-story__code">app.css</code>.
-    </p>
+<TitleContainer
+    Title="Buttons"
+    Description="CustomButton uses the global theme, spacing, border, and shadow tokens." />
 
-    <section class="button-story__section" aria-labelledby="button-sizes-heading">
-        <h2 id="button-sizes-heading" class="button-story__h2">By size</h2>
-        <p class="button-story__muted">Each row is one variant; columns are Small, Medium, and Large.</p>
+<BaseContainer Border="true">
+    <div class="button-story__size-matrix">
+        <div class="button-story__size-matrix-corner" aria-hidden="true"></div>
+        <div class="button-story__size-colhead">Small</div>
+        <div class="button-story__size-colhead">Medium</div>
+        <div class="button-story__size-colhead">Large</div>
 
-        <div class="button-story__size-matrix">
-            <div class="button-story__size-matrix-corner" aria-hidden="true"></div>
-            <div class="button-story__size-colhead">Small</div>
-            <div class="button-story__size-colhead">Medium</div>
-            <div class="button-story__size-colhead">Large</div>
-
-            @foreach (var variant in StoryVariants)
-            {
-                <div class="button-story__size-rowlabel" id="@($"size-row-{variant}")">@TypeLabel(variant)</div>
-                <div class="button-story__size-cell">
-                    <CustomButton ButtonType="variant"
-                                  Size="CustomButtonSize.Small"
-                                  Text="@TypeLabel(variant)" />
-                </div>
-                <div class="button-story__size-cell">
-                    <CustomButton ButtonType="variant"
-                                  Size="CustomButtonSize.Medium"
-                                  Text="@TypeLabel(variant)" />
-                </div>
-                <div class="button-story__size-cell">
-                    <CustomButton ButtonType="variant"
-                                  Size="CustomButtonSize.Large"
-                                  Text="@TypeLabel(variant)" />
-                </div>
-            }
-        </div>
-    </section>
-</main>
+        @foreach (var variant in StoryVariants)
+        {
+            <div class="button-story__size-rowlabel" id="@($"size-row-{variant}")">@TypeLabel(variant)</div>
+            <div class="button-story__size-cell">
+                <CustomButton ButtonType="variant"
+                              Size="CustomButtonSize.Small"
+                              Text="@TypeLabel(variant)" />
+            </div>
+            <div class="button-story__size-cell">
+                <CustomButton ButtonType="variant"
+                              Size="CustomButtonSize.Medium"
+                              Text="@TypeLabel(variant)" />
+            </div>
+            <div class="button-story__size-cell">
+                <CustomButton ButtonType="variant"
+                              Size="CustomButtonSize.Large"
+                              Text="@TypeLabel(variant)" />
+            </div>
+        }
+    </div>
+</BaseContainer>
 
 @code {
     /// <summary>Tertiary is third row after Secondary (not enum declaration order).</summary>

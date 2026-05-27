@@ -45,7 +45,7 @@
     /* ---------------------------------------------------------------------- */
     /* Container spacing — cards, panels, tables, form shells                  */
     /* ---------------------------------------------------------------------- */
-    --pad-container: var(--spacing-3-5);
+    --pad-container: var(--spacing-5);
     --pad-container-m: var(--spacing-2-5);
     --pad-sub: var(--spacing-3-5);
     --pad-sub-m: var(--spacing-2-5);

@@ -10,8 +10,22 @@
 
 html,
 body {
+    margin: 0;
+    padding: 0;
     font-family: var(--font-ui);
     color: var(--theme-fg);
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
+
+#app {
+    min-height: 100vh;
 }
 
 a {
@@ -24,8 +38,90 @@ code {
     color: #c02d76;
 }
 
-h1:focus {
-    outline: none;
+/* -------------------------------------------------------------------------- */
+/* Headings — semantic + utility classes                                      */
+/* -------------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    margin: 0 0 var(--pad-input);
+    font-family: var(--font-ui);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--text-leading-heading);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-color-primary);
+}
+
+/* When a heading is the last element in a block, avoid “extra tail” spacing. */
+h1:last-child,
+h2:last-child,
+h3:last-child,
+h4:last-child,
+h5:last-child,
+h6:last-child,
+.h1:last-child,
+.h2:last-child,
+.h3:last-child,
+.h4:last-child,
+.h5:last-child,
+.h6:last-child {
+    margin-bottom: var(--spacing-0);
+}
+
+h1,
+.h1 {
+    font-size: var(--text-size-display);
+}
+
+h2,
+.h2 {
+    font-size: var(--text-size-heading);
+}
+
+h3,
+.h3 {
+    font-size: var(--text-size-subheading);
+}
+
+h4,
+.h4 {
+    font-size: var(--text-size-3xl);
+}
+
+h5,
+.h5 {
+    font-size: var(--text-size-xl);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-normal);
+}
+
+h6,
+.h6 {
+    font-size: var(--text-size-lg);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-color-secondary);
+    text-transform: uppercase;
+}
+
+/* A11y: don't remove focus entirely; keep it limited to keyboard navigation. */
+h1:focus-visible,
+h2:focus-visible,
+h3:focus-visible,
+h4:focus-visible,
+h5:focus-visible,
+h6:focus-visible {
+    outline: 2px solid var(--app-primary-focus-ring);
+    outline-offset: 2px;
 }
 
 /* -------------------------------------------------------------------------- */

@@ -1,0 +1,25 @@
+.base-container {
+    display: block;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: var(--pad-container);
+    border: var(--border-container-style);
+    border-radius: var(--radius-container);
+    background: var(--app-surface);
+    box-shadow: var(--shadow-card);
+    color: var(--text-color-secondary);
+}
+
+.base-container--no-padding {
+    padding: var(--spacing-0);
+}
+
+.base-container--no-border {
+    border: var(--border-width-none);
+}
+
+@media (max-width: 640px) {
+    .base-container:not(.base-container--no-padding) {
+        padding: var(--pad-container-m);
+    }
+}

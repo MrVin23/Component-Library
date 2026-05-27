@@ -73,23 +73,10 @@ public partial class CustomButton : ComponentBase
     [Parameter]
     public EventCallback<Microsoft.AspNetCore.Components.Web.MouseEventArgs> OnClick { get; set; }
 
-    private bool _isSparkling = false;
-
     private async Task HandleClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs args)
     {
         if (!Disabled)
         {
-            // Trigger sparkle animation for Generate button
-            if (ButtonType == CustomButtonType.Generate)
-            {
-                _isSparkling = true;
-                StateHasChanged();
-                // Remove the class after animation completes (350ms)
-                await Task.Delay(350);
-                _isSparkling = false;
-                StateHasChanged();
-            }
-            
             await OnClick.InvokeAsync(args);
         }
     }
@@ -110,7 +97,7 @@ public partial class CustomButton : ComponentBase
                 CustomButtonType.Danger => "custom-button danger",
                 CustomButtonType.Ghost => "custom-button ghost",
                 CustomButtonType.Tertiary => "custom-button tertiary",
-                CustomButtonType.Generate => $"custom-button generate{(_isSparkling ? " sparkle-trigger" : "")}",
+                CustomButtonType.Generate => "custom-button generate",
                 _ => "custom-button primary"
             };
 
