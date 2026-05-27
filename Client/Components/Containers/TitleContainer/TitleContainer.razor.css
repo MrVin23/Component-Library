@@ -16,10 +16,6 @@
 .title-container__description {
     margin: var(--spacing-0);
     max-width: 70ch;
-    font-family: var(--font-ui);
-    font-size: var(--text-size-body);
-    line-height: var(--leading-normal);
-    color: var(--text-color-muted);
 }
 
 .title-container__divider {

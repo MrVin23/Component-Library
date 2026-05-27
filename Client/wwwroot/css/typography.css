@@ -125,6 +125,30 @@ h6:focus-visible {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Text utilities                                                             */
+/* -------------------------------------------------------------------------- */
+/* Use these instead of re-declaring font-size/line-height/colors on every <p>. */
+.app-text {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: var(--text-size-body);
+    line-height: var(--leading-normal);
+    color: var(--text-color-primary);
+}
+
+.app-text--muted {
+    color: var(--text-color-muted);
+}
+
+.app-text--caption {
+    font-size: var(--text-size-label);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--text-tracking-label);
+    color: var(--text-color-muted);
+    line-height: var(--leading-snug);
+}
+
+/* -------------------------------------------------------------------------- */
 /* Form typography — pairs with layout rules in app.css (.app-field, .app-input) */
 /* -------------------------------------------------------------------------- */
 .app-label {
