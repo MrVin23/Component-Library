@@ -11,11 +11,6 @@
 
 .title-container__title {
     margin: var(--spacing-0);
-    font-family: var(--font-ui);
-    font-size: var(--text-size-display);
-    font-weight: var(--font-weight-bold);
-    line-height: var(--leading-tight);
-    color: var(--text-color-primary);
 }
 
 .title-container__description {
