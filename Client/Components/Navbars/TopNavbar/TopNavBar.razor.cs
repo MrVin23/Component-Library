@@ -5,6 +5,7 @@ using Client.Interfaces.Authorisation;
 using Client.Utils.AppSettings;
 using Client.Utils.UserPermissions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Shared.Dtos;
 using Shared.Dtos.Users;
@@ -17,6 +18,9 @@ public partial class TopNavBar : IDisposable
 
     [Inject]
     private IAuthService AuthService { get; set; } = default!;
+
+    [Inject]
+    private AuthenticationStateProvider AuthStateProvider { get; set; } = default!;
 
     [Inject]
     private NavigationManager NavigationManager { get; set; } = default!;
@@ -112,8 +116,15 @@ public partial class TopNavBar : IDisposable
     protected override async Task OnInitializedAsync()
     {
         ThemeHandler.Changed += OnThemeHandlerChanged;
+        AuthStateProvider.AuthenticationStateChanged += HandleAuthenticationStateChanged;
         _isDarkMode = ThemeHandler.IsDarkMode;
         await RefreshUserStateAsync();
+    }
+
+    private async void HandleAuthenticationStateChanged(Task<AuthenticationState> _)
+    {
+        await RefreshUserStateAsync();
+        await InvokeAsync(StateHasChanged);
     }
 
     private void OnThemeHandlerChanged()
@@ -122,7 +133,11 @@ public partial class TopNavBar : IDisposable
         _ = InvokeAsync(StateHasChanged);
     }
 
-    public void Dispose() => ThemeHandler.Changed -= OnThemeHandlerChanged;
+    public void Dispose()
+    {
+        ThemeHandler.Changed -= OnThemeHandlerChanged;
+        AuthStateProvider.AuthenticationStateChanged -= HandleAuthenticationStateChanged;
+    }
 
     private async Task RefreshUserStateAsync()
     {

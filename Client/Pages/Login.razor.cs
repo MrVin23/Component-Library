@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Client.Apis.UserPermissions;
+using Client.Utils.UserPermissions;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Components;
@@ -17,6 +18,7 @@ public partial class Login
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
     [Inject] private ApiAuth AuthApi { get; set; } = null!;
+    [Inject] private IAuthService AuthService { get; set; } = null!;
     [Inject] private NavigationManager Navigation { get; set; } = null!;
     [Inject] private IValidator<LoginRequest> LoginValidator { get; set; } = null!;
     [Inject] private IValidator<SignUpRequest> SignUpValidator { get; set; } = null!;
@@ -108,6 +110,7 @@ public partial class Login
                 var payload = await ReadApiResponseAsync<LoginResponse>(response);
                 if (payload is { Success: true, Data: not null })
                 {
+                    await AuthService.RefreshClientAuthStateAsync();
                     Navigation.NavigateTo("/");
                     return;
                 }
