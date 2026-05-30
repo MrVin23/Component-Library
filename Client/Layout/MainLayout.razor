@@ -7,28 +7,31 @@
 @inject Client.Utils.AppSettings.ThemeHandler ThemeHandler
 
 <div class="page @(_sidebarCollapsed ? "page--sidebar-collapsed" : null)">
-    <aside class="sidebar-shell">
-        <SideNavBar Collapsed="_sidebarCollapsed" />
-    </aside>
+    <TopNavBar SidebarCollapsed="_sidebarCollapsed" OnSidebarToggle="ToggleSidebar" />
 
-    <button type="button"
-            class="sidebar-backdrop"
-            @onclick="ToggleSidebar"
-            aria-label="Close navigation"></button>
+    <div class="page__body">
+        <aside class="sidebar-shell">
+            <SideNavBar Collapsed="_sidebarCollapsed" />
+        </aside>
 
-    <main class="main-area">
-        <TopNavBar SidebarCollapsed="_sidebarCollapsed" OnSidebarToggle="ToggleSidebar" />
-        <article class="content">
-            @if (_shellReady)
-            {
-                @Body
-            }
-            else
-            {
-                <p class="main-layout__preparing" aria-live="polite">Loading…</p>
-            }
-        </article>
-    </main>
+        <button type="button"
+                class="sidebar-backdrop"
+                @onclick="ToggleSidebar"
+                aria-label="Close navigation"></button>
+
+        <main class="main-area">
+            <article class="content">
+                @if (_shellReady)
+                {
+                    @Body
+                }
+                else
+                {
+                    <p class="main-layout__preparing" aria-live="polite">Loading…</p>
+                }
+            </article>
+        </main>
+    </div>
 </div>
 
 @code {

@@ -1,10 +1,21 @@
 .page {
+    --layout-top-nav-height: calc(3.25rem + 3px);
+
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100dvh;
     background: var(--app-surface);
     color: var(--text-color-secondary);
+}
+
+.page__body {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 0;
+    margin-top: var(--layout-top-nav-height);
 }
 
 .main-area {
@@ -31,7 +42,10 @@
 .sidebar-backdrop {
     display: none;
     position: fixed;
-    inset: var(--spacing-0);
+    top: var(--layout-top-nav-height);
+    right: var(--spacing-0);
+    bottom: var(--spacing-0);
+    left: var(--spacing-0);
     z-index: 250;
     margin: var(--spacing-0);
     padding: var(--spacing-0);
@@ -41,7 +55,7 @@
     background: color-mix(in srgb, var(--theme-fg) 48%, transparent);
 }
 
-/* ——— Mobile: sidebar as drawer ——— */
+/* ——— Mobile: sidebar drawer below fixed top nav ——— */
 @media (max-width: 767.98px) {
     .main-area > .content {
         padding: var(--pad-page-m);
@@ -49,10 +63,10 @@
 
     .sidebar-shell {
         position: fixed;
-        top: var(--spacing-0);
+        top: var(--layout-top-nav-height);
         left: var(--spacing-0);
         z-index: 300;
-        height: 100vh;
+        height: calc(100dvh - var(--layout-top-nav-height));
         width: min(calc(var(--spacing-base) * 70), 88vw);
         transform: translateX(0);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -69,25 +83,17 @@
     }
 }
 
-/* ——— Desktop: sidebar column + narrow rail when collapsed ——— */
+/* ——— Desktop: sidebar column under top nav ——— */
 @media (min-width: 768px) {
     .sidebar-backdrop {
         display: none !important;
     }
 
-    .page {
-        flex-direction: row;
-        align-items: stretch;
-    }
-
-    /* Sidebar stacks above .main-area so fixed descendants (e.g. tooltips) paint over the content column */
     .sidebar-shell {
         flex-shrink: 0;
         width: calc(var(--spacing-base) * 64);
-        height: 100vh;
-        position: sticky;
-        top: var(--spacing-0);
-        align-self: flex-start;
+        min-height: calc(100dvh - var(--layout-top-nav-height));
+        align-self: stretch;
         transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         overflow: hidden;
         z-index: 2;
@@ -99,7 +105,7 @@
 
     .main-area {
         flex: 1;
-        min-height: 100vh;
+        min-height: calc(100dvh - var(--layout-top-nav-height));
         position: relative;
         z-index: 0;
     }

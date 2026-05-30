@@ -1,7 +1,9 @@
 .top-nav {
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 20;
+    left: 0;
+    right: 0;
+    z-index: 400;
     background: var(--theme-bg);
     border-bottom: 1px solid var(--theme-border);
     box-shadow: 0 1px 0 color-mix(in srgb, var(--palette-purple) 12%, transparent);
