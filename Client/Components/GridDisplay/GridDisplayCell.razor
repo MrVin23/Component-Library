@@ -1,0 +1,10 @@
+@namespace Client.Components.GridDisplay
+
+<div class="grid-display__cell">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

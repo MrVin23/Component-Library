@@ -8,36 +8,32 @@
     Title="Buttons"
     Description="CustomButton uses the global theme, spacing, border, and shadow tokens." />
 
-<BaseContainer Border="true">
-    <div class="button-story__size-matrix">
-        <div class="button-story__size-matrix-corner" aria-hidden="true"></div>
-        <div class="button-story__size-colhead">Small</div>
-        <div class="button-story__size-colhead">Medium</div>
-        <div class="button-story__size-colhead">Large</div>
-
-        @foreach (var variant in StoryVariants)
-        {
-            <div class="button-story__size-rowlabel" id="@($"size-row-{variant}")">@TypeLabel(variant)</div>
-            <div class="button-story__size-cell">
+<GridDisplay ColumnHeaders="@SizeColumnHeaders">
+    @foreach (var variant in StoryVariants)
+    {
+        <GridDisplayRow Label="@TypeLabel(variant)" LabelId="@($"size-row-{variant}")">
+            <GridDisplayCell>
                 <CustomButton ButtonType="variant"
                               Size="CustomButtonSize.Small"
                               Text="@TypeLabel(variant)" />
-            </div>
-            <div class="button-story__size-cell">
+            </GridDisplayCell>
+            <GridDisplayCell>
                 <CustomButton ButtonType="variant"
                               Size="CustomButtonSize.Medium"
                               Text="@TypeLabel(variant)" />
-            </div>
-            <div class="button-story__size-cell">
+            </GridDisplayCell>
+            <GridDisplayCell>
                 <CustomButton ButtonType="variant"
                               Size="CustomButtonSize.Large"
                               Text="@TypeLabel(variant)" />
-            </div>
-        }
-    </div>
-</BaseContainer>
+            </GridDisplayCell>
+        </GridDisplayRow>
+    }
+</GridDisplay>
 
 @code {
+    private static readonly string[] SizeColumnHeaders = ["Small", "Medium", "Large"];
+
     /// <summary>Tertiary is third row after Secondary (not enum declaration order).</summary>
     private static readonly CustomButtonType[] StoryVariants =
     [

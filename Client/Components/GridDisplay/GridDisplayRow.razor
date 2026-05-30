@@ -1,0 +1,10 @@
+@namespace Client.Components.GridDisplay
+
+@if (!string.IsNullOrWhiteSpace(Label))
+{
+    <div class="grid-display__rowlabel @(IsFirstRow ? "grid-display__rowlabel--first" : null)"
+         id="@LabelId">
+        @Label
+    </div>
+}
+@ChildContent

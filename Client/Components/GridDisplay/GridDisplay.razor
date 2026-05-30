@@ -1,0 +1,20 @@
+@namespace Client.Components.GridDisplay
+
+<CascadingValue Value="this" Name="GridDisplay">
+    <BaseContainer Border="@Border" Padding="@Padding">
+        <div class="@MatrixCssClass" style="@MatrixStyle">
+            @if (ShowCorner)
+            {
+                <div class="grid-display__corner" aria-hidden="true"></div>
+            }
+            @if (HasColumnHeaders)
+            {
+                @foreach (var header in ColumnHeaders!)
+                {
+                    <div class="grid-display__colhead">@header</div>
+                }
+            }
+            @ChildContent
+        </div>
+    </BaseContainer>
+</CascadingValue>

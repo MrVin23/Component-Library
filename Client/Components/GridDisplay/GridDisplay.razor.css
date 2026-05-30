@@ -1,17 +1,14 @@
-/* Size matrix layout only — page shell from MainLayout; panel from BaseContainer */
-
-.button-story__size-matrix {
+.grid-display__matrix {
     display: grid;
-    grid-template-columns: minmax(calc(var(--spacing-base) * 30), auto) repeat(3, minmax(0, 1fr));
     gap: var(--pad-sub) var(--grid-gutter);
     align-items: center;
 }
 
-.button-story__size-matrix-corner {
+.grid-display__corner {
     min-height: 1px;
 }
 
-.button-story__size-colhead {
+.grid-display__colhead {
     font-size: var(--text-size-caption);
     font-weight: var(--font-weight-semibold);
     letter-spacing: var(--tracking-wide);
@@ -21,13 +18,13 @@
     padding-bottom: var(--pad-input);
 }
 
-.button-story__size-rowlabel {
+.grid-display__rowlabel {
     font-size: var(--text-size-label);
     font-weight: var(--font-weight-semibold);
     color: var(--text-color-primary);
 }
 
-.button-story__size-cell {
+.grid-display__cell {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -36,25 +33,25 @@
 }
 
 @media (max-width: 640px) {
-    .button-story__size-matrix {
-        grid-template-columns: 1fr;
+    .grid-display__matrix {
+        grid-template-columns: 1fr !important;
         gap: var(--pad-input) var(--pad-sub);
     }
 
-    .button-story__size-matrix-corner,
-    .button-story__size-colhead {
+    .grid-display__corner,
+    .grid-display__colhead {
         display: none;
     }
 
-    .button-story__size-rowlabel {
+    .grid-display__rowlabel {
         margin-top: var(--pad-container);
     }
 
-    .button-story__size-matrix > .button-story__size-rowlabel:nth-child(5) {
+    .grid-display__matrix--with-corner .grid-display__rowlabel--first {
         margin-top: var(--spacing-0);
     }
 
-    .button-story__size-cell {
+    .grid-display__cell {
         min-height: unset;
     }
 }
