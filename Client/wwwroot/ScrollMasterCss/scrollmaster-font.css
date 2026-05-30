@@ -1,0 +1,93 @@
+/* ==========================================================================
+   Typography design system
+   --------------------------------------------------------------------------
+   Load after scrollmaster-app.css — text colors reference theme tokens (--scroll-theme-fg, etc.)
+   that switch with prefers-color-scheme and html[data-theme].
+
+   Google Fonts (index.html): Outfit 500, 600, 700
+
+   Families:  var(--scroll-font-ui), var(--scroll-font-mono)
+   Scale:     var(--scroll-text-size-*)
+   Semantic:  var(--scroll-text-size-body), var(--scroll-text-size-label), …
+   Colors:    var(--scroll-text-color-*)
+
+   Usage:
+     font-family: var(--scroll-font-ui);
+     font-size: var(--scroll-text-size-body);
+     font-weight: var(--scroll-font-weight-semibold);
+     color: var(--scroll-text-color-primary);
+   ========================================================================== */
+
+:root {
+    /* ---------------------------------------------------------------------- */
+    /* Font families                                                           */
+    /* ---------------------------------------------------------------------- */
+    --scroll-font-ui: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --scroll-font-mono: ui-monospace, "Cascadia Code", "Segoe UI Mono", Consolas, monospace;
+
+    /* ---------------------------------------------------------------------- */
+    /* Font weights (match Outfit weights loaded in index.html)                */
+    /* ---------------------------------------------------------------------- */
+    --scroll-font-weight-medium: 500;
+    --scroll-font-weight-semibold: 600;
+    --scroll-font-weight-bold: 700;
+
+    /* ---------------------------------------------------------------------- */
+    /* Type scale (rem, 16px root)                                             */
+    /* ---------------------------------------------------------------------- */
+    --scroll-text-size-2xs: 0.6875rem;  /* 11px */
+    --scroll-text-size-xs: 0.75rem;     /* 12px */
+    --scroll-text-size-sm: 0.8125rem;   /* 13px */
+    --scroll-text-size-base: 0.875rem;  /* 14px */
+    --scroll-text-size-md: 0.9375rem;   /* 15px */
+    --scroll-text-size-lg: 1rem;        /* 16px */
+    --scroll-text-size-xl: 1.0625rem;   /* 17px */
+    --scroll-text-size-2xl: 1.125rem;   /* 18px */
+    --scroll-text-size-3xl: 1.25rem;    /* 20px */
+    --scroll-text-size-4xl: 1.75rem;    /* 28px */
+    --scroll-text-size-5xl: 2rem;       /* 32px */
+
+    /* ---------------------------------------------------------------------- */
+    /* Line height & letter spacing                                            */
+    /* ---------------------------------------------------------------------- */
+    --scroll-leading-tight: 1.25;
+    --scroll-leading-snug: 1.35;
+    --scroll-leading-normal: 1.5;
+    --scroll-leading-relaxed: 1.625;
+
+    --scroll-tracking-tight: -0.01em;
+    --scroll-tracking-normal: 0;
+    --scroll-tracking-wide: 0.02em;
+
+    /* ---------------------------------------------------------------------- */
+    /* Semantic type roles                                                     */
+    /* ---------------------------------------------------------------------- */
+    --scroll-text-size-caption: var(--scroll-text-size-xs);
+    --scroll-text-size-label: var(--scroll-text-size-sm);
+    --scroll-text-size-body: var(--scroll-text-size-md);
+    --scroll-text-size-body-compact: var(--scroll-text-size-base);
+    --scroll-text-size-control: var(--scroll-text-size-md);
+    --scroll-text-size-button: var(--scroll-text-size-base);
+    --scroll-text-size-button-sm: var(--scroll-text-size-sm);
+    --scroll-text-size-button-lg: var(--scroll-text-size-lg);
+    --scroll-text-size-subheading: var(--scroll-text-size-3xl);
+    --scroll-text-size-heading: var(--scroll-text-size-4xl);
+    --scroll-text-size-display: clamp(2rem, 2.8vw, 2.6rem);
+
+    --scroll-text-leading-body: var(--scroll-leading-snug);
+    --scroll-text-leading-heading: var(--scroll-leading-tight);
+    --scroll-text-tracking-label: var(--scroll-tracking-wide);
+
+    /* ---------------------------------------------------------------------- */
+    /* Text colors (theme-aware — follows light / dark from scrollmaster-app.css)           */
+    /* ---------------------------------------------------------------------- */
+    --scroll-text-color-primary: var(--scroll-theme-fg-contrast);
+    --scroll-text-color-secondary: var(--scroll-theme-fg);
+    --scroll-text-color-muted: var(--scroll-theme-fg-muted);
+    --scroll-text-color-inverse: var(--scroll-theme-bg);
+    --scroll-text-color-link: var(--scroll-palette-accent-1);
+    --scroll-text-color-required: var(--scroll-palette-orange);
+
+    /* Backward-compatible alias */
+    --scroll-app-text-primary: var(--scroll-text-color-primary);
+}

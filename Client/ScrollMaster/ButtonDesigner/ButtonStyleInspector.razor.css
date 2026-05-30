@@ -1,0 +1,82 @@
+/* Scoped to ButtonStyleInspector — flex shell + scrollable field list */
+.scroll-button-canvas__inspector {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+    border: var(--scroll-border-width-thin) solid var(--scroll-border-color-strong);
+    border-radius: var(--scroll-radius-md);
+    background: var(--scroll-app-surface);
+    box-shadow: var(--scroll-shadow-sm);
+    box-sizing: border-box;
+}
+
+.scroll-button-canvas__inspector-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--scroll-pad-input);
+    flex: 0 0 auto;
+    padding: var(--scroll-pad-input) var(--scroll-pad-sub);
+    border-bottom: var(--scroll-border-container) solid var(--scroll-border-color-muted);
+    background: var(--scroll-app-surface);
+}
+
+.scroll-button-canvas__inspector-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.scroll-button-canvas__reset-btn {
+    flex-shrink: 0;
+    font-size: var(--scroll-text-size-button-sm);
+    padding: var(--scroll-pad-input-m) var(--scroll-pad-sub);
+}
+
+.scroll-button-canvas__inspector-scroll {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.scroll-button-canvas__inspector-empty {
+    margin: var(--scroll-pad-container);
+}
+
+.scroll-button-canvas__inspector-inner {
+    padding: var(--scroll-pad-sub);
+}
+
+.scroll-button-canvas__state-section {
+    padding-bottom: var(--scroll-pad-sub);
+    margin-bottom: var(--scroll-pad-sub);
+    border-bottom: var(--scroll-border-container) solid var(--scroll-border-color-muted);
+}
+
+.scroll-button-canvas__state-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.scroll-button-canvas__state-heading {
+    margin: 0 0 var(--scroll-pad-input);
+    padding: 0;
+    color: var(--scroll-text-color-primary);
+    text-transform: none;
+    letter-spacing: var(--scroll-tracking-normal);
+}
+
+.scroll-button-canvas__state-fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--scroll-pad-input);
+}

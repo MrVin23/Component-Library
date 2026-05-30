@@ -1,0 +1,175 @@
+@namespace Client.ScrollMaster.ButtonDesigner
+@using Client.Components.Buttons.CustomButton
+@using Client.ScrollMaster.ButtonDesigner.Models
+
+<aside class="scroll-button-canvas__inspector" aria-label="Button style inspector">
+    @if (SelectedButton is not null)
+    {
+        <div class="scroll-button-canvas__inspector-toolbar">
+            <span class="scroll-button-canvas__inspector-title scroll-app-text scroll-app-text--caption">
+                @SelectedButton.Label
+            </span>
+            <button type="button"
+                    class="scroll-primary-button scroll-button-canvas__reset-btn"
+                    @onclick="HandleReset">
+                Reset
+            </button>
+        </div>
+    }
+
+    <div class="scroll-button-canvas__inspector-scroll">
+        @if (SelectedButton is null)
+        {
+            <p class="scroll-button-canvas__inspector-empty scroll-app-text scroll-app-text--muted">
+                Click a preview button in the gallery to edit its CSS variables.
+            </p>
+        }
+        else
+        {
+            <div class="scroll-button-canvas__inspector-inner">
+                @foreach (var state in InspectorStates)
+                {
+                    <section class="scroll-button-canvas__state-section" id="@SectionId(state)">
+                        <h3 class="scroll-button-canvas__state-heading scroll-h5">@StateLabel(state)</h3>
+
+                        <div class="scroll-button-canvas__state-fields">
+                            @if (state == ButtonStyleState.Constant)
+                            {
+                                <div class="scroll-app-field">
+                                    <label class="scroll-app-label">Label</label>
+                                    <input class="scroll-app-input"
+                                           type="text"
+                                           @bind="SelectedButton.Label"
+                                           @bind:event="oninput"
+                                           @bind:after="NotifyChanged" />
+                                </div>
+                                <div class="scroll-app-field">
+                                    <label class="scroll-app-label">Button text</label>
+                                    <input class="scroll-app-input"
+                                           type="text"
+                                           @bind="SelectedButton.Text"
+                                           @bind:event="oninput"
+                                           @bind:after="NotifyChanged" />
+                                </div>
+                                <div class="scroll-app-field">
+                                    <label class="scroll-app-label">Width</label>
+                                    <input class="scroll-app-input"
+                                           type="text"
+                                           @bind="SelectedButton.Width"
+                                           @bind:event="oninput"
+                                           @bind:after="NotifyChanged" />
+                                </div>
+                                <div class="scroll-app-field">
+                                    <label class="scroll-app-label">Height</label>
+                                    <input class="scroll-app-input"
+                                           type="text"
+                                           @bind="SelectedButton.Height"
+                                           @bind:event="oninput"
+                                           @bind:after="NotifyChanged" />
+                                </div>
+                                <div class="scroll-app-field">
+                                    <label class="scroll-app-label">Size</label>
+                                    <select class="scroll-app-input"
+                                            @bind="SelectedButton.Size"
+                                            @bind:after="NotifyChanged">
+                                        @foreach (CustomButtonSize size in Enum.GetValues<CustomButtonSize>())
+                                        {
+                                            <option value="@size">@size</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="scroll-app-field">
+                                    <label class="scroll-app-label">Variant</label>
+                                    <select class="scroll-app-input"
+                                            @bind="SelectedButton.ButtonType"
+                                            @bind:after="OnButtonTypeChanged">
+                                        @foreach (var type in ButtonCssVarSchema.SupportedButtonTypes)
+                                        {
+                                            <option value="@type">@type</option>
+                                        }
+                                    </select>
+                                </div>
+                            }
+                            else if (state == ButtonStyleState.Disabled)
+                            {
+                                <p class="scroll-app-text scroll-app-text--muted">
+                                    Disabled appearance uses CustomButton opacity. Hover the preview button in the gallery to test other states.
+                                </p>
+                            }
+                            else
+                            {
+                                @foreach (var key in ButtonCssVarSchema.GetKeys(state))
+                                {
+                                    <ButtonCssVarField CssVariable="@key"
+                                                         Value="@GetVar(state, key)"
+                                                         ValueChanged="value => SetVar(state, key, value)" />
+                                }
+                            }
+                        </div>
+                    </section>
+                }
+            </div>
+        }
+    </div>
+</aside>
+
+@code {
+    private static readonly ButtonStyleState[] InspectorStates =
+    [
+        ButtonStyleState.Constant,
+        ButtonStyleState.Default,
+        ButtonStyleState.Hover,
+        ButtonStyleState.Focus,
+        ButtonStyleState.Active,
+        ButtonStyleState.Disabled
+    ];
+
+    [Parameter]
+    public DesignedButton? SelectedButton { get; set; }
+
+    [Parameter]
+    public EventCallback OnChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnReset { get; set; }
+
+    private static string StateLabel(ButtonStyleState state) => state switch
+    {
+        ButtonStyleState.Constant => "Constant",
+        ButtonStyleState.Default => "Default / normal",
+        ButtonStyleState.Hover => "Hover",
+        ButtonStyleState.Focus => "Focus",
+        ButtonStyleState.Active => "Active",
+        ButtonStyleState.Disabled => "Disabled",
+        _ => state.ToString()
+    };
+
+    private static string SectionId(ButtonStyleState state) =>
+        $"scroll-inspector-{state.ToString().ToLowerInvariant()}";
+
+    private string GetVar(ButtonStyleState state, string key) =>
+        SelectedButton!.Variables[state].TryGetValue(key, out var value) ? value : string.Empty;
+
+    private async Task SetVar(ButtonStyleState state, string key, string value)
+    {
+        SelectedButton!.Variables[state][key] = value;
+        await NotifyChanged();
+    }
+
+    private async Task OnButtonTypeChanged()
+    {
+        if (SelectedButton is not null)
+            ButtonCssVarSchema.RefreshTypeDefaults(SelectedButton);
+
+        await NotifyChanged();
+    }
+
+    private async Task HandleReset()
+    {
+        SelectedButton?.ResetToDefaults();
+        await OnReset.InvokeAsync();
+        await NotifyChanged();
+    }
+
+    private async Task NotifyChanged() => await OnChanged.InvokeAsync();
+}

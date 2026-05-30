@@ -1,0 +1,366 @@
+/* -------------------------------------------------------------------------- */
+/* ScrollMaster theme tokens (spacing: scrollmaster-spacing.css,             */
+/* borders: scrollmaster-border.css, type: scrollmaster-font.css,             */
+/* typography: scrollmaster-typography.css, shadows: scrollmaster-shadow.css)  */
+/* Theme: var(--scroll-theme-*), var(--scroll-palette-*).                                    */
+/*                                                                             */
+/* KEY (semantic roles):                                                       */
+/*   --scroll-theme-bg          Page / default surface background                     */
+/*   --scroll-theme-fg          Primary text; contrasts strongly with --scroll-theme-bg      */
+/*   --scroll-theme-fg-muted    Secondary / de-emphasized text (still readable)      */
+/*   --scroll-theme-fg-contrast Strongest readable text (headings, emphasis)         */
+/*   --scroll-theme-border      Neutral lines: cards, dividers, inputs, table edges    */
+/*   --scroll-theme-surface-muted Subtle background (table headers, inset panels)      */
+/*                                                                             */
+/* Dark mode: prefers-color-scheme. For a manual toggle later, override these */
+/* on html[data-theme="dark"] / html[data-theme="light"].                      */
+/* -------------------------------------------------------------------------- */
+:root {
+    /* Theme */
+    --scroll-theme-bg: #ffffff;
+    --scroll-theme-fg: #1a1a1a;
+    --scroll-theme-fg-muted: #5c5c5c;
+    --scroll-theme-fg-contrast: #0a0a0a;
+    --scroll-theme-border: #c8c8c8;
+    --scroll-theme-surface-muted: #efefef;
+
+    --scroll-palette-purple: #662e9b;
+    --scroll-palette-orange: #f86624;
+    --scroll-palette-yellow: #f9c80e;
+    --scroll-palette-cyan: #43bccd;
+
+    /* Aliases by role (optional; same as above until you differentiate) */
+    --scroll-palette-accent-1: var(--scroll-palette-purple);
+    --scroll-palette-accent-2: var(--scroll-palette-orange);
+    --scroll-palette-accent-3: var(--scroll-palette-yellow);
+    --scroll-palette-accent-4: var(--scroll-palette-cyan);
+
+    /* App-level aliases used by reusable components */
+    --scroll-app-radius-lg: 16px;
+    --scroll-app-surface: var(--scroll-theme-bg);
+    --scroll-app-surface-alt: var(--scroll-theme-surface-muted);
+    --scroll-app-primary: var(--scroll-palette-accent-1);
+    --scroll-app-primary-dark: color-mix(in srgb, var(--scroll-palette-accent-1) 72%, #000000);
+    --scroll-app-secondary: var(--scroll-palette-accent-4);
+
+    /* Primary purple: hand-tuned shades (prefer these over ad-hoc color-mix in components) */
+    --scroll-app-primary-soft-bg: #efe8f6;
+    --scroll-app-primary-soft-border: #c5aedb;
+    --scroll-app-primary-hover-bg: #482372;
+    --scroll-app-primary-active-bg: #3f1d62;
+    --scroll-app-primary-focus-ring: color-mix(in srgb, var(--scroll-palette-purple) 48%, transparent);
+
+    /* Secondary (outline) button: orange scale — hand-tuned from --scroll-palette-orange */
+    --scroll-app-orange-soft-bg: #fff0e8;
+    --scroll-app-orange-soft-border: #f0c4ae;
+    --scroll-app-orange-fg: #a63f0a;
+    --scroll-app-orange-hover-bg: #e85714;
+    --scroll-app-orange-hover-fg: #ffffff;
+    --scroll-app-orange-active-bg: #bb4610;
+    --scroll-app-orange-active-fg: #ffffff;
+    --scroll-app-orange-focus-ring: color-mix(in srgb, var(--scroll-palette-orange) 46%, transparent);
+
+    /* Tertiary button: blue-cyan scale — hand-tuned from --scroll-palette-cyan */
+    --scroll-app-tertiary-soft-bg: #e8f5f8;
+    --scroll-app-tertiary-soft-border: #b8e0ea;
+    --scroll-app-tertiary-fg: #0a5664;
+    --scroll-app-tertiary-hover-bg: #2a9db0;
+    --scroll-app-tertiary-hover-fg: #ffffff;
+    --scroll-app-tertiary-active-bg: #1f7a8a;
+    --scroll-app-tertiary-active-fg: #ffffff;
+    --scroll-app-tertiary-focus-ring: color-mix(in srgb, var(--scroll-palette-cyan) 46%, transparent);
+
+    /* Support tones for contextual cards */
+    --scroll-support-blue: var(--scroll-palette-accent-4);
+    --scroll-support-blue-bg: color-mix(in srgb, var(--scroll-palette-accent-4) 56%, var(--scroll-theme-bg));
+    --scroll-support-green: #1f9d55;
+    --scroll-support-green-bg: color-mix(in srgb, #1f9d55 58%, var(--scroll-theme-bg));
+    --scroll-support-red: #c74444;
+    --scroll-support-red-bg: color-mix(in srgb, #c74444 58%, var(--scroll-theme-bg));
+    --scroll-support-yellow: var(--scroll-palette-accent-3);
+    --scroll-support-yellow-bg: color-mix(in srgb, var(--scroll-palette-accent-3) 58%, var(--scroll-theme-bg));
+    --scroll-support-purple: var(--scroll-palette-accent-1);
+    --scroll-support-purple-bg: color-mix(in srgb, var(--scroll-palette-accent-1) 58%, var(--scroll-theme-bg));
+    --scroll-support-orange: var(--scroll-palette-accent-2);
+    --scroll-support-orange-bg: color-mix(in srgb, var(--scroll-palette-accent-2) 58%, var(--scroll-theme-bg));
+
+    /* Floating dropdowns (combobox menus): solid surface, follows theme when OS / html theme changes */
+    --scroll-app-dropdown-surface: color-mix(in srgb, var(--scroll-theme-bg) 94%, var(--scroll-theme-fg-contrast) 6%);
+    --scroll-app-dropdown-header-bg: color-mix(in srgb, var(--scroll-theme-surface-muted) 82%, var(--scroll-theme-bg));
+    --scroll-app-dropdown-row-hover: color-mix(in srgb, var(--scroll-theme-surface-muted) 58%, var(--scroll-theme-bg));
+    --scroll-app-dropdown-row-selected: color-mix(in srgb, var(--scroll-app-primary-soft-bg) 92%, var(--scroll-theme-bg));
+    --scroll-app-dropdown-border: color-mix(in srgb, var(--scroll-theme-border) 78%, var(--scroll-theme-fg) 10%);
+    --scroll-app-dropdown-radius: calc(var(--scroll-app-radius-lg) * 0.65);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --scroll-theme-bg: #000000;
+        --scroll-theme-fg: #f2f2f2;
+        --scroll-theme-fg-muted: #a3a3a3;
+        --scroll-theme-fg-contrast: #fafafa;
+        --scroll-theme-border: #3d3d3d;
+        --scroll-theme-surface-muted: #141414;
+
+        /* Lighter tints for contrast on black */
+        --scroll-palette-purple: #c4a3f0;
+        --scroll-palette-orange: #ffa66a;
+        --scroll-palette-yellow: #fce76a;
+        --scroll-palette-cyan: #8ae0ef;
+
+        --scroll-palette-accent-1: var(--scroll-palette-purple);
+        --scroll-palette-accent-2: var(--scroll-palette-orange);
+        --scroll-palette-accent-3: var(--scroll-palette-yellow);
+        --scroll-palette-accent-4: var(--scroll-palette-cyan);
+
+        --scroll-app-primary-soft-bg: #251b33;
+        --scroll-app-primary-soft-border: #4d3d68;
+        --scroll-app-primary-hover-bg: #8874c9;
+        --scroll-app-primary-active-bg: #7e63c4;
+        --scroll-app-primary-focus-ring: color-mix(in srgb, var(--scroll-palette-purple) 42%, transparent);
+
+        --scroll-app-orange-soft-bg: #2c1f18;
+        --scroll-app-orange-soft-border: #5c422f;
+        --scroll-app-orange-fg: #ffd4bc;
+        --scroll-app-orange-hover-bg: #d9723a;
+        --scroll-app-orange-hover-fg: #ffffff;
+        --scroll-app-orange-active-bg: #b85a28;
+        --scroll-app-orange-active-fg: #ffffff;
+        --scroll-app-orange-focus-ring: color-mix(in srgb, var(--scroll-palette-orange) 42%, transparent);
+
+        --scroll-app-tertiary-soft-bg: #131e22;
+        --scroll-app-tertiary-soft-border: #2a454e;
+        --scroll-app-tertiary-fg: #c5eef6;
+        --scroll-app-tertiary-hover-bg: #4aa8bc;
+        --scroll-app-tertiary-hover-fg: #ffffff;
+        --scroll-app-tertiary-active-bg: #3a8a9c;
+        --scroll-app-tertiary-active-fg: #ffffff;
+        --scroll-app-tertiary-focus-ring: color-mix(in srgb, var(--scroll-palette-cyan) 42%, transparent);
+    }
+}
+
+/* Manual theme (e.g. CustomSwitchButton DarkLightMode) — wins over prefers-color-scheme */
+html[data-theme="light"] {
+    color-scheme: light;
+    --scroll-theme-bg: #ffffff;
+    --scroll-theme-fg: #1a1a1a;
+    --scroll-theme-fg-muted: #5c5c5c;
+    --scroll-theme-fg-contrast: #0a0a0a;
+    --scroll-theme-border: #c8c8c8;
+    --scroll-theme-surface-muted: #efefef;
+
+    --scroll-palette-purple: #662e9b;
+    --scroll-palette-orange: #f86624;
+    --scroll-palette-yellow: #f9c80e;
+    --scroll-palette-cyan: #43bccd;
+
+    --scroll-palette-accent-1: var(--scroll-palette-purple);
+    --scroll-palette-accent-2: var(--scroll-palette-orange);
+    --scroll-palette-accent-3: var(--scroll-palette-yellow);
+    --scroll-palette-accent-4: var(--scroll-palette-cyan);
+
+    --scroll-app-primary-soft-bg: #efe8f6;
+    --scroll-app-primary-soft-border: #c5aedb;
+    --scroll-app-primary-hover-bg: #482372;
+    --scroll-app-primary-active-bg: #3f1d62;
+    --scroll-app-primary-focus-ring: color-mix(in srgb, var(--scroll-palette-purple) 48%, transparent);
+
+    --scroll-app-orange-soft-bg: #fff0e8;
+    --scroll-app-orange-soft-border: #f0c4ae;
+    --scroll-app-orange-fg: #a63f0a;
+    --scroll-app-orange-hover-bg: #e85714;
+    --scroll-app-orange-hover-fg: #ffffff;
+    --scroll-app-orange-active-bg: #bb4610;
+    --scroll-app-orange-active-fg: #ffffff;
+    --scroll-app-orange-focus-ring: color-mix(in srgb, var(--scroll-palette-orange) 46%, transparent);
+
+    --scroll-app-tertiary-soft-bg: #e8f5f8;
+    --scroll-app-tertiary-soft-border: #b8e0ea;
+    --scroll-app-tertiary-fg: #0a5664;
+    --scroll-app-tertiary-hover-bg: #2a9db0;
+    --scroll-app-tertiary-hover-fg: #ffffff;
+    --scroll-app-tertiary-active-bg: #1f7a8a;
+    --scroll-app-tertiary-active-fg: #ffffff;
+    --scroll-app-tertiary-focus-ring: color-mix(in srgb, var(--scroll-palette-cyan) 46%, transparent);
+}
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --scroll-theme-bg: #000000;
+    --scroll-theme-fg: #f2f2f2;
+    --scroll-theme-fg-muted: #a3a3a3;
+    --scroll-theme-fg-contrast: #fafafa;
+    --scroll-theme-border: #3d3d3d;
+    --scroll-theme-surface-muted: #141414;
+
+    --scroll-palette-purple: #c4a3f0;
+    --scroll-palette-orange: #ffa66a;
+    --scroll-palette-yellow: #fce76a;
+    --scroll-palette-cyan: #8ae0ef;
+
+    --scroll-palette-accent-1: var(--scroll-palette-purple);
+    --scroll-palette-accent-2: var(--scroll-palette-orange);
+    --scroll-palette-accent-3: var(--scroll-palette-yellow);
+    --scroll-palette-accent-4: var(--scroll-palette-cyan);
+
+    --scroll-app-primary-soft-bg: #251b33;
+    --scroll-app-primary-soft-border: #4d3d68;
+    --scroll-app-primary-hover-bg: #8874c9;
+    --scroll-app-primary-active-bg: #7e63c4;
+    --scroll-app-primary-focus-ring: color-mix(in srgb, var(--scroll-palette-purple) 42%, transparent);
+
+    --scroll-app-orange-soft-bg: #2c1f18;
+    --scroll-app-orange-soft-border: #5c422f;
+    --scroll-app-orange-fg: #ffd4bc;
+    --scroll-app-orange-hover-bg: #d9723a;
+    --scroll-app-orange-hover-fg: #ffffff;
+    --scroll-app-orange-active-bg: #b85a28;
+    --scroll-app-orange-active-fg: #ffffff;
+    --scroll-app-orange-focus-ring: color-mix(in srgb, var(--scroll-palette-orange) 42%, transparent);
+
+    --scroll-app-tertiary-soft-bg: #131e22;
+    --scroll-app-tertiary-soft-border: #2a454e;
+    --scroll-app-tertiary-fg: #c5eef6;
+    --scroll-app-tertiary-hover-bg: #4aa8bc;
+    --scroll-app-tertiary-hover-fg: #ffffff;
+    --scroll-app-tertiary-active-bg: #3a8a9c;
+    --scroll-app-tertiary-active-fg: #ffffff;
+    --scroll-app-tertiary-focus-ring: color-mix(in srgb, var(--scroll-palette-cyan) 42%, transparent);
+}
+
+.scroll-master {
+    background-color: var(--scroll-theme-bg);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Reusable form primitives — use on native inputs and Blazor Input*        */
+/*   .scroll-app-field     : column stack for <label> wrapping text + control        */
+/*   .scroll-app-label     : caption (typography in typography.css)                  */
+/*   .scroll-app-label-req : required marker (typography in typography.css)          */
+/*   .scroll-app-input     : single-line text-style controls                         */
+/* -------------------------------------------------------------------------- */
+.scroll-app-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--scroll-pad-input);
+    margin: 0;
+}
+
+.scroll-app-input {
+    min-width: 0;
+    padding: var(--scroll-pad-input) var(--scroll-pad-sub);
+    border: var(--scroll-border-container) solid var(--scroll-theme-border);
+    border-radius: calc(var(--scroll-app-radius-lg) / 4);
+    background: var(--scroll-app-surface);
+}
+
+.scroll-app-input:focus-visible {
+    outline: 2px solid var(--scroll-app-primary-focus-ring);
+    outline-offset: 2px;
+}
+
+.scroll-app-input:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.scroll-primary-button {
+    color: #fff;
+    background-color: #1b6ec2;
+    border: 1px solid #1861ac;
+    border-radius: 4px;
+    padding: 0.375rem 0.75rem;
+    cursor: pointer;
+}
+
+.scroll-primary-button:hover {
+    filter: brightness(1.05);
+}
+
+.scroll-primary-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.scroll-content {
+    padding-top: 1.1rem;
+}
+
+.scroll-valid.scroll-modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.scroll-invalid {
+    outline: 1px solid red;
+}
+
+.scroll-validation-message {
+    color: red;
+}
+
+/* Blazor WASM sets --blazor-load-percentage and --blazor-load-percentage-text on .scroll-loading-progress */
+.scroll-loading-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    min-height: 100vh;
+    padding: 2rem 1.25rem;
+    box-sizing: border-box;
+    background: var(--scroll-theme-bg);
+}
+
+.scroll-loading-screen__art {
+    display: block;
+    max-width: min(280px, 72vw);
+    height: auto;
+    max-height: min(42vh, 360px);
+    object-fit: contain;
+    filter: drop-shadow(0 12px 28px rgba(67, 188, 205, 0.22));
+}
+
+.scroll-loading-progress {
+    width: min(22rem, 88vw);
+    margin: 0;
+}
+
+.scroll-loading-progress__track {
+    height: 0.4rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--scroll-theme-border) 65%, var(--scroll-theme-bg));
+    overflow: hidden;
+}
+
+.scroll-loading-progress__fill {
+    height: 100%;
+    width: var(--blazor-load-percentage, 0%);
+    border-radius: inherit;
+    background: linear-gradient(90deg, #0d7ea8 0%, var(--scroll-palette-cyan) 55%, #5ee7ff 100%);
+    box-shadow: 0 0 12px rgba(67, 188, 205, 0.45);
+    transition: width 0.05s ease-in-out;
+}
+
+.scroll-loading-progress-text {
+    position: static;
+}
+
+    .scroll-loading-progress-text:after {
+        content: var(--blazor-load-percentage-text, "Loading");
+    }
+
+.scroll-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+
+.scroll-data-table th,
+.scroll-data-table td {
+    border: 1px solid var(--scroll-theme-border);
+    padding: 0.5rem 0.75rem;
+}
+
+.scroll-data-table thead {
+    background-color: var(--scroll-theme-surface-muted);
+}

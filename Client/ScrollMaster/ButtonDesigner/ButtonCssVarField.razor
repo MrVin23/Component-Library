@@ -1,0 +1,39 @@
+@namespace Client.ScrollMaster.ButtonDesigner
+@using Client.ScrollMaster.ButtonDesigner.Models
+
+<div class="scroll-app-field">
+    <label class="scroll-app-label" for="@_inputId">@CssVariable</label>
+    <select id="@_inputId"
+            class="scroll-app-input"
+            value="@Value"
+            @onchange="HandleChange">
+        @foreach (var option in _options)
+        {
+            <option value="@option.Value">@option.Label</option>
+        }
+    </select>
+</div>
+
+@code {
+    private readonly string _inputId = $"scroll-css-var-{Guid.NewGuid():N}";
+    private IReadOnlyList<AppCssTokenCatalog.TokenOption> _options = [];
+
+    [Parameter, EditorRequired]
+    public string CssVariable { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _options = AppCssTokenCatalog.GetOptionsForValue(CssVariable, Value);
+    }
+
+    private async Task HandleChange(ChangeEventArgs args)
+    {
+        await ValueChanged.InvokeAsync(args.Value?.ToString() ?? string.Empty);
+    }
+}

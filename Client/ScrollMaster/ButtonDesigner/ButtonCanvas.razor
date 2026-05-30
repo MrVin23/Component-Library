@@ -1,0 +1,37 @@
+@page "/button-designer"
+@layout MainLayout
+@using Client.ScrollMaster.ButtonDesigner.Models
+
+<PageTitle>Button designer</PageTitle>
+
+<div class="scroll-master scroll-button-canvas">
+    <header class="scroll-button-canvas__header">
+        <h1 class="scroll-h2">Button designer</h1>
+        <p class="scroll-app-text scroll-app-text--muted">
+            Click a preview button to edit it. Scroll the right-hand panel for all style fields.
+        </p>
+    </header>
+
+    <div class="scroll-button-canvas__workspace">
+        <div class="scroll-button-canvas__gallery" role="list" aria-label="Designed buttons">
+            <button type="button"
+                    class="scroll-button-canvas__card scroll-button-canvas__card--add"
+                    @onclick="AddButton"
+                    aria-label="Add button">
+                <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                <span class="scroll-button-canvas__add-label">Add button</span>
+            </button>
+
+            @foreach (var button in _buttons)
+            {
+                <ButtonPreviewCard Button="button"
+                                   IsSelected="_selectedId == button.Id"
+                                   OnSelect="SelectButton" />
+            }
+        </div>
+
+        <ButtonStyleInspector SelectedButton="SelectedButton"
+                              OnChanged="OnDesignerChanged"
+                              OnReset="OnDesignerChanged" />
+    </div>
+</div>

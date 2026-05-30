@@ -1,0 +1,189 @@
+/* ==========================================================================
+   Typography styles
+   --------------------------------------------------------------------------
+   Load after scrollmaster-font.css — uses type tokens and theme from
+   scrollmaster-app.css. Scoped under .scroll-master to avoid clashing with
+   the main app stylesheet.
+
+   Base:     .scroll-master defaults, links, code
+   Form:     .scroll-app-label, .scroll-app-input text styling
+   App UI:   loading screen text
+   ========================================================================== */
+
+.scroll-master {
+    margin: 0;
+    padding: 0;
+    font-family: var(--scroll-font-ui);
+    color: var(--scroll-theme-fg);
+    min-height: 100%;
+}
+
+.scroll-master a {
+    color: var(--scroll-text-color-link, #0071c1);
+}
+
+.scroll-master code {
+    font-family: var(--scroll-font-mono);
+    font-size: 0.9em;
+    color: #c02d76;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Headings — semantic + utility classes                                      */
+/* -------------------------------------------------------------------------- */
+.scroll-master h1,
+.scroll-master h2,
+.scroll-master h3,
+.scroll-master h4,
+.scroll-master h5,
+.scroll-master h6,
+.scroll-master .scroll-h1,
+.scroll-master .scroll-h2,
+.scroll-master .scroll-h3,
+.scroll-master .scroll-h4,
+.scroll-master .scroll-h5,
+.scroll-master .scroll-h6 {
+    margin: 0 0 var(--scroll-pad-input);
+    font-family: var(--scroll-font-ui);
+    font-weight: var(--scroll-font-weight-bold);
+    line-height: var(--scroll-text-leading-heading);
+    letter-spacing: var(--scroll-tracking-tight);
+    color: var(--scroll-text-color-primary);
+}
+
+/* When a heading is the last element in a block, avoid “extra tail” spacing. */
+.scroll-master h1:last-child,
+.scroll-master h2:last-child,
+.scroll-master h3:last-child,
+.scroll-master h4:last-child,
+.scroll-master h5:last-child,
+.scroll-master h6:last-child,
+.scroll-master .scroll-h1:last-child,
+.scroll-master .scroll-h2:last-child,
+.scroll-master .scroll-h3:last-child,
+.scroll-master .scroll-h4:last-child,
+.scroll-master .scroll-h5:last-child,
+.scroll-master .scroll-h6:last-child {
+    margin-bottom: var(--scroll-spacing-0);
+}
+
+.scroll-master h1,
+.scroll-master .scroll-h1 {
+    font-size: var(--scroll-text-size-display);
+}
+
+.scroll-master h2,
+.scroll-master .scroll-h2 {
+    font-size: var(--scroll-text-size-heading);
+}
+
+.scroll-master h3,
+.scroll-master .scroll-h3 {
+    font-size: var(--scroll-text-size-subheading);
+}
+
+.scroll-master h4,
+.scroll-master .scroll-h4 {
+    font-size: var(--scroll-text-size-3xl);
+}
+
+.scroll-master h5,
+.scroll-master .scroll-h5 {
+    font-size: var(--scroll-text-size-xl);
+    font-weight: var(--scroll-font-weight-semibold);
+    letter-spacing: var(--scroll-tracking-normal);
+}
+
+.scroll-master h6,
+.scroll-master .scroll-h6 {
+    font-size: var(--scroll-text-size-lg);
+    font-weight: var(--scroll-font-weight-semibold);
+    letter-spacing: var(--scroll-tracking-wide);
+    color: var(--scroll-text-color-secondary);
+    text-transform: uppercase;
+}
+
+/* A11y: don't remove focus entirely; keep it limited to keyboard navigation. */
+.scroll-master h1:focus-visible,
+.scroll-master h2:focus-visible,
+.scroll-master h3:focus-visible,
+.scroll-master h4:focus-visible,
+.scroll-master h5:focus-visible,
+.scroll-master h6:focus-visible {
+    outline: 2px solid var(--scroll-app-primary-focus-ring);
+    outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Text utilities                                                             */
+/* -------------------------------------------------------------------------- */
+/* Use these instead of re-declaring font-size/line-height/colors on every <p>. */
+.scroll-app-text {
+    margin: 0;
+    font-family: var(--scroll-font-ui);
+    font-size: var(--scroll-text-size-body);
+    line-height: var(--scroll-leading-normal);
+    color: var(--scroll-text-color-primary);
+}
+
+.scroll-app-text--muted {
+    color: var(--scroll-text-color-muted);
+}
+
+.scroll-app-text--caption {
+    font-size: var(--scroll-text-size-label);
+    font-weight: var(--scroll-font-weight-semibold);
+    letter-spacing: var(--scroll-text-tracking-label);
+    color: var(--scroll-text-color-muted);
+    line-height: var(--scroll-leading-snug);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Form typography — pairs with layout rules in scrollmaster-app.css          */
+/* -------------------------------------------------------------------------- */
+.scroll-app-label {
+    font-family: var(--scroll-font-ui);
+    font-size: var(--scroll-text-size-label);
+    font-weight: var(--scroll-font-weight-semibold);
+    letter-spacing: var(--scroll-text-tracking-label);
+    color: var(--scroll-text-color-primary);
+}
+
+.scroll-app-label-req {
+    color: var(--scroll-text-color-required);
+}
+
+.scroll-app-input {
+    font-family: var(--scroll-font-ui);
+    font-size: var(--scroll-text-size-control);
+    line-height: var(--scroll-text-leading-body);
+    color: var(--scroll-text-color-primary);
+}
+
+.scroll-app-input::placeholder {
+    color: var(--scroll-text-color-muted);
+}
+
+.scroll-primary-button {
+    font-size: var(--scroll-text-size-lg);
+}
+
+.scroll-loading-screen {
+    font-family: var(--scroll-font-ui);
+}
+
+.scroll-loading-progress-text {
+    text-align: center;
+    font-weight: var(--scroll-font-weight-semibold);
+    font-size: 0.95rem;
+    color: var(--scroll-text-color-muted);
+}
+
+.scroll-data-table th,
+.scroll-data-table td {
+    text-align: left;
+}
+
+.scroll-data-table thead {
+    color: var(--scroll-text-color-primary);
+}

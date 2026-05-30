@@ -56,6 +56,13 @@ public partial class CustomButton : ComponentBase
     public string Height { get; set; } = "auto";
 
     /// <summary>
+    /// Optional overrides for <c>--btn-*</c> tokens (e.g. <c>--btn-fg: var(--app-primary);</c>).
+    /// Used by ScrollMaster Button designer for live preview; omit everywhere else.
+    /// </summary>
+    [Parameter]
+    public string? CssVariablesStyle { get; set; }
+
+    /// <summary>
     /// Whether the button is disabled
     /// </summary>
     [Parameter]
@@ -109,6 +116,26 @@ public partial class CustomButton : ComponentBase
             };
 
             return typeClass + sizeClass;
+        }
+    }
+
+    // CustomButton styles normally come from CSS classes (.primary, etc.). The designer passes
+    // CssVariablesStyle so --btn-* values can be overridden on the element for real-time preview
+    // without generating new stylesheet rules. Width and height stay separate parameters.
+    private string InlineStyle
+    {
+        get
+        {
+            var parts = new List<string>
+            {
+                $"width:{Width};",
+                $"height:{Height};"
+            };
+
+            if (!string.IsNullOrWhiteSpace(CssVariablesStyle))
+                parts.Add(CssVariablesStyle.Trim());
+
+            return string.Join(" ", parts);
         }
     }
 }

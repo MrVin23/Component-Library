@@ -105,4 +105,12 @@ public static class NavigationRoutes
         new("componentlibrary-snackbar", "Snackbar", SideNavIconId.ComponentLibrary),
         new("authorization-tests", "Authorization tests", SideNavIconId.ComponentLibrary, NavigationAccess.Admin),
     ];
+
+    /// <summary>
+    /// ScrollMaster design tools (authenticated users).
+    /// </summary>
+    public static readonly NavigationRouteItem[] ScrollMasterNavItems =
+    [
+        new("button-designer", "Button designer", SideNavIconId.ComponentLibrary, NavigationAccess.UserOrAdmin),
+    ];
 }

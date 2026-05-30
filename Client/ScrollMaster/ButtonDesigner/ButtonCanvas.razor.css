@@ -1,0 +1,170 @@
+/* Lock shell — no document scroll on this page */
+:global(.page:has(.scroll-button-canvas)) {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+}
+
+:global(.page:has(.scroll-button-canvas) .main-area) {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+:global(.main-area > .content:has(.scroll-button-canvas)) {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.scroll-button-canvas {
+    --scroll-canvas-top-nav: calc(3.25rem + 3px);
+    --scroll-canvas-header: 5.75rem;
+    --scroll-workspace-height: calc(
+        100dvh - var(--scroll-canvas-top-nav) - var(--scroll-canvas-header) - 2 * var(--pad-page)
+    );
+
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    background: var(--scroll-theme-bg);
+    color: var(--scroll-theme-fg);
+    font-family: var(--scroll-font-ui);
+}
+
+.scroll-button-canvas__header {
+    flex: 0 0 var(--scroll-canvas-header);
+    height: var(--scroll-canvas-header);
+    max-height: var(--scroll-canvas-header);
+    overflow: hidden;
+    padding-bottom: var(--scroll-pad-input);
+    border-bottom: var(--scroll-border-container) solid var(--scroll-border-color-muted);
+    box-sizing: border-box;
+}
+
+.scroll-button-canvas__header .scroll-h2 {
+    margin-bottom: var(--scroll-pad-input-m);
+}
+
+.scroll-button-canvas__workspace {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(320px, 400px);
+    align-items: stretch;
+    gap: var(--scroll-pad-container);
+    flex: 0 0 var(--scroll-workspace-height);
+    height: var(--scroll-workspace-height);
+    max-height: var(--scroll-workspace-height);
+    overflow: hidden;
+}
+
+/* Child components (ButtonStyleInspector, ButtonPreviewCard) don't inherit parent scope */
+::deep .scroll-button-canvas__inspector {
+    height: var(--scroll-workspace-height);
+    max-height: var(--scroll-workspace-height);
+}
+
+/* Gallery: fixed height, no scroll */
+.scroll-button-canvas__gallery {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: var(--scroll-pad-container);
+    height: var(--scroll-workspace-height);
+    max-height: var(--scroll-workspace-height);
+    min-width: 0;
+    overflow: hidden;
+    padding: var(--scroll-pad-sub);
+    border-radius: var(--scroll-radius-md);
+    background: color-mix(in srgb, var(--scroll-theme-surface-muted) 35%, var(--scroll-theme-bg));
+    box-sizing: border-box;
+}
+
+.scroll-button-canvas__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--scroll-pad-input);
+    min-width: 11rem;
+    min-height: 9rem;
+    padding: var(--scroll-pad-container);
+    border: var(--scroll-border-container) solid var(--scroll-border-color-default);
+    border-radius: var(--scroll-radius-md);
+    background: var(--scroll-app-surface);
+    box-sizing: border-box;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.scroll-button-canvas__card--add {
+    border-style: dashed;
+    border-color: var(--scroll-border-color-muted);
+    background: color-mix(in srgb, var(--scroll-theme-surface-muted) 40%, var(--scroll-theme-bg));
+    color: var(--scroll-text-color-muted);
+    font-size: var(--scroll-text-size-label);
+    font-weight: var(--scroll-font-weight-semibold);
+    cursor: pointer;
+}
+
+.scroll-button-canvas__card--add:hover {
+    border-color: var(--scroll-app-primary);
+    color: var(--scroll-text-color-primary);
+}
+
+.scroll-button-canvas__card--add .bi {
+    font-size: 1.75rem;
+}
+
+.scroll-button-canvas__card--selected {
+    border-color: var(--scroll-app-primary);
+    box-shadow: var(--scroll-shadow-sm);
+}
+
+.scroll-button-canvas__card-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+}
+
+.scroll-button-canvas__card-label {
+    font-size: var(--scroll-text-size-caption);
+    font-weight: var(--scroll-font-weight-semibold);
+    color: var(--scroll-text-color-muted);
+    pointer-events: none;
+}
+
+@media (max-width: 767.98px) {
+    .scroll-button-canvas {
+        --scroll-canvas-header: 6.5rem;
+        --scroll-workspace-height: calc(
+            100dvh - var(--scroll-canvas-top-nav) - var(--scroll-canvas-header) - 2 * var(--pad-page-m)
+        );
+    }
+
+    .scroll-button-canvas__workspace {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto var(--scroll-workspace-height);
+        height: auto;
+        max-height: none;
+        flex: 1 1 auto;
+    }
+
+    .scroll-button-canvas__gallery {
+        height: auto;
+        max-height: min(36dvh, 16rem);
+        flex-shrink: 0;
+    }
+
+    ::deep .scroll-button-canvas__inspector {
+        height: var(--scroll-workspace-height);
+        max-height: var(--scroll-workspace-height);
+    }
+}

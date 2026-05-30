@@ -15,6 +15,7 @@ public partial class SideNavBar : IDisposable
 
     private IReadOnlyList<SideNavLinkItem> VisibleMainNavItems { get; set; } = [];
     private IReadOnlyList<SideNavLinkItem> VisibleComponentLibraryNavItems { get; set; } = [];
+    private IReadOnlyList<SideNavLinkItem> VisibleScrollMasterNavItems { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,6 +39,11 @@ public partial class SideNavBar : IDisposable
             .ToArray();
 
         VisibleComponentLibraryNavItems = NavigationRoutes.ComponentLibraryNavItems
+            .Where(item => NavigationAccessHelper.HasAccess(user, item.Access))
+            .Select(ToSideNavLinkItem)
+            .ToArray();
+
+        VisibleScrollMasterNavItems = NavigationRoutes.ScrollMasterNavItems
             .Where(item => NavigationAccessHelper.HasAccess(user, item.Access))
             .Select(ToSideNavLinkItem)
             .ToArray();

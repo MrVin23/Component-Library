@@ -1,0 +1,64 @@
+/* ==========================================================================
+   Border design system
+   --------------------------------------------------------------------------
+   Load after scrollmaster-app.css — colors reference theme tokens (--scroll-theme-border, etc.)
+   that switch with prefers-color-scheme and html[data-theme].
+
+   Widths:   var(--scroll-border-width-*), var(--scroll-border-container*)
+   Colors:   var(--scroll-border-color-*)
+   Radius:   var(--scroll-radius-*)
+
+   Usage:
+     border: var(--scroll-border-container) solid var(--scroll-border-color-default);
+     border-radius: var(--scroll-radius-input);
+   ========================================================================== */
+
+:root {
+    /* ---------------------------------------------------------------------- */
+    /* Border widths                                                           */
+    /* ---------------------------------------------------------------------- */
+    --scroll-border-width-none: 0;
+    --scroll-border-width-hairline: 1px;
+    --scroll-border-width-thin: 2px;
+    --scroll-border-width-medium: 3px;
+
+    --scroll-border-container: var(--scroll-border-width-hairline);
+    --scroll-border-container-m: var(--scroll-border-width-hairline);
+    --scroll-border-input: var(--scroll-border-width-hairline);
+    --scroll-border-input-m: var(--scroll-border-width-hairline);
+    --scroll-border-focus-ring: 2px; 
+
+    /* ---------------------------------------------------------------------- */
+    /* Border colors (theme-aware — follows light / dark from scrollmaster-app.css)         */
+    /* ---------------------------------------------------------------------- */
+    --scroll-border-color-default: var(--scroll-theme-border);
+    --scroll-border-color-muted: color-mix(in srgb, var(--scroll-theme-border) 55%, var(--scroll-theme-bg));
+    --scroll-border-color-strong: color-mix(in srgb, var(--scroll-theme-border) 78%, var(--scroll-theme-fg) 10%);
+    --scroll-border-color-input: var(--scroll-theme-border);
+    --scroll-border-color-divider: var(--scroll-theme-border);
+    --scroll-border-color-focus: var(--scroll-app-primary-focus-ring);
+
+    /* ---------------------------------------------------------------------- */
+    /* Container borders — cards, panels, tables, form shells                  */
+    /* ---------------------------------------------------------------------- */
+    --scroll-border-container-color: var(--scroll-border-color-default);
+    --scroll-border-container-style: var(--scroll-border-container) solid var(--scroll-border-container-color);
+
+    /* ---------------------------------------------------------------------- */
+    /* Input field borders — text fields, selects, buttons (neutral outline)   */
+    /* ---------------------------------------------------------------------- */
+    --scroll-border-input-color: var(--scroll-border-color-input);
+    --scroll-border-input-radius: calc(var(--scroll-radius-lg) / 4);
+    --scroll-border-input-style: var(--scroll-border-input) solid var(--scroll-border-input-color);
+
+    /* ---------------------------------------------------------------------- */
+    /* Border radius scale                                                     */
+    /* ---------------------------------------------------------------------- */
+    --scroll-radius-none: 0;
+    --scroll-radius-sm: 4px;
+    --scroll-radius-md: 8px;
+    --scroll-radius-lg: var(--scroll-app-radius-lg, 16px);
+    --scroll-radius-input: calc(var(--scroll-radius-lg) / 4);
+    --scroll-radius-container: calc(var(--scroll-radius-lg) / 4);
+    --scroll-radius-pill: 999px;
+}

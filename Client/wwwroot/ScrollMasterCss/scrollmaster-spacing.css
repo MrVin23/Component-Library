@@ -1,0 +1,65 @@
+/* ==========================================================================
+   Spacing design system
+   --------------------------------------------------------------------------
+   Base unit: 4px (8-point grid compatible; aligns with Material, Polaris, etc.)
+
+   Primitives:  var(--scroll-spacing-0) … var(--scroll-spacing-12)
+   Semantic:    var(--scroll-pad-*), var(--scroll-grid-gutter) (borders: see scrollmaster-border.css)
+                *-m suffix = compact values for use inside max-width media
+                queries (not auto-applied).
+
+   Usage:
+     padding: var(--scroll-pad-page);
+     gap: var(--scroll-pad-container);
+     margin-bottom: var(--scroll-spacing-4);
+   ========================================================================== */
+
+:root {
+    /* ---------------------------------------------------------------------- */
+    /* Primitive scale (4px base)                                              */
+    /* ---------------------------------------------------------------------- */
+    --scroll-spacing-base: 4px;
+
+    --scroll-spacing-0: 0;
+    --scroll-spacing-1: calc(var(--scroll-spacing-base) * 1);     /*  4px */
+    --scroll-spacing-2: calc(var(--scroll-spacing-base) * 2);     /*  8px */
+    --scroll-spacing-2-5: calc(var(--scroll-spacing-base) * 2.5); /* 10px */
+    --scroll-spacing-3: calc(var(--scroll-spacing-base) * 3);     /* 12px */
+    --scroll-spacing-3-5: calc(var(--scroll-spacing-base) * 3.5); /* 14px */
+    --scroll-spacing-4: calc(var(--scroll-spacing-base) * 4);     /* 16px */
+    --scroll-spacing-5: calc(var(--scroll-spacing-base) * 5);     /* 20px */
+    --scroll-spacing-6: calc(var(--scroll-spacing-base) * 6);     /* 24px */
+    --scroll-spacing-7: calc(var(--scroll-spacing-base) * 7);     /* 28px */
+    --scroll-spacing-8: calc(var(--scroll-spacing-base) * 8);     /* 32px */
+    --scroll-spacing-9: calc(var(--scroll-spacing-base) * 9);     /* 36px */
+    --scroll-spacing-10: calc(var(--scroll-spacing-base) * 10);   /* 40px */
+    --scroll-spacing-11: calc(var(--scroll-spacing-base) * 11);   /* 44px */
+    --scroll-spacing-12: calc(var(--scroll-spacing-base) * 12);   /* 48px */
+
+    /* ---------------------------------------------------------------------- */
+    /* Page spacing — outer layout / viewport edges                            */
+    /* ---------------------------------------------------------------------- */
+    --scroll-pad-page: var(--scroll-spacing-5);
+    --scroll-pad-page-m: var(--scroll-spacing-4);
+
+    /* ---------------------------------------------------------------------- */
+    /* Container spacing — cards, panels, tables, form shells                  */
+    /* ---------------------------------------------------------------------- */
+    --scroll-pad-container: var(--scroll-spacing-5);
+    --scroll-pad-container-m: var(--scroll-spacing-2-5);
+    --scroll-pad-sub: var(--scroll-spacing-3-5);
+    --scroll-pad-sub-m: var(--scroll-spacing-2-5);
+    --scroll-grid-gutter: var(--scroll-spacing-4);
+
+    /* ---------------------------------------------------------------------- */
+    /* Input field spacing — controls, buttons, compact stacks                 */
+    /* ---------------------------------------------------------------------- */
+    --scroll-pad-input: var(--scroll-spacing-2-5);
+    --scroll-pad-input-m: var(--scroll-spacing-2);
+
+    /* ---------------------------------------------------------------------- */
+    /* Responsive spacing — optional fluid tokens (clamp min ↔ max)          */
+    /* ---------------------------------------------------------------------- */
+    --scroll-pad-page-fluid: clamp(var(--scroll-pad-page-m), 2.5vw, var(--scroll-pad-page));
+    --scroll-pad-container-fluid: clamp(var(--scroll-pad-container-m), 1.75vw, var(--scroll-pad-container));
+}

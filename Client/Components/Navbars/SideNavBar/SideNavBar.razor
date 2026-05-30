@@ -50,6 +50,27 @@
                     </NavBarDropdown>
                 </div>
             }
+
+            @if (!Collapsed && VisibleScrollMasterNavItems.Count > 0)
+            {
+                <div class="side-nav__item side-nav__item--dropdown">
+                    <NavBarDropdown Label="ScrollMaster">
+                        <Icon>
+                            <NavItemIcon Id="@SideNavIconId.ComponentLibrary" />
+                        </Icon>
+                        <ChildContent>
+                            @foreach (var item in VisibleScrollMasterNavItems)
+                            {
+                                <ExpandedNavButton Href="@item.Href" Match="@item.Match" Label="@item.Label">
+                                    <Icon>
+                                        <NavItemIcon Id="@item.Icon" />
+                                    </Icon>
+                                </ExpandedNavButton>
+                            }
+                        </ChildContent>
+                    </NavBarDropdown>
+                </div>
+            }
         </div>
     </CascadingValue>
 </nav>

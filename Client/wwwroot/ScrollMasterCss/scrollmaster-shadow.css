@@ -1,0 +1,100 @@
+/* ==========================================================================
+   Shadow design system
+   --------------------------------------------------------------------------
+   Load after scrollmaster-app.css.
+
+   Light mode: dark shadows (black ink) for depth on light surfaces.
+   Dark mode:  light shadows (white glow) for depth on dark surfaces.
+
+   Primitives:  var(--scroll-shadow-ink*), var(--scroll-shadow-glow*)
+   Elevation:   var(--scroll-shadow-xs) … var(--scroll-shadow-xl)
+   Semantic:    var(--scroll-shadow-card), var(--scroll-shadow-dropdown), var(--scroll-shadow-modal)
+   Aliases:     var(--scroll-app-shadow-*) — backward compatible with existing components
+
+   Usage:
+     box-shadow: var(--scroll-shadow-md);
+     box-shadow: var(--scroll-app-shadow-lg);
+   ========================================================================== */
+
+:root {
+    /* ---------------------------------------------------------------------- */
+    /* Shadow ink — light mode (dark shadows)                                  */
+    /* ---------------------------------------------------------------------- */
+    --scroll-shadow-ink-soft: rgb(0 0 0 / 0.06);
+    --scroll-shadow-ink: rgb(0 0 0 / 0.10);
+    --scroll-shadow-ink-strong: rgb(0 0 0 / 0.14);
+    --scroll-shadow-ink-border: rgb(0 0 0 / 0.08);
+    --scroll-shadow-glow-soft: rgb(255 255 255 / 0.04);
+
+    /* ---------------------------------------------------------------------- */
+    /* Elevation scale                                                         */
+    /* ---------------------------------------------------------------------- */
+    --scroll-shadow-xs: 0 1px 2px var(--scroll-shadow-ink-soft);
+    --scroll-shadow-sm: 0 2px 8px var(--scroll-shadow-ink-soft), 0 1px 2px var(--scroll-shadow-ink);
+    --scroll-shadow-md: 0 10px 24px var(--scroll-shadow-ink);
+    --scroll-shadow-lg: 0 16px 36px var(--scroll-shadow-ink-strong);
+    --scroll-shadow-xl:
+        0 14px 40px var(--scroll-shadow-ink-strong),
+        0 4px 12px var(--scroll-shadow-ink),
+        0 0 0 1px var(--scroll-shadow-ink-border);
+
+    /* ---------------------------------------------------------------------- */
+    /* Semantic shadows                                                        */
+    /* ---------------------------------------------------------------------- */
+    --scroll-shadow-card: var(--scroll-shadow-md);
+    --scroll-shadow-modal: var(--scroll-shadow-lg);
+    --scroll-shadow-dropdown: var(--scroll-shadow-xl);
+    --scroll-shadow-sticky: 0 2px 2px -1px var(--scroll-shadow-ink);
+
+    /* Backward-compatible app aliases */
+    --scroll-app-shadow-sm: var(--scroll-shadow-sm);
+    --scroll-app-shadow-md: var(--scroll-shadow-md);
+    --scroll-app-shadow-lg: var(--scroll-shadow-lg);
+    --scroll-app-dropdown-shadow: var(--scroll-shadow-dropdown);
+
+    /* ---------------------------------------------------------------------- */
+    /* Accent lift shadows — buttons (dark ink in light mode)                  */
+    /* ---------------------------------------------------------------------- */
+    --scroll-app-primary-shadow-lift: 0 3px 14px rgb(72 35 114 / 0.30);
+    --scroll-app-orange-shadow-lift: 0 3px 14px rgb(232 87 20 / 0.30);
+    --scroll-app-tertiary-shadow-lift: 0 3px 14px rgb(42 157 176 / 0.30);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark mode: light shadows */
+        --scroll-shadow-ink-soft: rgb(255 255 255 / 0.06);
+        --scroll-shadow-ink: rgb(255 255 255 / 0.10);
+        --scroll-shadow-ink-strong: rgb(255 255 255 / 0.14);
+        --scroll-shadow-ink-border: rgb(255 255 255 / 0.08);
+        --scroll-shadow-glow-soft: rgb(255 255 255 / 0.05);
+
+        --scroll-app-primary-shadow-lift: 0 3px 16px rgb(136 116 201 / 0.34);
+        --scroll-app-orange-shadow-lift: 0 3px 16px rgb(217 114 58 / 0.34);
+        --scroll-app-tertiary-shadow-lift: 0 3px 16px rgb(74 168 188 / 0.34);
+    }
+}
+
+html[data-theme="light"] {
+    --scroll-shadow-ink-soft: rgb(0 0 0 / 0.06);
+    --scroll-shadow-ink: rgb(0 0 0 / 0.10);
+    --scroll-shadow-ink-strong: rgb(0 0 0 / 0.14);
+    --scroll-shadow-ink-border: rgb(0 0 0 / 0.08);
+    --scroll-shadow-glow-soft: rgb(255 255 255 / 0.04);
+
+    --scroll-app-primary-shadow-lift: 0 3px 14px rgb(72 35 114 / 0.30);
+    --scroll-app-orange-shadow-lift: 0 3px 14px rgb(232 87 20 / 0.30);
+    --scroll-app-tertiary-shadow-lift: 0 3px 14px rgb(42 157 176 / 0.30);
+}
+
+html[data-theme="dark"] {
+    --scroll-shadow-ink-soft: rgb(255 255 255 / 0.06);
+    --scroll-shadow-ink: rgb(255 255 255 / 0.10);
+    --scroll-shadow-ink-strong: rgb(255 255 255 / 0.14);
+    --scroll-shadow-ink-border: rgb(255 255 255 / 0.08);
+    --scroll-shadow-glow-soft: rgb(255 255 255 / 0.05);
+
+    --scroll-app-primary-shadow-lift: 0 3px 16px rgb(136 116 201 / 0.34);
+    --scroll-app-orange-shadow-lift: 0 3px 16px rgb(217 114 58 / 0.34);
+    --scroll-app-tertiary-shadow-lift: 0 3px 16px rgb(74 168 188 / 0.34);
+}

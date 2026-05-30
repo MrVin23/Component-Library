@@ -1,0 +1,38 @@
+@namespace Client.ScrollMaster.ButtonDesigner
+@using Client.Components.Buttons.CustomButton
+@using Client.ScrollMaster.ButtonDesigner.Models
+
+<div class="scroll-button-canvas__card @(IsSelected ? "scroll-button-canvas__card--selected" : null)"
+     role="group"
+     aria-label="@Button.Label">
+    <div class="scroll-button-canvas__card-preview">
+        <CustomButton Text="@Button.Text"
+                      ButtonType="@Button.ButtonType"
+                      Size="@Button.Size"
+                      Width="@Button.Width"
+                      Height="@Button.Height"
+                      CssVariablesStyle="@PreviewCssStyle"
+                      OnClick="HandleButtonClick" />
+    </div>
+
+    <span class="scroll-button-canvas__card-label">@Button.Label</span>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public DesignedButton Button { get; set; } = null!;
+
+    [Parameter]
+    public bool IsSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<DesignedButton> OnSelect { get; set; }
+
+    private string PreviewCssStyle =>
+        ButtonPreviewStyleBuilder.BuildFullPreviewStyle(Button);
+
+    private async Task HandleButtonClick(MouseEventArgs _)
+    {
+        await OnSelect.InvokeAsync(Button);
+    }
+}
