@@ -6,19 +6,67 @@
     {
         <label class="app-label @LabelCssClass">@Label</label>
     }
-    <select class="app-input @SelectCssClass"
-            style="height: @Height;"
-            @bind="SelectedValueString"
-            disabled="@Disabled"
-            @attributes="AdditionalAttributes">
-        @if (!string.IsNullOrEmpty(Placeholder) && SelectedValue == null)
-        {
-            <option value="" disabled selected>@Placeholder</option>
-        }
-        @foreach (var item in Items)
-        {
-            <option value="@ValueFunc(item)">@DisplayFunc(item)</option>
-        }
-    </select>
-</div>
+    <div class="custom-select-wrapper @(_isOpen ? "is-open" : "") @(HasSelection ? "custom-select-has-selection" : "")">
+        <div class="custom-select-input-wrapper"
+             @ref="_triggerRef"
+             @onmousedown="OnTriggerMouseDown">
+            <input type="text"
+                   class="app-input custom-select-input-main @InputCssClass"
+                   style="height: @Height;"
+                   placeholder="@Placeholder"
+                   value="@InputValue"
+                   @ref="_inputRef"
+                   readonly
+                   @onfocus="OnInputFocus"
+                   @onclick="OnInputClick"
+                   @onkeydown="OnInputKeyDown"
+                   disabled="@Disabled"
+                   @attributes="AdditionalAttributes" />
+            <div class="custom-select-trigger-actions">
+                @if (HasSelection)
+                {
+                    <button type="button"
+                            class="custom-select-trigger-clear"
+                            aria-label="Clear selection"
+                            disabled="@Disabled"
+                            @onclick="ClearSelection"
+                            @onclick:stopPropagation="true"
+                            @onmousedown:preventDefault="true">
+                        <i class="bi bi-x-lg" aria-hidden="true"></i>
+                    </button>
+                }
+                <span class="custom-select-trigger-chevron"
+                      role="button"
+                      tabindex="0"
+                      aria-label="Toggle list"
+                      @onclick="OnChevronClick"
+                      @onclick:stopPropagation="true"
+                      @onkeydown="OnChevronKeyDown">▼</span>
+            </div>
+        </div>
 
+        <CustomDropdownPanel @ref="_dropdownPanel" IsOpen="_isOpen" OnClose="CloseDropdown">
+            <div class="custom-select-dropdown">
+                <div class="custom-select-items">
+                    @if (Items.Count > 0)
+                    {
+                        @foreach (var item in Items)
+                        {
+                            <div @key="ValueFunc(item)"
+                                 class="custom-select-item @(EqualityComparer<TItem>.Default.Equals(item, SelectedValue) ? "selected" : "")"
+                                 @onclick="() => SelectItem(item)"
+                                 @onclick:stopPropagation="true"
+                                 @onmousedown:preventDefault="true">
+                                @DisplayFunc(item)
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="custom-select-item no-results">No items available</div>
+                    }
+                </div>
+            </div>
+        </CustomDropdownPanel>
+    </div>
+</div>

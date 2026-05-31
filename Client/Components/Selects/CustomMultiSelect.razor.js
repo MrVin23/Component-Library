@@ -5,21 +5,15 @@ function isDomElement(el) {
 }
 
 /**
- * Close on document click when the target is outside both the trigger (input row)
- * and the floating panel. Uses bubble phase so in-panel handlers (and stopPropagation
- * on rows) run before we decide to close — capture phase was closing/unmounting the
- * panel before ToggleItem could run when the panel ref was briefly invalid.
+ * Multi-select click-away uses the outer wrapper (input + floating panel).
+ * The panel is NOT inside the input row ref used by single-select — only the wrapper contains both.
  */
-export function initializeClickAway(triggerRef, dotNetObjectReference) {
-    const trigger = triggerRef;
-
-    const state = { trigger, panel: null };
+export function initializeClickAway(rootRef, dotNetObjectReference) {
+    const state = { root: rootRef };
 
     const clickAwayHandler = (event) => {
         const t = event.target;
-        const inTrigger = isDomElement(state.trigger) && state.trigger.contains(t);
-        const inPanel = isDomElement(state.panel) && state.panel.contains(t);
-        if (inTrigger || inPanel) {
+        if (isDomElement(state.root) && state.root.contains(t)) {
             return;
         }
 
@@ -47,14 +41,8 @@ export function initializeClickAway(triggerRef, dotNetObjectReference) {
     }, 0);
 }
 
-/** Call after each render when IsOpen or panel DOM may have changed. */
-export function syncClickAwayPanel(dotNetObjectReference, isOpen, panelRef) {
-    const entry = clickAwayHandlers.get(dotNetObjectReference);
-    if (!entry) {
-        return;
-    }
-    entry.state.panel = isOpen && isDomElement(panelRef) ? panelRef : null;
-}
+/** Kept for API compatibility; multi-select only needs the stable wrapper ref. */
+export function syncClickAwayPanel() {}
 
 export function dispose(dotNetObjectReference) {
     const handlerData = clickAwayHandlers.get(dotNetObjectReference);

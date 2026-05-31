@@ -92,12 +92,15 @@ public partial class CustomMultiSelect<TItem> : ComponentBase, IAsyncDisposable 
     private bool _isOpen = false;
     private string _searchText = string.Empty;
     private bool _suppressOpenFromFocus;
-    private ElementReference _triggerRef;
+    private ElementReference _clickAwayRootRef;
     private ElementReference _inputRef;
     private CustomDropdownPanel? _dropdownPanel;
     private IJSObjectReference? _jsModule;
     private DotNetObjectReference<CustomMultiSelect<TItem>>? _dotNetObjectRef;
-    private bool _isDisposed = false;
+    private bool _isDisposed;
+    private bool _suppressClickAway;
+
+    private bool HasSelection => SelectedValues is { Count: > 0 };
 
     private int SelectedCount => SelectedValues?.Count ?? 0;
     private int TotalCount => Items?.Count ?? 0;
@@ -135,12 +138,7 @@ public partial class CustomMultiSelect<TItem> : ComponentBase, IAsyncDisposable 
         get
         {
             if (_isOpen)
-            {
-                if (!string.IsNullOrEmpty(_searchText))
-                    return _searchText;
-
-                return SelectedDisplayText == Placeholder ? string.Empty : SelectedDisplayText;
-            }
+                return _searchText;
 
             return SelectedDisplayText == Placeholder ? string.Empty : SelectedDisplayText;
         }
@@ -177,33 +175,23 @@ public partial class CustomMultiSelect<TItem> : ComponentBase, IAsyncDisposable 
     {
         if (firstRender)
         {
-            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/Selects/CustomMultiSelect.razor.js");
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>(
+                "import",
+                "./Components/Selects/CustomMultiSelect.razor.js");
             _dotNetObjectRef = DotNetObjectReference.Create(this);
-            await _jsModule.InvokeVoidAsync("initializeClickAway", _triggerRef, _dotNetObjectRef);
-        }
-
-        if (_jsModule != null && _dotNetObjectRef != null)
-        {
-            await _jsModule.InvokeVoidAsync(
-                "syncClickAwayPanel",
-                _dotNetObjectRef,
-                _isOpen,
-                _isOpen && _dropdownPanel != null ? _dropdownPanel.DropdownPanelRef : default);
+            await _jsModule.InvokeVoidAsync("initializeClickAway", _clickAwayRootRef, _dotNetObjectRef);
         }
     }
 
     [JSInvokable]
     public void HandleClickAway()
     {
-        if (_isDisposed)
+        if (_isDisposed || _suppressClickAway || !_isOpen)
             return;
 
-        if (_isOpen)
-        {
-            _isOpen = false;
-            _searchText = string.Empty;
-            StateHasChanged();
-        }
+        _isOpen = false;
+        _searchText = string.Empty;
+        StateHasChanged();
     }
 
     private void OnTriggerMouseDown()
@@ -265,12 +253,6 @@ public partial class CustomMultiSelect<TItem> : ComponentBase, IAsyncDisposable 
         }
     }
 
-    private void CloseDropdown()
-    {
-        _isOpen = false;
-        _searchText = string.Empty;
-    }
-
     private void ToggleDropdown()
     {
         if (!Disabled)
@@ -281,6 +263,16 @@ public partial class CustomMultiSelect<TItem> : ComponentBase, IAsyncDisposable 
                 _searchText = string.Empty;
             }
         }
+    }
+
+    private async Task ClearSelection()
+    {
+        _suppressOpenFromFocus = true;
+        _isOpen = false;
+        _searchText = string.Empty;
+        SelectedValues = [];
+        await SelectedValuesChanged.InvokeAsync(SelectedValues);
+        await InvokeAsync(StateHasChanged);
     }
 
     private bool IsItemSelected(TItem item)
@@ -296,43 +288,50 @@ public partial class CustomMultiSelect<TItem> : ComponentBase, IAsyncDisposable 
     private async Task ToggleItem(TItem item)
     {
         var newSelectedValues = SelectedValues?.ToList() ?? new List<TItem>();
-        
+
         if (IsItemSelected(item))
         {
-            // Remove item
-            newSelectedValues.RemoveAll(selected => 
+            newSelectedValues.RemoveAll(selected =>
                 EqualityComparer<TItem>.Default.Equals(selected, item) ||
                 ValueFunc(selected) == ValueFunc(item));
         }
         else
         {
-            // Add item
             newSelectedValues.Add(item);
         }
-        
-        SelectedValues = newSelectedValues;
-        await SelectedValuesChanged.InvokeAsync(newSelectedValues);
-        StateHasChanged();
+
+        await UpdateSelectedValuesAsync(newSelectedValues, keepOpen: true);
     }
 
     private async Task ToggleSelectAll()
     {
         List<TItem> newSelectedValues;
-        
+
         if (IsAllSelected)
-        {
-            // Unselect all
-            newSelectedValues = new List<TItem>();
-        }
+            newSelectedValues = [];
         else
+            newSelectedValues = Items?.ToList() ?? [];
+
+        await UpdateSelectedValuesAsync(newSelectedValues, keepOpen: true);
+    }
+
+    private async Task UpdateSelectedValuesAsync(List<TItem> newSelectedValues, bool keepOpen)
+    {
+        _suppressClickAway = true;
+        try
         {
-            // Select all (use filtered items if search is active, otherwise all items)
-            newSelectedValues = Items?.ToList() ?? new List<TItem>();
+            SelectedValues = newSelectedValues;
+            await SelectedValuesChanged.InvokeAsync(newSelectedValues);
+
+            if (keepOpen)
+                _isOpen = true;
+
+            await InvokeAsync(StateHasChanged);
         }
-        
-        SelectedValues = newSelectedValues;
-        await SelectedValuesChanged.InvokeAsync(newSelectedValues);
-        StateHasChanged();
+        finally
+        {
+            _suppressClickAway = false;
+        }
     }
 
     private void OnSearchInput(ChangeEventArgs e)

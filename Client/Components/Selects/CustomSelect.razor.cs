@@ -1,91 +1,63 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
 namespace Client.Components.CustomSelect;
 
-public partial class CustomSelect<TItem> : ComponentBase
+public partial class CustomSelect<TItem> : ComponentBase, IAsyncDisposable where TItem : notnull
 {
-    [Parameter(CaptureUnmatchedValues = true)]
-    public Dictionary<string, object> AdditionalAttributes { get; set; } = new Dictionary<string, object>();
+    [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
 
-    /// <summary>
-    /// Height of the select element
-    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; } = new();
+
     [Parameter]
     public string Height { get; set; } = "auto";
 
-    /// <summary>
-    /// Width of the select element
-    /// </summary>
     [Parameter]
     public string Width { get; set; } = "100%";
 
-    /// <summary>
-    /// Label text displayed above the select
-    /// </summary>
     [Parameter]
     public string Label { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Style type of the select component
-    /// </summary>
     [Parameter]
     public CustomSelectType SelectType { get; set; } = CustomSelectType.Primary;
 
-    /// <summary>
-    /// List of items to display in the select
-    /// </summary>
     [Parameter]
     public List<TItem> Items { get; set; } = new();
 
-    /// <summary>
-    /// Function to get the display text for an item
-    /// </summary>
     [Parameter]
     public Func<TItem, string> DisplayFunc { get; set; } = item => item?.ToString() ?? string.Empty;
 
-    /// <summary>
-    /// Function to get the value for an item
-    /// </summary>
     [Parameter]
     public Func<TItem, string> ValueFunc { get; set; } = item => item?.ToString() ?? string.Empty;
 
-    /// <summary>
-    /// Currently selected value
-    /// </summary>
     [Parameter]
     public TItem? SelectedValue { get; set; }
 
-    /// <summary>
-    /// Callback when selected value changes
-    /// </summary>
     [Parameter]
     public EventCallback<TItem?> SelectedValueChanged { get; set; }
 
-    /// <summary>
-    /// Placeholder text when no item is selected
-    /// </summary>
     [Parameter]
     public string Placeholder { get; set; } = "Select...";
 
-    /// <summary>
-    /// Whether the select is disabled
-    /// </summary>
     [Parameter]
-    public bool Disabled { get; set; } = false;
+    public bool Disabled { get; set; }
 
-    private string SelectedValueString
-    {
-        get => SelectedValue != null ? ValueFunc(SelectedValue) : string.Empty;
-        set
-        {
-            var selectedItem = Items.FirstOrDefault(item => ValueFunc(item) == value);
-            if (!EqualityComparer<TItem>.Default.Equals(selectedItem, SelectedValue))
-            {
-                SelectedValue = selectedItem;
-                SelectedValueChanged.InvokeAsync(selectedItem);
-            }
-        }
-    }
+    private bool _isOpen;
+    private bool _suppressOpenFromFocus;
+    private ElementReference _triggerRef;
+    private ElementReference _inputRef;
+    private CustomDropdownPanel? _dropdownPanel;
+    private IJSObjectReference? _jsModule;
+    private DotNetObjectReference<CustomSelect<TItem>>? _dotNetObjectRef;
+    private bool _isDisposed;
+
+    private bool HasSelection =>
+        SelectedValue != null && (Items.Count == 0 || Items.Contains(SelectedValue));
+
+    private string InputValue =>
+        HasSelection ? DisplayFunc(SelectedValue!) : string.Empty;
 
     private string ContainerCssClass => SelectType switch
     {
@@ -93,10 +65,10 @@ public partial class CustomSelect<TItem> : ComponentBase
         _ => "custom-select-container primary"
     };
 
-    private string SelectCssClass => SelectType switch
+    private string InputCssClass => SelectType switch
     {
-        CustomSelectType.Pager => "custom-select pager",
-        _ => "custom-select primary"
+        CustomSelectType.Pager => "custom-select-input pager",
+        _ => "custom-select-input primary"
     };
 
     private string LabelCssClass => SelectType switch
@@ -104,17 +76,167 @@ public partial class CustomSelect<TItem> : ComponentBase
         CustomSelectType.Pager => "custom-select-label pager",
         _ => "custom-select-label primary"
     };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>(
+                "import",
+                "./Components/Selects/CustomSearchSelect.razor.js");
+            _dotNetObjectRef = DotNetObjectReference.Create(this);
+            await _jsModule.InvokeVoidAsync("initializeClickAway", _triggerRef, _dotNetObjectRef);
+        }
+
+        if (_jsModule != null && _dotNetObjectRef != null)
+        {
+            await _jsModule.InvokeVoidAsync(
+                "syncClickAwayPanel",
+                _dotNetObjectRef,
+                _isOpen,
+                _isOpen && _dropdownPanel != null ? _dropdownPanel.DropdownPanelRef : default);
+        }
+    }
+
+    [JSInvokable]
+    public void HandleClickAway()
+    {
+        if (_isDisposed || !_isOpen)
+            return;
+
+        _isOpen = false;
+        StateHasChanged();
+    }
+
+    private void OnTriggerMouseDown() => _suppressOpenFromFocus = true;
+
+    private void OnInputFocus()
+    {
+        if (Disabled)
+            return;
+
+        if (_suppressOpenFromFocus)
+        {
+            _suppressOpenFromFocus = false;
+            return;
+        }
+
+        OpenDropdown();
+    }
+
+    private void OnInputClick()
+    {
+        if (Disabled)
+            return;
+
+        _suppressOpenFromFocus = false;
+        OpenDropdown();
+    }
+
+    private void OnChevronClick()
+    {
+        if (Disabled)
+            return;
+
+        _suppressOpenFromFocus = false;
+        ToggleDropdown();
+    }
+
+    private void OnChevronKeyDown(KeyboardEventArgs e)
+    {
+        if (Disabled)
+            return;
+
+        if (e.Key is "Enter" or " ")
+            OnChevronClick();
+    }
+
+    private void OnInputKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+            CloseDropdown();
+    }
+
+    private void OpenDropdown()
+    {
+        if (Disabled || _isOpen)
+            return;
+
+        _isOpen = true;
+        StateHasChanged();
+    }
+
+    private void ToggleDropdown()
+    {
+        if (Disabled)
+            return;
+
+        _isOpen = !_isOpen;
+        StateHasChanged();
+    }
+
+    private void CloseDropdown()
+    {
+        _isOpen = false;
+    }
+
+    private async Task ClearSelection()
+    {
+        _suppressOpenFromFocus = true;
+        _isOpen = false;
+        SelectedValue = default;
+        await SelectedValueChanged.InvokeAsync(default);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task SelectItem(TItem item)
+    {
+        _suppressOpenFromFocus = true;
+        _isOpen = false;
+        if (!EqualityComparer<TItem>.Default.Equals(item, SelectedValue))
+        {
+            SelectedValue = item;
+            await SelectedValueChanged.InvokeAsync(item);
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        _isDisposed = true;
+
+        if (_jsModule != null && _dotNetObjectRef != null)
+        {
+            try
+            {
+                await _jsModule.InvokeVoidAsync("dispose", _dotNetObjectRef);
+            }
+            catch (JSException) { }
+            catch (TaskCanceledException) { }
+            catch (InvalidOperationException) { }
+
+            try
+            {
+                await _jsModule.DisposeAsync();
+            }
+            catch (JSException) { }
+            catch (InvalidOperationException) { }
+        }
+
+        try
+        {
+            _dotNetObjectRef?.Dispose();
+        }
+        catch (ObjectDisposedException) { }
+    }
 }
 
 public enum CustomSelectType
 {
-    /// <summary>
-    /// Primary style - standard form select
-    /// </summary>
+    /// <summary>Primary style — standard form select.</summary>
     Primary,
-    
-    /// <summary>
-    /// Pager style - compact select for pager components
-    /// </summary>
+
+    /// <summary>Pager style — compact select for pager components.</summary>
     Pager
 }

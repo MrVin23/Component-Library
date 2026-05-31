@@ -94,6 +94,9 @@ public partial class CustomSearchSelect<TItem> : ComponentBase, IAsyncDisposable
     private bool _isSelectingItem = false;
     private bool _isDisposed = false;
 
+    private bool HasSelection =>
+        SelectedValue != null && (Items == null || Items.Count == 0 || Items.Contains(SelectedValue));
+
     private string SelectedDisplayText
     {
         get
@@ -133,18 +136,10 @@ public partial class CustomSearchSelect<TItem> : ComponentBase, IAsyncDisposable
         get
         {
             if (_isOpen)
-            {
-                if (!string.IsNullOrEmpty(_searchText))
-                    return _searchText;
+                return _searchText;
 
-                if (SelectedValue != null && (Items == null || Items.Count == 0 || Items.Contains(SelectedValue)))
-                    return DisplayFunc(SelectedValue);
-
-                return string.Empty;
-            }
-
-            if (SelectedValue != null && (Items == null || Items.Count == 0 || Items.Contains(SelectedValue)))
-                return DisplayFunc(SelectedValue);
+            if (HasSelection)
+                return DisplayFunc(SelectedValue!);
 
             return string.Empty;
         }

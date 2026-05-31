@@ -9,7 +9,7 @@
     @* Keep this wrapper as a plain div.
        If parent pages wrap this component in an outer <label>, focus can bounce back to the input after selection
        and visually reopen the panel. Prefer <div class="app-field"> wrappers in consuming pages. *@
-    <div class="custom-search-select-wrapper @(_isOpen ? "is-open" : "")">
+    <div class="custom-search-select-wrapper @(_isOpen ? "is-open" : "") @(HasSelection ? "custom-select-has-selection" : "")">
         <div class="custom-search-select-input-wrapper"
              @ref="_triggerRef"
              @onmousedown="OnTriggerMouseDown">
@@ -26,28 +26,32 @@
                    @onkeydown="OnInputKeyDown"
                    disabled="@Disabled"
                    @attributes="AdditionalAttributes" />
-            <span class="custom-search-select-arrow"
-                  role="button"
-                  tabindex="0"
-                  aria-label="Toggle list"
-                  @onclick="OnChevronClick"
-                  @onclick:stopPropagation="true"
-                  @onkeydown="OnChevronKeyDown">▼</span>
+            <div class="custom-select-trigger-actions">
+                @if (HasSelection)
+                {
+                    <button type="button"
+                            class="custom-select-trigger-clear"
+                            aria-label="Clear selection"
+                            disabled="@Disabled"
+                            @onclick="ClearSelection"
+                            @onclick:stopPropagation="true"
+                            @onmousedown:preventDefault="true">
+                        <i class="bi bi-x-lg" aria-hidden="true"></i>
+                    </button>
+                }
+                <span class="custom-select-trigger-chevron"
+                      role="button"
+                      tabindex="0"
+                      aria-label="Toggle list"
+                      @onclick="OnChevronClick"
+                      @onclick:stopPropagation="true"
+                      @onkeydown="OnChevronKeyDown">▼</span>
+            </div>
         </div>
         
         <CustomDropdownPanel @ref="_dropdownPanel" IsOpen="_isOpen" OnClose="() => { _isOpen = false; _searchText = string.Empty; }">
             <div class="custom-search-select-dropdown">
                 <div class="custom-search-select-items">
-                    @if (SelectedValue != null && (Items == null || Items.Count == 0 || Items.Contains(SelectedValue)))
-                    {
-                        <button type="button"
-                                class="custom-search-select-clear-button"
-                                @onclick="ClearSelection"
-                                @onclick:stopPropagation="true"
-                                @onmousedown:preventDefault="true">
-                            <i class="bi bi-x-circle me-2"></i>Clear Selection
-                        </button>
-                    }
                     @if (FilteredItems.Any())
                     {
                         @foreach (var item in FilteredItems)
@@ -63,9 +67,13 @@
                             </div>
                         }
                     }
-                    else if (string.IsNullOrWhiteSpace(_searchText))
+                    else if (!string.IsNullOrWhiteSpace(_searchText))
                     {
                         <div class="custom-search-select-item no-results">No results found</div>
+                    }
+                    else
+                    {
+                        <div class="custom-search-select-item no-results">No items available</div>
                     }
                 </div>
             </div>
